@@ -1,6 +1,9 @@
 package com.ruoyi.web.controller.canteen;
 
 import java.util.List;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +31,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  */
 @RestController
 @RequestMapping("/canteen/info")
+@Api(value="CanteenController",tags="食堂信息接口")
 public class CanteenController extends BaseController
 {
     @Autowired
@@ -38,6 +42,7 @@ public class CanteenController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('canteen:info:list')")
     @GetMapping("/list")
+    @ApiOperation("查询食堂信息列表")
     public TableDataInfo list(Canteen canteen)
     {
         startPage();
@@ -51,6 +56,7 @@ public class CanteenController extends BaseController
     @PreAuthorize("@ss.hasPermi('canteen:info:export')")
     @Log(title = "食堂信息", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
+    @ApiOperation("导出食堂信息列表")
     public AjaxResult export(Canteen canteen)
     {
         List<Canteen> list = canteenService.selectCanteenList(canteen);
@@ -63,6 +69,7 @@ public class CanteenController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('canteen:info:query')")
     @GetMapping(value = "/{canteenId}")
+    @ApiOperation("获取食堂信息详细信息")
     public AjaxResult getInfo(@PathVariable("canteenId") Long canteenId)
     {
         return AjaxResult.success(canteenService.selectCanteenByCanteenId(canteenId));
@@ -74,6 +81,7 @@ public class CanteenController extends BaseController
     @PreAuthorize("@ss.hasPermi('canteen:info:add')")
     @Log(title = "食堂信息", businessType = BusinessType.INSERT)
     @PostMapping
+    @ApiOperation("新增食堂信息")
     public AjaxResult add(@RequestBody Canteen canteen)
     {
         return toAjax(canteenService.insertCanteen(canteen));
@@ -85,6 +93,7 @@ public class CanteenController extends BaseController
     @PreAuthorize("@ss.hasPermi('canteen:info:edit')")
     @Log(title = "食堂信息", businessType = BusinessType.UPDATE)
     @PutMapping
+    @ApiOperation("修改食堂信息")
     public AjaxResult edit(@RequestBody Canteen canteen)
     {
         return toAjax(canteenService.updateCanteen(canteen));
@@ -96,6 +105,7 @@ public class CanteenController extends BaseController
     @PreAuthorize("@ss.hasPermi('canteen:info:remove')")
     @Log(title = "食堂信息", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{canteenIds}")
+    @ApiOperation("删除食堂信息")
     public AjaxResult remove(@PathVariable Long[] canteenIds)
     {
         return toAjax(canteenService.deleteCanteenByCanteenIds(canteenIds));
@@ -107,6 +117,7 @@ public class CanteenController extends BaseController
     @PreAuthorize("@ss.hasPermi('canteen:info:edit')")
     @Log(title = "食堂信息", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")
+    @ApiOperation("修改食堂状态")
     public AjaxResult changeStatus(@RequestBody Canteen canteen)
     {
         return toAjax(canteenService.changeCanteenStatus(canteen));
