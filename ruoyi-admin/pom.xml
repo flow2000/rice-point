@@ -71,6 +71,11 @@
             <artifactId>rice-dish</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>rice-ticket</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
