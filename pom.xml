@@ -212,6 +212,13 @@
                 <version>${ruoyi.version}</version>
             </dependency>
 
+            <!-- 投票管理-->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>rice-ticket</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+
             <!-- 通用工具-->
             <dependency>
                 <groupId>com.ruoyi</groupId>
@@ -231,6 +238,7 @@
         <module>ruoyi-common</module>
         <module>rice-canteen</module>
         <module>rice-dish</module>
+        <module>rice-ticket</module>
     </modules>
     <packaging>pom</packaging>
 
