@@ -19,12 +19,18 @@ public class Canteen extends BaseEntity
     /** 食堂id */
     private Long canteenId;
 
+    /** 详细地址 */
+    @Excel(name = "详细地址")
+    private String location;
+
+    /** 经纬度 */
+    private String tude;
+
     /** 食堂名称 */
     @Excel(name = "食堂名称")
     private String canteenName;
 
     /** 食堂图片 */
-    @Excel(name = "食堂图片")
     private String canteenUrl;
 
     /** 人均消费 */
@@ -58,6 +64,24 @@ public class Canteen extends BaseEntity
     public Long getCanteenId()
     {
         return canteenId;
+    }
+    public void setLocation(String location)
+    {
+        this.location = location;
+    }
+
+    public String getLocation()
+    {
+        return location;
+    }
+    public void setTude(String tude)
+    {
+        this.tude = tude;
+    }
+
+    public String getTude()
+    {
+        return tude;
     }
     public void setCanteenName(String canteenName)
     {
@@ -135,19 +159,21 @@ public class Canteen extends BaseEntity
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("canteenId", getCanteenId())
-            .append("canteenName", getCanteenName())
-            .append("canteenUrl", getCanteenUrl())
-            .append("average", getAverage())
-            .append("leader", getLeader())
-            .append("phone", getPhone())
-            .append("email", getEmail())
-            .append("status", getStatus())
-            .append("createBy", getCreateBy())
-            .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
-            .append("delFlag", getDelFlag())
-            .toString();
+                .append("canteenId", getCanteenId())
+                .append("location", getLocation())
+                .append("tude", getTude())
+                .append("canteenName", getCanteenName())
+                .append("canteenUrl", getCanteenUrl())
+                .append("average", getAverage())
+                .append("leader", getLeader())
+                .append("phone", getPhone())
+                .append("email", getEmail())
+                .append("status", getStatus())
+                .append("createBy", getCreateBy())
+                .append("createTime", getCreateTime())
+                .append("updateBy", getUpdateBy())
+                .append("updateTime", getUpdateTime())
+                .append("delFlag", getDelFlag())
+                .toString();
     }
 }

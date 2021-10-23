@@ -103,6 +103,6 @@ public class CanteenServiceImpl implements ICanteenService
     @Override
     public int changeCanteenStatus(Canteen canteen) {
         canteen.setUpdateTime(DateUtils.getNowDate());
-        return canteenMapper.changeCanteenStatus(canteen);
+        return canteenMapper.updateCanteenStatus(canteen);
     }
 }

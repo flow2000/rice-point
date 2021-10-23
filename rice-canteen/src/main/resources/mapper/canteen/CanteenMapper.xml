@@ -1,34 +1,40 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.canteen.mapper.CanteenMapper">
 
     <resultMap type="Canteen" id="CanteenResult">
-        <result property="canteenId"    column="canteen_id"    />
-        <result property="canteenName"    column="canteen_name"    />
-        <result property="canteenUrl"    column="canteen_url"    />
-        <result property="average"    column="average"    />
-        <result property="leader"    column="leader"    />
-        <result property="phone"    column="phone"    />
-        <result property="email"    column="email"    />
-        <result property="status"    column="status"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="delFlag"    column="del_flag"    />
+        <result property="canteenId" column="canteen_id"/>
+        <result property="location" column="location"/>
+        <result property="tude" column="tude"/>
+        <result property="canteenName" column="canteen_name"/>
+        <result property="canteenUrl" column="canteen_url"/>
+        <result property="average" column="average"/>
+        <result property="leader" column="leader"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delFlag" column="del_flag"/>
     </resultMap>
 
     <sql id="selectCanteenVo">
-        select canteen_id, canteen_name, canteen_url, average, leader, phone, email, status, create_by, create_time, update_by, update_time, del_flag from rice_canteen
+        select canteen_id, location, tude, canteen_name, canteen_url, average, leader, phone, email, status, create_by, create_time, update_by, update_time, del_flag from rice_canteen
     </sql>
+
 
     <select id="selectCanteenList" parameterType="Canteen" resultMap="CanteenResult">
         <include refid="selectCanteenVo"/>
         <where>
-            <if test="canteenName != null  and canteenName != ''"> and canteen_name like concat('%', #{canteenName}, '%')</if>
-            <if test="leader != null  and leader != ''"> and leader = #{leader}</if>
+            <if test="location != null  and location != ''">and location like concat('%', #{canteenName}, '%')</if>
+            <if test="canteenName != null  and canteenName != ''">and canteen_name like concat('%', #{canteenName},
+                '%')
+            </if>
+            <if test="leader != null  and leader != ''">and leader = #{leader}</if>
             and del_flag=0
         </where>
     </select>
@@ -41,6 +47,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertCanteen" parameterType="Canteen" useGeneratedKeys="true" keyProperty="canteenId">
         insert into rice_canteen
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="location != null">location,</if>
+            <if test="tude != null">tude,</if>
             <if test="canteenName != null">canteen_name,</if>
             <if test="canteenUrl != null">canteen_url,</if>
             <if test="average != null">average,</if>
@@ -53,8 +61,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="delFlag != null">del_flag,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="location != null">#{location},</if>
+            <if test="tude != null">#{tude},</if>
             <if test="canteenName != null">#{canteenName},</if>
             <if test="canteenUrl != null">#{canteenUrl},</if>
             <if test="average != null">#{average},</if>
@@ -67,12 +77,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="delFlag != null">#{delFlag},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateCanteen" parameterType="Canteen">
         update rice_canteen
         <trim prefix="SET" suffixOverrides=",">
+            <if test="location != null">location = #{location},</if>
+            <if test="tude != null">tude = #{tude},</if>
             <if test="canteenName != null">canteen_name = #{canteenName},</if>
             <if test="canteenUrl != null">canteen_url = #{canteenUrl},</if>
             <if test="average != null">average = #{average},</if>
@@ -104,7 +116,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </update>
 
-    <update id="changeCanteenStatus" parameterType="Canteen">
+    <update id="updateCanteenStatus" parameterType="Canteen">
         update rice_canteen
         <trim prefix="SET" suffixOverrides=",">
             <if test="status != null">status = #{status},</if>

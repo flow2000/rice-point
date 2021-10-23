@@ -65,5 +65,5 @@ public interface CanteenMapper
      * @param canteen 食堂信息
      * @return 结果
      */
-    public int changeCanteenStatus(Canteen canteen);
+    public int updateCanteenStatus(Canteen canteen);
 }
