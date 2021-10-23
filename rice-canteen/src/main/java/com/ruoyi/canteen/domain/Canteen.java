@@ -19,16 +19,16 @@ public class Canteen extends BaseEntity
     /** 食堂id */
     private Long canteenId;
 
-    /** 详细地址 */
-    @Excel(name = "详细地址")
-    private String location;
+    /** 食堂名称 */
+    @Excel(name = "食堂名称")
+    private String canteenName;
 
     /** 经纬度 */
     private String tude;
 
-    /** 食堂名称 */
-    @Excel(name = "食堂名称")
-    private String canteenName;
+    /** 详细地址 */
+    @Excel(name = "详细地址")
+    private String location;
 
     /** 食堂图片 */
     private String canteenUrl;
