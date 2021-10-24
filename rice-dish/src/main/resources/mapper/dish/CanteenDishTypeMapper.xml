@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.dish.mapper.CanteenDishTypeMapper">
+
+    <resultMap type="CanteenDishType" id="CanteenDishTypeResult">
+        <result property="typeId"     column="type_id"      />
+        <result property="canteenId"     column="canteen_id"      />
+    </resultMap>
+
+    <insert id="batchCanteenDishType">
+        insert into rice_canteen_dish_type(type_id, canteen_id) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (#{item.typeId},#{item.canteenId})
+        </foreach>
+    </insert>
+
+    <delete id="deleteCanteenDishTypeByTypeId" parameterType="Long">
+        delete from rice_canteen_dish_type
+        where type_id=#{typeId}
+    </delete>
+
+    <select id="selectCanteenDishType" parameterType="CanteenDishType" resultMap="CanteenDishTypeResult">
+        select type_id, canteen_id from rice_canteen_dish_type
+        <where>
+            <if test="typeId!=null">and type_id=#{typeId}</if>
+        </where>;
+    </select>
+</mapper>

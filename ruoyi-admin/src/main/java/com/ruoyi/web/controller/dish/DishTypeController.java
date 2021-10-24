@@ -2,6 +2,9 @@ package com.ruoyi.web.controller.dish;
 
 import java.util.List;
 
+import com.ruoyi.dish.constatnt.DishTypeConstants;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +32,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  */
 @RestController
 @RequestMapping("/dish/type")
+@Api(value="DishTypeController",tags="菜品类型接口")
 public class DishTypeController extends BaseController
 {
     @Autowired
@@ -39,6 +43,7 @@ public class DishTypeController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('dish:type:list')")
     @GetMapping("/list")
+    @ApiOperation("查询菜品类型列表")
     public TableDataInfo list(DishType dishType)
     {
         startPage();
@@ -52,6 +57,7 @@ public class DishTypeController extends BaseController
     @PreAuthorize("@ss.hasPermi('dish:type:export')")
     @Log(title = "菜品类型", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
+    @ApiOperation("导出菜品类型列表")
     public AjaxResult export(DishType dishType)
     {
         List<DishType> list = dishTypeService.selectDishTypeList(dishType);
@@ -64,6 +70,7 @@ public class DishTypeController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('dish:type:query')")
     @GetMapping(value = "/{typeId}")
+    @ApiOperation("获取菜品类型详细信息")
     public AjaxResult getInfo(@PathVariable("typeId") Long typeId)
     {
         return AjaxResult.success(dishTypeService.selectDishTypeByTypeId(typeId));
@@ -75,8 +82,13 @@ public class DishTypeController extends BaseController
     @PreAuthorize("@ss.hasPermi('dish:type:add')")
     @Log(title = "菜品类型", businessType = BusinessType.INSERT)
     @PostMapping
+    @ApiOperation("新增菜品类型")
     public AjaxResult add(@RequestBody DishType dishType)
     {
+        if (DishTypeConstants.NOT_UNIQUE.equals(dishTypeService.checkDishTypeNameUnique(dishType.getTypeName())))
+        {
+            return AjaxResult.error("新增菜品类型" + dishType.getTypeName() + "失败,菜品类型名称已存在");
+        }
         return toAjax(dishTypeService.insertDishType(dishType));
     }
 
@@ -86,6 +98,7 @@ public class DishTypeController extends BaseController
     @PreAuthorize("@ss.hasPermi('dish:type:edit')")
     @Log(title = "菜品类型", businessType = BusinessType.UPDATE)
     @PutMapping
+    @ApiOperation("修改菜品类型")
     public AjaxResult edit(@RequestBody DishType dishType)
     {
         return toAjax(dishTypeService.updateDishType(dishType));
@@ -97,6 +110,7 @@ public class DishTypeController extends BaseController
     @PreAuthorize("@ss.hasPermi('dish:type:remove')")
     @Log(title = "菜品类型", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{typeIds}")
+    @ApiOperation("删除菜品类型")
     public AjaxResult remove(@PathVariable Long[] typeIds)
     {
         return toAjax(dishTypeService.deleteDishTypeByTypeIds(typeIds));
@@ -108,6 +122,7 @@ public class DishTypeController extends BaseController
     @PreAuthorize("@ss.hasPermi('dish:type:edit')")
     @Log(title = "菜品类型", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")
+    @ApiOperation("修改菜品类型状态")
     public AjaxResult changeStatus(@RequestBody DishType dishType)
     {
         return toAjax(dishTypeService.changeTypeStatus(dishType));

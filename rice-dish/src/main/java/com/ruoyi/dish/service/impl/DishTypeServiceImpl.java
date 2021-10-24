@@ -1,7 +1,12 @@
 package com.ruoyi.dish.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.dish.constatnt.DishTypeConstants;
+import com.ruoyi.dish.domain.CanteenDishType;
+import com.ruoyi.dish.mapper.CanteenDishTypeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.dish.mapper.DishTypeMapper;
@@ -20,6 +25,9 @@ public class DishTypeServiceImpl implements IDishTypeService
     @Autowired
     private DishTypeMapper dishTypeMapper;
 
+    @Autowired
+    private CanteenDishTypeMapper canteenDishTypeMapper;
+
     /**
      * 查询菜品类型
      *
@@ -29,7 +37,21 @@ public class DishTypeServiceImpl implements IDishTypeService
     @Override
     public DishType selectDishTypeByTypeId(Long typeId)
     {
-        return dishTypeMapper.selectDishTypeByTypeId(typeId);
+        DishType dishType = dishTypeMapper.selectDishTypeByTypeId(typeId);
+        if (dishType != null){
+            Long type_id = dishType.getTypeId();
+            CanteenDishType canteenDishType = new CanteenDishType();
+            canteenDishType.setTypeId(type_id);
+            List<CanteenDishType> list = canteenDishTypeMapper.selectCanteenDishType(canteenDishType);
+            if (list!=null) {
+                Long[] canteenIds = new Long[list.size()];
+                for (int i = 0; i < list.size(); i++) {
+                    canteenIds[i] = list.get(i).getCanteenId();
+                }
+                dishType.setCanteenIds(canteenIds);
+            }
+        }
+        return dishType;
     }
 
     /**
@@ -54,7 +76,36 @@ public class DishTypeServiceImpl implements IDishTypeService
     public int insertDishType(DishType dishType)
     {
         dishType.setCreateTime(DateUtils.getNowDate());
-        return dishTypeMapper.insertDishType(dishType);
+        int rows = dishTypeMapper.insertDishType(dishType);
+        // 新增食堂菜品类型关联
+        insertCanteenDishType(dishType);
+        return rows;
+    }
+
+    /**
+     * 新增食堂菜品类型
+     *
+     * @param dishType 菜品类型
+     */
+    private void insertCanteenDishType(DishType dishType) {
+        Long [] canteenIds = dishType.getCanteenIds();
+        if (StringUtils.isNotNull(canteenIds))
+        {
+            // 新增食堂菜品类型
+            List<CanteenDishType> list = new ArrayList<CanteenDishType>();
+            for (Long canteenId : canteenIds)
+            {
+                CanteenDishType cd = new CanteenDishType();
+                cd.setTypeId(dishType.getTypeId());
+                cd.setCanteenId(canteenId);
+                System.out.println(cd.getTypeId());
+                list.add(cd);
+            }
+            if (list.size() > 0)
+            {
+                canteenDishTypeMapper.batchCanteenDishType(list);
+            }
+        }
     }
 
     /**
@@ -67,6 +118,11 @@ public class DishTypeServiceImpl implements IDishTypeService
     public int updateDishType(DishType dishType)
     {
         dishType.setUpdateTime(DateUtils.getNowDate());
+        Long typeId = dishType.getTypeId();
+        //删除食堂菜品类型
+        canteenDishTypeMapper.deleteCanteenDishTypeByTypeId(typeId);
+        // 新增食堂菜品类型关联
+        insertCanteenDishType(dishType);
         return dishTypeMapper.updateDishType(dishType);
     }
 
@@ -104,5 +160,21 @@ public class DishTypeServiceImpl implements IDishTypeService
     public int changeTypeStatus(DishType dishType) {
         dishType.setUpdateTime(DateUtils.getNowDate());
         return dishTypeMapper.updateDishTypeStatus(dishType);
+    }
+
+    /**
+     * 校验菜品类型名称是否唯一
+     *
+     * @param typeName 菜品类型名称
+     * @return 结果
+     */
+    @Override
+    public String checkDishTypeNameUnique(String typeName) {
+        int count = dishTypeMapper.checkDishTypeNameUnique(typeName);
+        if (count > 0)
+        {
+            return DishTypeConstants.NOT_UNIQUE;
+        }
+        return DishTypeConstants.UNIQUE;
     }
 }

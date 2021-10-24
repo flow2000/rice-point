@@ -22,13 +22,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectDishTypeList" parameterType="DishType" resultMap="DishTypeResult">
         <include refid="selectDishTypeVo"/>
         <where>
+            del_flag = 0
             <if test="typeName != null  and typeName != ''"> and type_name like concat('%', #{typeName}, '%')</if>
         </where>
     </select>
 
     <select id="selectDishTypeByTypeId" parameterType="Long" resultMap="DishTypeResult">
         <include refid="selectDishTypeVo"/>
-        where type_id = #{typeId}
+        where del_flag = 0 and type_id = #{typeId}
     </select>
 
     <insert id="insertDishType" parameterType="DishType" useGeneratedKeys="true" keyProperty="typeId">
@@ -67,16 +68,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where type_id = #{typeId}
     </update>
 
-    <delete id="deleteDishTypeByTypeId" parameterType="Long">
-        delete from rice_dish_type where type_id = #{typeId}
-    </delete>
+    <update id="deleteDishTypeByTypeId" parameterType="Long">
+        update rice_dish_type
+        set del_flag = 2
+        where type_id = #{typeId}
+    </update>
 
-    <delete id="deleteDishTypeByTypeIds" parameterType="String">
-        delete from rice_dish_type where type_id in
+    <update id="deleteDishTypeByTypeIds" parameterType="String">
+        update rice_dish_type
+        set del_flag = 2
+        where type_id in
         <foreach item="typeId" collection="array" open="(" separator="," close=")">
             #{typeId}
         </foreach>
-    </delete>
+    </update>
 
     <update id="updateDishTypeStatus" parameterType="DishType">
         update rice_dish_type
@@ -86,4 +91,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where type_id = #{typeId}
     </update>
+
+    <select id="checkDishTypeNameUnique" parameterType="String" resultType="int">
+        select count(1) from rice_dish_type where type_name=#{typeName} and del_flag = 0 limit 1
+    </select>
+
 </mapper>
