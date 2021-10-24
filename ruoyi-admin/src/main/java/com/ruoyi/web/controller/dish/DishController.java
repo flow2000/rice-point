@@ -2,7 +2,10 @@ package com.ruoyi.web.controller.dish;
 
 import java.util.List;
 
+import com.ruoyi.dish.constatnt.DishTypeConstants;
+import com.ruoyi.dish.domain.DishType;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +44,7 @@ public class DishController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('dish:dish:list')")
     @GetMapping("/list")
+    @ApiOperation("查询菜品列表")
     public TableDataInfo list(Dish dish)
     {
         startPage();
@@ -52,8 +56,9 @@ public class DishController extends BaseController
      * 导出菜品列表
      */
     @PreAuthorize("@ss.hasPermi('dish:dish:export')")
-    @Log(title = "菜品", businessType = BusinessType.EXPORT)
+    @Log(title = "菜品信息", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
+    @ApiOperation("导出菜品列表")
     public AjaxResult export(Dish dish)
     {
         List<Dish> list = dishService.selectDishList(dish);
@@ -66,6 +71,7 @@ public class DishController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('dish:dish:query')")
     @GetMapping(value = "/{dishId}")
+    @ApiOperation("获取菜品详细信息")
     public AjaxResult getInfo(@PathVariable("dishId") Long dishId)
     {
         return AjaxResult.success(dishService.selectDishByDishId(dishId));
@@ -75,10 +81,15 @@ public class DishController extends BaseController
      * 新增菜品
      */
     @PreAuthorize("@ss.hasPermi('dish:dish:add')")
-    @Log(title = "菜品", businessType = BusinessType.INSERT)
+    @Log(title = "菜品信息", businessType = BusinessType.INSERT)
     @PostMapping
+    @ApiOperation("新增菜品")
     public AjaxResult add(@RequestBody Dish dish)
     {
+        if (DishTypeConstants.NOT_UNIQUE.equals(dishService.checkDishesNameUnique(dish.getDishesName())))
+        {
+            return AjaxResult.error("新增菜品类型" + dish.getDishesName() + "失败,菜品类型名称已存在");
+        }
         return toAjax(dishService.insertDish(dish));
     }
 
@@ -86,8 +97,9 @@ public class DishController extends BaseController
      * 修改菜品
      */
     @PreAuthorize("@ss.hasPermi('dish:dish:edit')")
-    @Log(title = "菜品", businessType = BusinessType.UPDATE)
+    @Log(title = "菜品信息", businessType = BusinessType.UPDATE)
     @PutMapping
+    @ApiOperation("修改菜品")
     public AjaxResult edit(@RequestBody Dish dish)
     {
         return toAjax(dishService.updateDish(dish));
@@ -97,10 +109,23 @@ public class DishController extends BaseController
      * 删除菜品
      */
     @PreAuthorize("@ss.hasPermi('dish:dish:remove')")
-    @Log(title = "菜品", businessType = BusinessType.DELETE)
+    @Log(title = "菜品信息", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{dishIds}")
+    @ApiOperation("删除菜品")
     public AjaxResult remove(@PathVariable Long[] dishIds)
     {
         return toAjax(dishService.deleteDishByDishIds(dishIds));
+    }
+
+    /**
+     * 修改菜品状态
+     */
+    @PreAuthorize("@ss.hasPermi('dish:dish:edit')")
+    @Log(title = "菜品信息", businessType = BusinessType.UPDATE)
+    @PutMapping("/changeStatus")
+    @ApiOperation("修改菜品状态")
+    public AjaxResult changeStatus(@RequestBody Dish dish)
+    {
+        return toAjax(dishService.changeDishStatus(dish));
     }
 }

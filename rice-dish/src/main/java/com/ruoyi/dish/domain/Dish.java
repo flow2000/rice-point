@@ -19,16 +19,18 @@ public class Dish extends BaseEntity
     /** 菜品id */
     private Long dishId;
 
+    /** 菜品类型id */
+    private Long typeId;
+
     /** 菜品名称 */
     @Excel(name = "菜品名称")
     private String dishesName;
 
     /** 菜品类型 */
     @Excel(name = "菜品类型")
-    private Long dishesType;
+    private String dishesType;
 
     /** 菜品图片 */
-    @Excel(name = "菜品图片")
     private String url;
 
     /** 菜品价格 */
@@ -55,6 +57,15 @@ public class Dish extends BaseEntity
     {
         return dishId;
     }
+    public void setTypeId(Long typeId)
+    {
+        this.typeId = typeId;
+    }
+
+    public Long getTypeId()
+    {
+        return typeId;
+    }
     public void setDishesName(String dishesName)
     {
         this.dishesName = dishesName;
@@ -64,12 +75,12 @@ public class Dish extends BaseEntity
     {
         return dishesName;
     }
-    public void setDishesType(Long dishesType)
+    public void setDishesType(String dishesType)
     {
         this.dishesType = dishesType;
     }
 
-    public Long getDishesType()
+    public String getDishesType()
     {
         return dishesType;
     }
@@ -123,6 +134,7 @@ public class Dish extends BaseEntity
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("dishId", getDishId())
+            .append("typeId", getTypeId())
             .append("dishesName", getDishesName())
             .append("dishesType", getDishesType())
             .append("url", getUrl())

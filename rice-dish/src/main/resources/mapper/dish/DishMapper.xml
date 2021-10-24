@@ -1,34 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.dish.mapper.DishMapper">
 
     <resultMap type="Dish" id="DishResult">
-        <result property="dishId"    column="dish_id"    />
-        <result property="dishesName"    column="dishes_name"    />
-        <result property="dishesType"    column="dishes_type"    />
-        <result property="url"    column="url"    />
-        <result property="price"    column="price"    />
-        <result property="onsale"    column="onsale"    />
-        <result property="status"    column="status"    />
-        <result property="delFlag"    column="del_flag"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
+        <result property="dishId" column="dish_id"/>
+        <result property="typeId" column="type_id"/>
+        <result property="dishesName" column="dishes_name"/>
+        <result property="dishesType" column="dishes_type"/>
+        <result property="url" column="url"/>
+        <result property="price" column="price"/>
+        <result property="onsale" column="onsale"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
     </resultMap>
 
     <sql id="selectDishVo">
-        select dish_id, dishes_name, dishes_type, url, price, onsale, status, del_flag, create_by, create_time, update_by, update_time from rice_dish
+        select rd.dish_id, rd.type_id, rd.dishes_name, rt.type_name as dishes_type, rd.url, rd.price, rd.onsale, rd.status, rd.del_flag, rd.create_by, rd.create_time, rd.update_by, rd.update_time
+        from rice_dish rd
+            left join rice_dish_type rt on rd.type_id = rt.type_id
     </sql>
 
     <select id="selectDishList" parameterType="Dish" resultMap="DishResult">
         <include refid="selectDishVo"/>
         <where>
-            <if test="dishesName != null  and dishesName != ''"> and dishes_name like concat('%', #{dishesName}, '%')</if>
-            <if test="dishesType != null "> and dishes_type = #{dishesType}</if>
-            <if test="price != null "> and price = #{price}</if>
+            <if test="dishesName != null  and dishesName != ''">and dishes_name like concat('%', #{dishesName}, '%')
+            </if>
+            <if test="dishesType != null ">and rt.type_name = #{dishesType}</if>
+            <if test="price != null ">and price = #{price}</if>
         </where>
     </select>
 
@@ -41,7 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into rice_dish
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="dishesName != null">dishes_name,</if>
-            <if test="dishesType != null">dishes_type,</if>
+            <if test="typeId != null ">type_id,</if>
             <if test="url != null">url,</if>
             <if test="price != null">price,</if>
             <if test="onsale != null">onsale,</if>
@@ -51,10 +55,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="dishesName != null">#{dishesName},</if>
-            <if test="dishesType != null">#{dishesType},</if>
+            <if test="typeId != null ">#{typeId}</if>
             <if test="url != null">#{url},</if>
             <if test="price != null">#{price},</if>
             <if test="onsale != null">#{onsale},</if>
@@ -64,14 +68,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateDish" parameterType="Dish">
         update rice_dish
         <trim prefix="SET" suffixOverrides=",">
             <if test="dishesName != null">dishes_name = #{dishesName},</if>
-            <if test="dishesType != null">dishes_type = #{dishesType},</if>
+            <if test="typeId != null ">type_id = #{typeId},</if>
             <if test="url != null">url = #{url},</if>
             <if test="price != null">price = #{price},</if>
             <if test="onsale != null">onsale = #{onsale},</if>
@@ -85,14 +89,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where dish_id = #{dishId}
     </update>
 
-    <delete id="deleteDishByDishId" parameterType="Long">
-        delete from rice_dish where dish_id = #{dishId}
-    </delete>
+    <update id="deleteDishByDishId" parameterType="Long">
+        update rice_dish
+        set del_flag=2
+        where dish_id = #{dishId}
+    </update>
 
-    <delete id="deleteDishByDishIds" parameterType="String">
-        delete from rice_dish where dish_id in
+    <update id="deleteDishByDishIds" parameterType="String">
+        update rice_dish
+        set del_flag=2
+        where dish_id in
         <foreach item="dishId" collection="array" open="(" separator="," close=")">
             #{dishId}
         </foreach>
-    </delete>
+    </update>
+
+    <select id="checkDishesNameUnique" parameterType="String" resultType="int">
+        select count(1) from rice_dish where dishes_name=#{dishesName} limit 1
+    </select>
+
+    <update id="updateDishStatus" parameterType="Dish">
+        update rice_dish
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="status != null">status = #{status},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where dish_id = #{dishId}
+    </update>
 </mapper>

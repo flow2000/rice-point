@@ -2,6 +2,7 @@ package com.ruoyi.dish.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.dish.constatnt.DishConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.dish.mapper.DishMapper;
@@ -54,7 +55,19 @@ public class DishServiceImpl implements IDishService
     public int insertDish(Dish dish)
     {
         dish.setCreateTime(DateUtils.getNowDate());
-        return dishMapper.insertDish(dish);
+        int rows = dishMapper.insertDish(dish);
+        // 新增食堂菜品类型关联
+        insertCanteenDish(dish);
+        return rows;
+    }
+
+    /**
+     * 新增食堂菜品关联
+     *
+     * @param dish 菜品对象
+     */
+    private void insertCanteenDish(Dish dish) {
+
     }
 
     /**
@@ -92,5 +105,33 @@ public class DishServiceImpl implements IDishService
     public int deleteDishByDishId(Long dishId)
     {
         return dishMapper.deleteDishByDishId(dishId);
+    }
+
+    /**
+     * 校验菜品名称是否唯一
+     *
+     * @param dishesName 菜品名称
+     * @return 结果
+     */
+    @Override
+    public String checkDishesNameUnique(String dishesName) {
+        int count = dishMapper.checkDishTypeNameUnique(dishesName);
+        if (count > 0)
+        {
+            return DishConstants.NOT_UNIQUE;
+        }
+        return DishConstants.UNIQUE;
+    }
+
+    /**
+     * 修改菜品状态
+     *
+     * @param dish 菜品
+     * @return 结果
+     */
+    @Override
+    public int changeDishStatus(Dish dish) {
+        dish.setUpdateTime(DateUtils.getNowDate());
+        return dishMapper.updateDishStatus(dish);
     }
 }

@@ -58,4 +58,20 @@ public interface IDishService
      * @return 结果
      */
     public int deleteDishByDishId(Long dishId);
+
+    /**
+     * 校验菜品名称是否唯一
+     *
+     * @param dishesName 菜品名称
+     * @return 结果
+     */
+    public String checkDishesNameUnique(String dishesName);
+
+    /**
+     * 修改菜品状态
+     *
+     * @param dish 菜品
+     * @return 结果
+     */
+    public int changeDishStatus(Dish dish);
 }
