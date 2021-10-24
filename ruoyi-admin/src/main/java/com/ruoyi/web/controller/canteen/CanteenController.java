@@ -2,6 +2,7 @@ package com.ruoyi.web.controller.canteen;
 
 import java.util.List;
 
+import com.ruoyi.canteen.constant.CanteenConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,9 +32,8 @@ import com.ruoyi.common.core.page.TableDataInfo;
  */
 @RestController
 @RequestMapping("/canteen/info")
-@Api(value="CanteenController",tags="食堂信息接口")
-public class CanteenController extends BaseController
-{
+@Api(value = "CanteenController", tags = "食堂信息接口")
+public class CanteenController extends BaseController {
     @Autowired
     private ICanteenService canteenService;
 
@@ -43,8 +43,7 @@ public class CanteenController extends BaseController
     @PreAuthorize("@ss.hasPermi('canteen:info:list')")
     @GetMapping("/list")
     @ApiOperation("查询食堂信息列表")
-    public TableDataInfo list(Canteen canteen)
-    {
+    public TableDataInfo list(Canteen canteen) {
         startPage();
         List<Canteen> list = canteenService.selectCanteenList(canteen);
         return getDataTable(list);
@@ -57,8 +56,7 @@ public class CanteenController extends BaseController
     @Log(title = "食堂信息", businessType = BusinessType.EXPORT)
     @GetMapping("/export")
     @ApiOperation("导出食堂信息列表")
-    public AjaxResult export(Canteen canteen)
-    {
+    public AjaxResult export(Canteen canteen) {
         List<Canteen> list = canteenService.selectCanteenList(canteen);
         ExcelUtil<Canteen> util = new ExcelUtil<Canteen>(Canteen.class);
         return util.exportExcel(list, "食堂信息数据");
@@ -70,8 +68,7 @@ public class CanteenController extends BaseController
     @PreAuthorize("@ss.hasPermi('canteen:info:query')")
     @GetMapping(value = "/{canteenId}")
     @ApiOperation("获取食堂信息详细信息")
-    public AjaxResult getInfo(@PathVariable("canteenId") Long canteenId)
-    {
+    public AjaxResult getInfo(@PathVariable("canteenId") Long canteenId) {
         return AjaxResult.success(canteenService.selectCanteenByCanteenId(canteenId));
     }
 
@@ -82,8 +79,15 @@ public class CanteenController extends BaseController
     @Log(title = "食堂信息", businessType = BusinessType.INSERT)
     @PostMapping
     @ApiOperation("新增食堂信息")
-    public AjaxResult add(@RequestBody Canteen canteen)
-    {
+    public AjaxResult add(@RequestBody Canteen canteen) {
+        if (CanteenConstants.NOT_PASS_RULES.equals(canteenService.checkPassRules(canteen)))
+        {
+            return AjaxResult.error("新增" + canteen.getCanteenName() + "失败,请检查是否符合添加规则");
+        }
+        if (CanteenConstants.NOT_UNIQUE.equals(canteenService.checkCanteenNameUnique(canteen.getCanteenName())))
+        {
+            return AjaxResult.error("新增" + canteen.getCanteenName() + "失败,食堂名称已存在");
+        }
         return toAjax(canteenService.insertCanteen(canteen));
     }
 
@@ -94,8 +98,11 @@ public class CanteenController extends BaseController
     @Log(title = "食堂信息", businessType = BusinessType.UPDATE)
     @PutMapping
     @ApiOperation("修改食堂信息")
-    public AjaxResult edit(@RequestBody Canteen canteen)
-    {
+    public AjaxResult edit(@RequestBody Canteen canteen) {
+        if (CanteenConstants.NOT_PASS_RULES.equals(canteenService.checkPassRules(canteen)))
+        {
+            return AjaxResult.error("修改" + canteen.getCanteenName() + "失败,请检查是否符合规则");
+        }
         return toAjax(canteenService.updateCanteen(canteen));
     }
 
@@ -104,10 +111,9 @@ public class CanteenController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('canteen:info:remove')")
     @Log(title = "食堂信息", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{canteenIds}")
+    @DeleteMapping("/{canteenIds}")
     @ApiOperation("删除食堂信息")
-    public AjaxResult remove(@PathVariable Long[] canteenIds)
-    {
+    public AjaxResult remove(@PathVariable Long[] canteenIds) {
         return toAjax(canteenService.deleteCanteenByCanteenIds(canteenIds));
     }
 
@@ -118,8 +124,7 @@ public class CanteenController extends BaseController
     @Log(title = "食堂信息", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")
     @ApiOperation("修改食堂状态")
-    public AjaxResult changeStatus(@RequestBody Canteen canteen)
-    {
+    public AjaxResult changeStatus(@RequestBody Canteen canteen) {
         return toAjax(canteenService.changeCanteenStatus(canteen));
     }
 

@@ -66,4 +66,20 @@ public interface ICanteenService
      * @return 结果
      */
     public int changeCanteenStatus(Canteen canteen);
+
+    /**
+     * 校验饭堂名称是否唯一
+     *
+     * @param canteenName 饭堂名称
+     * @return 结果
+     */
+    public String checkCanteenNameUnique(String canteenName);
+
+    /**
+     * 校验饭堂信息添加/修改规则
+     *
+     * @param canteen 饭堂信息
+     * @return 结果
+     */
+    public String checkPassRules(Canteen canteen);
 }

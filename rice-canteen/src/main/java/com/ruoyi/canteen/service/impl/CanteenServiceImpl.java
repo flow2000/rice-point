@@ -1,6 +1,10 @@
 package com.ruoyi.canteen.service.impl;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import com.ruoyi.canteen.constant.CanteenConstants;
 import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,8 +19,7 @@ import com.ruoyi.canteen.service.ICanteenService;
  * @date 2021-10-06
  */
 @Service
-public class CanteenServiceImpl implements ICanteenService
-{
+public class CanteenServiceImpl implements ICanteenService {
     @Autowired
     private CanteenMapper canteenMapper;
 
@@ -27,8 +30,7 @@ public class CanteenServiceImpl implements ICanteenService
      * @return 食堂信息
      */
     @Override
-    public Canteen selectCanteenByCanteenId(Long canteenId)
-    {
+    public Canteen selectCanteenByCanteenId(Long canteenId) {
         return canteenMapper.selectCanteenByCanteenId(canteenId);
     }
 
@@ -39,8 +41,7 @@ public class CanteenServiceImpl implements ICanteenService
      * @return 食堂信息
      */
     @Override
-    public List<Canteen> selectCanteenList(Canteen canteen)
-    {
+    public List<Canteen> selectCanteenList(Canteen canteen) {
         return canteenMapper.selectCanteenList(canteen);
     }
 
@@ -51,8 +52,7 @@ public class CanteenServiceImpl implements ICanteenService
      * @return 结果
      */
     @Override
-    public int insertCanteen(Canteen canteen)
-    {
+    public int insertCanteen(Canteen canteen) {
         canteen.setCreateTime(DateUtils.getNowDate());
         return canteenMapper.insertCanteen(canteen);
     }
@@ -64,8 +64,7 @@ public class CanteenServiceImpl implements ICanteenService
      * @return 结果
      */
     @Override
-    public int updateCanteen(Canteen canteen)
-    {
+    public int updateCanteen(Canteen canteen) {
         canteen.setUpdateTime(DateUtils.getNowDate());
         return canteenMapper.updateCanteen(canteen);
     }
@@ -77,8 +76,7 @@ public class CanteenServiceImpl implements ICanteenService
      * @return 结果
      */
     @Override
-    public int deleteCanteenByCanteenIds(Long[] canteenIds)
-    {
+    public int deleteCanteenByCanteenIds(Long[] canteenIds) {
         return canteenMapper.deleteCanteenByCanteenIds(canteenIds);
     }
 
@@ -89,8 +87,7 @@ public class CanteenServiceImpl implements ICanteenService
      * @return 结果
      */
     @Override
-    public int deleteCanteenByCanteenId(Long canteenId)
-    {
+    public int deleteCanteenByCanteenId(Long canteenId) {
         return canteenMapper.deleteCanteenByCanteenId(canteenId);
     }
 
@@ -105,4 +102,40 @@ public class CanteenServiceImpl implements ICanteenService
         canteen.setUpdateTime(DateUtils.getNowDate());
         return canteenMapper.updateCanteenStatus(canteen);
     }
+
+    /**
+     * 校验饭堂名称是否唯一
+     *
+     * @param canteenName 饭堂名称
+     * @return 结果
+     */
+    @Override
+    public String checkCanteenNameUnique(String canteenName) {
+        int count = canteenMapper.checkCanteenNameUnique(canteenName);
+        if (count > 0) {
+            return CanteenConstants.NOT_UNIQUE;
+        }
+        return CanteenConstants.UNIQUE;
+    }
+
+    /**
+     * 校验饭堂信息添加/修改规则
+     *
+     * @param canteen 饭堂信息
+     * @return 结果
+     */
+    @Override
+    public String checkPassRules(Canteen canteen) {
+        int length = canteen.getCanteenName().length();
+        if (length < CanteenConstants.CANTEENNAME_MIN_LENGTH || length > CanteenConstants.CANTEENNAME_MAX_LENGTH) {
+            return CanteenConstants.NOT_PASS_RULES;
+        }
+        Pattern pattern = Pattern.compile("^(0\\.\\d{0,1}[1-9]|\\+?[1-9][0-9]{0,3})(\\.\\d{1,2})?$"); // 判断小数点后2位的数字的正则表达式
+        Matcher match = pattern.matcher(canteen.getAverage().toString());
+        if (!match.matches()) {
+            return CanteenConstants.NOT_PASS_RULES;
+        }
+        return CanteenConstants.PASS_RULES;
+    }
+
 }

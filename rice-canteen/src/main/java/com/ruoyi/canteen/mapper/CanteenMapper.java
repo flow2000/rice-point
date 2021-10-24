@@ -66,4 +66,12 @@ public interface CanteenMapper
      * @return 结果
      */
     public int updateCanteenStatus(Canteen canteen);
+
+    /**
+     * 校验饭堂名称是否唯一
+     *
+     * @param canteenName 饭堂名称
+     * @return 结果
+     */
+    public int checkCanteenNameUnique(String canteenName);
 }

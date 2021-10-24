@@ -124,4 +124,9 @@
         </trim>
         where canteen_id = #{canteenId}
     </update>
+
+    <select id="checkCanteenNameUnique" parameterType="String" resultType="int">
+        select count(1) from rice_canteen where canteen_name=#{canteenName} limit 1
+    </select>
+
 </mapper>
