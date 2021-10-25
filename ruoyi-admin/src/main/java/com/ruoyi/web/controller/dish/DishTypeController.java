@@ -85,7 +85,7 @@ public class DishTypeController extends BaseController
     @ApiOperation("新增菜品类型")
     public AjaxResult add(@RequestBody DishType dishType)
     {
-        if (DishTypeConstants.NOT_UNIQUE.equals(dishTypeService.checkDishTypeNameUnique(dishType.getTypeName())))
+        if (DishTypeConstants.NOT_UNIQUE.equals(dishTypeService.checkDishTypeNameUnique(dishType)))
         {
             return AjaxResult.error("新增菜品类型" + dishType.getTypeName() + "失败,菜品类型名称已存在");
         }
@@ -101,6 +101,10 @@ public class DishTypeController extends BaseController
     @ApiOperation("修改菜品类型")
     public AjaxResult edit(@RequestBody DishType dishType)
     {
+        if (DishTypeConstants.NOT_UNIQUE.equals(dishTypeService.checkDishTypeNameUnique(dishType)))
+        {
+            return AjaxResult.error("修改菜品类型" + dishType.getTypeName() + "失败,菜品类型名称已存在");
+        }
         return toAjax(dishTypeService.updateDishType(dishType));
     }
 

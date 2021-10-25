@@ -70,8 +70,8 @@ public interface DishTypeMapper
     /**
      * 校验菜品类型名称是否唯一
      *
-     * @param typeName 菜品类型名称
+     * @param dishType 菜品类型
      * @return 结果
      */
-    public int checkDishTypeNameUnique(String typeName);
+    public int checkDishTypeUnique(DishType dishType);
 }

@@ -122,7 +122,6 @@ public class DishTypeServiceImpl implements IDishTypeService
                 CanteenDishType cd = new CanteenDishType();
                 cd.setTypeId(dishType.getTypeId());
                 cd.setCanteenId(canteenId);
-                System.out.println(cd.getTypeId());
                 list.add(cd);
             }
             if (list.size() > 0)
@@ -143,7 +142,7 @@ public class DishTypeServiceImpl implements IDishTypeService
     {
         dishType.setUpdateTime(DateUtils.getNowDate());
         Long typeId = dishType.getTypeId();
-        //删除食堂菜品类型
+        //删除食堂菜品类型关联
         canteenDishTypeMapper.deleteCanteenDishTypeByTypeId(typeId);
         // 新增食堂菜品类型关联
         insertCanteenDishType(dishType);
@@ -193,12 +192,12 @@ public class DishTypeServiceImpl implements IDishTypeService
     /**
      * 校验菜品类型名称是否唯一
      *
-     * @param typeName 菜品类型名称
+     * @param dishType 菜品类型
      * @return 结果
      */
     @Override
-    public String checkDishTypeNameUnique(String typeName) {
-        int count = dishTypeMapper.checkDishTypeNameUnique(typeName);
+    public String checkDishTypeNameUnique(DishType dishType) {
+        int count = dishTypeMapper.checkDishTypeUnique(dishType);
         if (count > 0)
         {
             return DishTypeConstants.NOT_UNIQUE;
