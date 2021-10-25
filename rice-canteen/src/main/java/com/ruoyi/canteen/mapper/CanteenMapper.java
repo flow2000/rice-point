@@ -68,17 +68,17 @@ public interface CanteenMapper
     public int updateCanteenStatus(Canteen canteen);
 
     /**
-     * 校验饭堂名称是否唯一
+     * 校验食堂名称是否唯一
      *
-     * @param canteenName 饭堂名称
+     * @param canteen 食堂信息
      * @return 结果
      */
-    public int checkCanteenNameUnique(String canteenName);
+    public int checkCanteenUnique(Canteen canteen);
 
     /**
      * 检查是否存在食堂和菜品类型关联
      *
-     * @param canteenIds 饭堂id组
+     * @param canteenIds 食堂id组
      * @return 结果
      */
     public int checkCanteenDishTypeByCanteenIds(Long[] canteenIds);
@@ -86,7 +86,7 @@ public interface CanteenMapper
     /**
      * 检查是否存在食堂和菜品类型关联
      *
-     * @param canteenId 饭堂id
+     * @param canteenId 食堂id
      * @return 结果
      */
     public int checkCanteenDishTypeByCanteenId(Long canteenId);

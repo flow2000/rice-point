@@ -111,12 +111,12 @@ public class CanteenServiceImpl implements ICanteenService {
     /**
      * 校验饭堂名称是否唯一
      *
-     * @param canteenName 饭堂名称
+     * @param canteen 饭堂名称
      * @return 结果
      */
     @Override
-    public String checkCanteenNameUnique(String canteenName) {
-        int count = canteenMapper.checkCanteenNameUnique(canteenName);
+    public String checkCanteenNameUnique(Canteen canteen) {
+        int count = canteenMapper.checkCanteenUnique(canteen);
         if (count > 0) {
             return CanteenConstants.NOT_UNIQUE;
         }

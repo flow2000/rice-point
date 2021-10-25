@@ -84,7 +84,7 @@ public class CanteenController extends BaseController {
         {
             return AjaxResult.error("新增" + canteen.getCanteenName() + "失败,请检查是否符合添加规则");
         }
-        if (CanteenConstants.NOT_UNIQUE.equals(canteenService.checkCanteenNameUnique(canteen.getCanteenName())))
+        if (CanteenConstants.NOT_UNIQUE.equals(canteenService.checkCanteenNameUnique(canteen)))
         {
             return AjaxResult.error("新增" + canteen.getCanteenName() + "失败,食堂名称已存在");
         }
@@ -103,9 +103,9 @@ public class CanteenController extends BaseController {
         {
             return AjaxResult.error("修改" + canteen.getCanteenName() + "失败,请检查是否符合规则");
         }
-        if (CanteenConstants.NOT_UNIQUE.equals(canteenService.checkCanteenNameUnique(canteen.getCanteenName())))
+        if (CanteenConstants.NOT_UNIQUE.equals(canteenService.checkCanteenNameUnique(canteen)))
         {
-            return AjaxResult.error("新增" + canteen.getCanteenName() + "失败,食堂名称已存在");
+            return AjaxResult.error("修改" + canteen.getCanteenName() + "失败,食堂名称已存在");
         }
         return toAjax(canteenService.updateCanteen(canteen));
     }

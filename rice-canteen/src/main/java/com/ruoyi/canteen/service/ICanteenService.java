@@ -69,17 +69,17 @@ public interface ICanteenService
     public int changeCanteenStatus(Canteen canteen);
 
     /**
-     * 校验饭堂名称是否唯一
+     * 校验食堂名称是否唯一
      *
-     * @param canteenName 饭堂名称
+     * @param canteen 食堂信息
      * @return 结果
      */
-    public String checkCanteenNameUnique(String canteenName);
+    public String checkCanteenNameUnique(Canteen canteen);
 
     /**
-     * 校验饭堂信息添加/修改规则
+     * 校验食堂信息添加/修改规则
      *
-     * @param canteen 饭堂信息
+     * @param canteen 食堂信息
      * @return 结果
      */
     public String checkPassRules(Canteen canteen);
@@ -87,7 +87,7 @@ public interface ICanteenService
     /**
      * 检查是否存在食堂和菜品类型关联
      *
-     * @param canteenIds 饭堂id组
+     * @param canteenIds 食堂id组
      * @return 结果
      */
     public String checkCanteenDishTypeByCanteenIds(Long[] canteenIds);
@@ -95,7 +95,7 @@ public interface ICanteenService
     /**
      * 检查是否存在食堂和菜品类型关联
      *
-     * @param canteenId 饭堂id组
+     * @param canteenId 食堂id组
      * @return 结果
      */
     public String checkCanteenDishTypeByCanteenId(Long canteenId);
