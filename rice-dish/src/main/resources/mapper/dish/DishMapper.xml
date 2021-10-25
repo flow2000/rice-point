@@ -22,10 +22,12 @@
     </resultMap>
 
     <sql id="selectDishVo">
-        select rd.dish_id, rd.type_id, rcd.canteen_id, rd.dishes_name, rt.type_name as dishes_type, rd.url, rd.price, rd.onsale, rd.status, rd.del_flag, rd.create_by, rd.create_time, rd.update_by, rd.update_time
+        select rd.dish_id, rd.type_id, <if test="canteenId != null">rcd.canteen_id,</if> rd.dishes_name, rt.type_name as dishes_type, rd.url, rd.price, rd.onsale, rd.status, rd.del_flag, rd.create_by, rd.create_time, rd.update_by, rd.update_time
         from rice_dish rd
             left join rice_dish_type rt on rd.type_id = rt.type_id
-            left join rice_canteen_dish rcd on rd.dish_id = rcd.dish_id
+            <if test="canteenId != null">
+                left join rice_canteen_dish rcd on rd.dish_id = rcd.dish_id
+            </if>
     </sql>
 
     <select id="selectDishList" parameterType="Dish" resultMap="DishResult">
@@ -42,6 +44,7 @@
     <select id="selectDishByDishId" parameterType="Long" resultMap="DishResult">
         <include refid="selectDishVo"/>
         where rd.dish_id = #{dishId}
+        limit 1
     </select>
 
     <insert id="insertDish" parameterType="Dish" useGeneratedKeys="true" keyProperty="dishId">
