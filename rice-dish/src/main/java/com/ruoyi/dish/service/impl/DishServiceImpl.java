@@ -1,8 +1,12 @@
 package com.ruoyi.dish.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.dish.constatnt.DishConstants;
+import com.ruoyi.dish.domain.CanteenDish;
+import com.ruoyi.dish.mapper.CanteenDishMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.dish.mapper.DishMapper;
@@ -21,6 +25,9 @@ public class DishServiceImpl implements IDishService
     @Autowired
     private DishMapper dishMapper;
 
+    @Autowired
+    private CanteenDishMapper canteenDishMapper;
+
     /**
      * 查询菜品
      *
@@ -30,7 +37,14 @@ public class DishServiceImpl implements IDishService
     @Override
     public Dish selectDishByDishId(Long dishId)
     {
-        return dishMapper.selectDishByDishId(dishId);
+        Dish dish = dishMapper.selectDishByDishId(dishId);
+        if (dish != null){
+            CanteenDish canteenDish = new CanteenDish();
+            canteenDish.setDishId(dishId);
+            Long[] canteenIds = selectCanteenDishList(canteenDish);
+            dish.setCanteenIds(canteenIds);
+        }
+        return dish;
     }
 
     /**
@@ -42,7 +56,37 @@ public class DishServiceImpl implements IDishService
     @Override
     public List<Dish> selectDishList(Dish dish)
     {
-        return dishMapper.selectDishList(dish);
+        List<Dish> list = dishMapper.selectDishList(dish);
+        if (list != null){
+            for (int i = 0; i < list.size(); i++) {
+                Long dish_id = list.get(i).getDishId();
+                CanteenDish canteenDish = new CanteenDish();
+                canteenDish.setDishId(dish_id);
+                Long[] canteenIds = selectCanteenDishList(canteenDish);
+                Dish d = list.get(i);
+                d.setCanteenIds(canteenIds);
+                list.set(i,d);
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 查询食堂菜品列表
+     *
+     * @param canteenDish 菜品类型
+     * @return 菜品类型
+     */
+    private Long[] selectCanteenDishList(CanteenDish canteenDish){
+        List<CanteenDish> list = canteenDishMapper.selectCanteenDish(canteenDish);
+        if (list!=null) {
+            Long[] canteenIds = new Long[list.size()];
+            for (int i = 0; i < list.size(); i++) {
+                canteenIds[i] = list.get(i).getCanteenId();
+            }
+            return canteenIds;
+        }
+        return null;
     }
 
     /**
@@ -56,7 +100,7 @@ public class DishServiceImpl implements IDishService
     {
         dish.setCreateTime(DateUtils.getNowDate());
         int rows = dishMapper.insertDish(dish);
-        // 新增食堂菜品类型关联
+        // 新增食堂菜品关联
         insertCanteenDish(dish);
         return rows;
     }
@@ -67,7 +111,22 @@ public class DishServiceImpl implements IDishService
      * @param dish 菜品对象
      */
     private void insertCanteenDish(Dish dish) {
-
+        Long[] canteenIds = dish.getCanteenIds();
+        if (StringUtils.isNotNull(canteenIds))
+        {
+            List<CanteenDish> list = new ArrayList<CanteenDish>();
+            for (Long canteenId : canteenIds)
+            {
+                CanteenDish cd = new CanteenDish();
+                cd.setDishId(dish.getDishId());
+                cd.setCanteenId(canteenId);
+                list.add(cd);
+            }
+            if (list.size() > 0)
+            {
+                canteenDishMapper.batchCanteenDish(list);
+            }
+        }
     }
 
     /**
@@ -80,6 +139,11 @@ public class DishServiceImpl implements IDishService
     public int updateDish(Dish dish)
     {
         dish.setUpdateTime(DateUtils.getNowDate());
+        Long dishId = dish.getDishId();
+        //删除食堂菜品关联
+        canteenDishMapper.deleteCanteenDishByDishId(dishId);
+        // 新增食堂菜品关联
+        insertCanteenDish(dish);
         return dishMapper.updateDish(dish);
     }
 
@@ -92,6 +156,8 @@ public class DishServiceImpl implements IDishService
     @Override
     public int deleteDishByDishIds(Long[] dishIds)
     {
+        //删除食堂菜品关联
+        canteenDishMapper.deleteCanteenDishByDishIds(dishIds);
         return dishMapper.deleteDishByDishIds(dishIds);
     }
 
@@ -104,18 +170,20 @@ public class DishServiceImpl implements IDishService
     @Override
     public int deleteDishByDishId(Long dishId)
     {
+        //删除食堂菜品关联
+        canteenDishMapper.deleteCanteenDishByDishId(dishId);
         return dishMapper.deleteDishByDishId(dishId);
     }
 
     /**
      * 校验菜品名称是否唯一
      *
-     * @param dishesName 菜品名称
+     * @param dish 菜品
      * @return 结果
      */
     @Override
-    public String checkDishesNameUnique(String dishesName) {
-        int count = dishMapper.checkDishTypeNameUnique(dishesName);
+    public String checkDishesNameUnique(Dish dish) {
+        int count = dishMapper.checkDishUnique(dish);
         if (count > 0)
         {
             return DishConstants.NOT_UNIQUE;

@@ -2,8 +2,7 @@ package com.ruoyi.web.controller.dish;
 
 import java.util.List;
 
-import com.ruoyi.dish.constatnt.DishTypeConstants;
-import com.ruoyi.dish.domain.DishType;
+import com.ruoyi.dish.constatnt.DishConstants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -86,9 +85,9 @@ public class DishController extends BaseController
     @ApiOperation("新增菜品")
     public AjaxResult add(@RequestBody Dish dish)
     {
-        if (DishTypeConstants.NOT_UNIQUE.equals(dishService.checkDishesNameUnique(dish.getDishesName())))
+        if (DishConstants.NOT_UNIQUE.equals(dishService.checkDishesNameUnique(dish)))
         {
-            return AjaxResult.error("新增菜品类型" + dish.getDishesName() + "失败,菜品类型名称已存在");
+            return AjaxResult.error("新增菜品" + dish.getDishesName() + "失败,菜品名称已存在");
         }
         return toAjax(dishService.insertDish(dish));
     }
@@ -102,6 +101,10 @@ public class DishController extends BaseController
     @ApiOperation("修改菜品")
     public AjaxResult edit(@RequestBody Dish dish)
     {
+        if (DishConstants.NOT_UNIQUE.equals(dishService.checkDishesNameUnique(dish)))
+        {
+            return AjaxResult.error("修改菜品" + dish.getDishesName() + "失败,菜品名称已存在");
+        }
         return toAjax(dishService.updateDish(dish));
     }
 

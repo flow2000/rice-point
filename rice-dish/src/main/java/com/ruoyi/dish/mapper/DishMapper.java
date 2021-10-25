@@ -62,10 +62,10 @@ public interface DishMapper
     /**
      * 校验菜品名称是否唯一
      *
-     * @param dishesName 菜品名称
+     * @param dish 菜品信息
      * @return 结果
      */
-    public int checkDishTypeNameUnique(String dishesName);
+    public int checkDishUnique(Dish dish);
 
     /**
      * 修改菜品状态

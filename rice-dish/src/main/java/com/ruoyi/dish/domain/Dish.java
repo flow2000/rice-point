@@ -22,6 +22,9 @@ public class Dish extends BaseEntity
     /** 菜品类型id */
     private Long typeId;
 
+    /** 所属食堂id */
+    private Long canteenId;
+
     /** 菜品名称 */
     @Excel(name = "菜品名称")
     private String dishesName;
@@ -48,6 +51,9 @@ public class Dish extends BaseEntity
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
 
+    /** 食堂组 */
+    private Long[] canteenIds;
+
     public void setDishId(Long dishId)
     {
         this.dishId = dishId;
@@ -65,6 +71,15 @@ public class Dish extends BaseEntity
     public Long getTypeId()
     {
         return typeId;
+    }
+    public void setCanteenId(Long canteenId)
+    {
+        this.canteenId = canteenId;
+    }
+
+    public Long getCanteenId()
+    {
+        return canteenId;
     }
     public void setDishesName(String dishesName)
     {
@@ -129,7 +144,15 @@ public class Dish extends BaseEntity
     {
         return delFlag;
     }
+    public void setCanteenIds(Long[] canteenIds)
+    {
+        this.canteenIds=canteenIds;
+    }
 
+    public Long[] getCanteenIds()
+    {
+        return canteenIds;
+    }
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -146,6 +169,7 @@ public class Dish extends BaseEntity
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
+            .append("canteenIds",getCanteenIds())
             .toString();
     }
 }

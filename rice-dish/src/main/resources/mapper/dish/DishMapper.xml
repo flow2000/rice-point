@@ -7,6 +7,7 @@
     <resultMap type="Dish" id="DishResult">
         <result property="dishId" column="dish_id"/>
         <result property="typeId" column="type_id"/>
+        <result property="canteenId" column="canteen_id"/>
         <result property="dishesName" column="dishes_name"/>
         <result property="dishesType" column="dishes_type"/>
         <result property="url" column="url"/>
@@ -21,9 +22,10 @@
     </resultMap>
 
     <sql id="selectDishVo">
-        select rd.dish_id, rd.type_id, rd.dishes_name, rt.type_name as dishes_type, rd.url, rd.price, rd.onsale, rd.status, rd.del_flag, rd.create_by, rd.create_time, rd.update_by, rd.update_time
+        select rd.dish_id, rd.type_id, rcd.canteen_id, rd.dishes_name, rt.type_name as dishes_type, rd.url, rd.price, rd.onsale, rd.status, rd.del_flag, rd.create_by, rd.create_time, rd.update_by, rd.update_time
         from rice_dish rd
             left join rice_dish_type rt on rd.type_id = rt.type_id
+            left join rice_canteen_dish rcd on rd.dish_id = rcd.dish_id
     </sql>
 
     <select id="selectDishList" parameterType="Dish" resultMap="DishResult">
@@ -31,6 +33,7 @@
         <where>
             <if test="dishesName != null  and dishesName != ''">and dishes_name like concat('%', #{dishesName}, '%')
             </if>
+            <if test="canteenId != null  and canteenId != ''">and rcd.canteen_id = #{canteenId}</if>
             <if test="dishesType != null ">and rt.type_name = #{dishesType}</if>
             <if test="price != null ">and price = #{price}</if>
         </where>
@@ -38,7 +41,7 @@
 
     <select id="selectDishByDishId" parameterType="Long" resultMap="DishResult">
         <include refid="selectDishVo"/>
-        where dish_id = #{dishId}
+        where rd.dish_id = #{dishId}
     </select>
 
     <insert id="insertDish" parameterType="Dish" useGeneratedKeys="true" keyProperty="dishId">
@@ -104,8 +107,11 @@
         </foreach>
     </update>
 
-    <select id="checkDishesNameUnique" parameterType="String" resultType="int">
-        select count(1) from rice_dish where dishes_name=#{dishesName} limit 1
+    <select id="checkDishUnique" parameterType="Dish" resultType="int">
+        select count(1)
+        from rice_dish
+        where dishes_name=#{dishesName} and dish_id!=#{dishId} and del_flag=0
+        limit 1
     </select>
 
     <update id="updateDishStatus" parameterType="Dish">
