@@ -12,6 +12,8 @@ public class CanteenConstants {
     public final static String NOT_UNIQUE = "1";
     public final static String PASS_RULES = "0";
     public final static String NOT_PASS_RULES = "2";
+    public final static String EXIST = "0";
+    public final static String NOT_EXIST = "3";
 
     /**
      * 饭堂名称长度限制

@@ -74,4 +74,20 @@ public interface CanteenMapper
      * @return 结果
      */
     public int checkCanteenNameUnique(String canteenName);
+
+    /**
+     * 检查是否存在食堂和菜品类型关联
+     *
+     * @param canteenIds 饭堂id组
+     * @return 结果
+     */
+    public int checkCanteenDishTypeByCanteenIds(Long[] canteenIds);
+
+    /**
+     * 检查是否存在食堂和菜品类型关联
+     *
+     * @param canteenId 饭堂id
+     * @return 结果
+     */
+    public int checkCanteenDishTypeByCanteenId(Long canteenId);
 }

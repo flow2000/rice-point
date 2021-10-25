@@ -103,6 +103,10 @@ public class CanteenController extends BaseController {
         {
             return AjaxResult.error("修改" + canteen.getCanteenName() + "失败,请检查是否符合规则");
         }
+        if (CanteenConstants.NOT_UNIQUE.equals(canteenService.checkCanteenNameUnique(canteen.getCanteenName())))
+        {
+            return AjaxResult.error("新增" + canteen.getCanteenName() + "失败,食堂名称已存在");
+        }
         return toAjax(canteenService.updateCanteen(canteen));
     }
 
@@ -114,6 +118,10 @@ public class CanteenController extends BaseController {
     @DeleteMapping("/{canteenIds}")
     @ApiOperation("删除食堂信息")
     public AjaxResult remove(@PathVariable Long[] canteenIds) {
+        if (CanteenConstants.EXIST.equals(canteenService.checkCanteenDishTypeByCanteenIds(canteenIds)))
+        {
+            return AjaxResult.error("食堂已分配,不能删除");
+        }
         return toAjax(canteenService.deleteCanteenByCanteenIds(canteenIds));
     }
 

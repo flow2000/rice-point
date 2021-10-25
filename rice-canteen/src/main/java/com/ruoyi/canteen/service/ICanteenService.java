@@ -82,4 +82,20 @@ public interface ICanteenService
      * @return 结果
      */
     public String checkPassRules(Canteen canteen);
+
+    /**
+     * 检查是否存在食堂和菜品类型关联
+     *
+     * @param canteenIds 饭堂id组
+     * @return 结果
+     */
+    public String checkCanteenDishTypeByCanteenIds(Long[] canteenIds);
+
+    /**
+     * 检查是否存在食堂和菜品类型关联
+     *
+     * @param canteenId 饭堂id组
+     * @return 结果
+     */
+    public String checkCanteenDishTypeByCanteenId(Long canteenId);
 }

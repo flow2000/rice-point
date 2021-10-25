@@ -129,4 +129,19 @@
         select count(1) from rice_canteen where canteen_name=#{canteenName} limit 1
     </select>
 
+    <select id="checkCanteenDishTypeByCanteenIds" resultType="int">
+        select count(1) from rice_canteen_dish_type
+        where canteen_id in
+        <foreach item="canteenId" collection="array" open="(" separator="," close=")">
+            #{canteenId}
+        </foreach>
+    </select>
+
+    <select id="checkCanteenDishTypeByCanteenId" resultType="int">
+        select count(1) from rice_canteen_dish_type
+        where canteen_id  in
+        <foreach item="canteenId" collection="array" open="(" separator="," close=")">
+            #{canteenId}
+        </foreach>
+    </select>
 </mapper>

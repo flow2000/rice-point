@@ -131,11 +131,43 @@ public class CanteenServiceImpl implements ICanteenService {
             return CanteenConstants.NOT_PASS_RULES;
         }
         Pattern pattern = Pattern.compile("^(0\\.\\d{0,1}[1-9]|\\+?[1-9][0-9]{0,3})(\\.\\d{1,2})?$"); // 判断小数点后2位的数字的正则表达式
-        Matcher match = pattern.matcher(canteen.getAverage().toString());
-        if (!match.matches()) {
-            return CanteenConstants.NOT_PASS_RULES;
+        if (canteen.getAverage()!=null){
+            Matcher match = pattern.matcher(canteen.getAverage().toString());
+            if (!match.matches()) {
+                return CanteenConstants.NOT_PASS_RULES;
+            }
         }
         return CanteenConstants.PASS_RULES;
+    }
+
+    /**
+     * 检查是否存在食堂和菜品类型关联
+     *
+     * @param canteenIds 饭堂id组
+     * @return 结果
+     */
+    @Override
+    public String checkCanteenDishTypeByCanteenIds(Long[] canteenIds) {
+        int count = canteenMapper.checkCanteenDishTypeByCanteenIds(canteenIds);
+        if (count > 0) {
+            return CanteenConstants.EXIST;
+        }
+        return CanteenConstants.NOT_EXIST;
+    }
+
+    /**
+     * 检查是否存在食堂和菜品类型关联
+     *
+     * @param canteenId 饭堂id
+     * @return 结果
+     */
+    @Override
+    public String checkCanteenDishTypeByCanteenId(Long canteenId) {
+        int count = canteenMapper.checkCanteenDishTypeByCanteenId(canteenId);
+        if (count > 0) {
+            return CanteenConstants.NOT_EXIST;
+        }
+        return CanteenConstants.EXIST;
     }
 
 }
