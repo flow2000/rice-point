@@ -136,4 +136,15 @@ public class CanteenController extends BaseController {
         return toAjax(canteenService.changeCanteenStatus(canteen));
     }
 
+    /**
+     * 获取食堂下拉树列表
+     */
+    @GetMapping("/treeselect")
+    @Log(title = "食堂信息", businessType = BusinessType.UPDATE)
+    @ApiOperation("获取食堂下拉树列表")
+    public AjaxResult treeselect(Canteen canteen)
+    {
+        List<Canteen> canteens = canteenService.selectCanteenList(canteen);
+        return AjaxResult.success(canteenService.buildCanteenTreeSelect(canteens));
+    }
 }

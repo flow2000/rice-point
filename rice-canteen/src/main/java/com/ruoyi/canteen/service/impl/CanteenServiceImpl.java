@@ -1,11 +1,16 @@
 package com.ruoyi.canteen.service.impl;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import com.ruoyi.canteen.constant.CanteenConstants;
+import com.ruoyi.canteen.domain.CanteenTreeSelect;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.canteen.mapper.CanteenMapper;
@@ -170,4 +175,94 @@ public class CanteenServiceImpl implements ICanteenService {
         return CanteenConstants.EXIST;
     }
 
+    /**
+     * 获取食堂下拉树列表
+     * @return 食堂下拉树列表
+     */
+    @Override
+    public List<CanteenTreeSelect> buildCanteenTreeSelect(List<Canteen> canteens) {
+        for (int i = 0; i < canteens.size(); i++) {
+            Canteen canteen = canteens.get(i);
+            canteen.setParentId(0L);
+            List<Canteen> children = new ArrayList<>();
+            canteen.setChildren(children);
+            canteens.set(i,canteen);
+        }
+        List<Canteen> canteenTrees = buildDeptTree(canteens);
+        return  canteenTrees.stream().map(CanteenTreeSelect::new).collect(Collectors.toList());
+    }
+
+    /**
+     * 构建前端所需要树结构
+     *
+     * @param canteens 部门列表
+     * @return 树结构列表
+     */
+    public List<Canteen> buildDeptTree(List<Canteen> canteens)
+    {
+        List<Canteen> returnList = new ArrayList<Canteen>();
+        List<Long> tempList = new ArrayList<Long>();
+        for (Canteen canteen : canteens)
+        {
+            tempList.add(canteen.getCanteenId());
+        }
+        for (Iterator<Canteen> iterator = canteens.iterator(); iterator.hasNext();)
+        {
+            Canteen canteen = (Canteen) iterator.next();
+            // 如果是顶级节点, 遍历该父节点的所有子节点
+            if (!tempList.contains(canteen.getParentId()))
+            {
+                recursionFn(canteens, canteen);
+                returnList.add(canteen);
+            }
+        }
+        if (returnList.isEmpty())
+        {
+            returnList = canteens;
+        }
+        return returnList;
+    }
+
+    /**
+     * 递归列表
+     */
+    private void recursionFn(List<Canteen> list, Canteen t)
+    {
+        // 得到子节点列表
+        List<Canteen> childList = getChildList(list, t);
+        t.setChildren(childList);
+        for (Canteen tChild : childList)
+        {
+            if (hasChild(list, tChild))
+            {
+                recursionFn(list, tChild);
+            }
+        }
+    }
+
+    /**
+     * 判断是否有子节点
+     */
+    private boolean hasChild(List<Canteen> list, Canteen t)
+    {
+        return getChildList(list, t).size() > 0;
+    }
+
+    /**
+     * 得到子节点列表
+     */
+    private List<Canteen> getChildList(List<Canteen> list, Canteen t)
+    {
+        List<Canteen> tlist = new ArrayList<Canteen>();
+        Iterator<Canteen> it = list.iterator();
+        while (it.hasNext())
+        {
+            Canteen n = (Canteen) it.next();
+            if (StringUtils.isNotNull(n.getParentId()) && n.getParentId().longValue() == t.getCanteenId().longValue())
+            {
+                tlist.add(n);
+            }
+        }
+        return tlist;
+    }
 }

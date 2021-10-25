@@ -2,6 +2,7 @@ package com.ruoyi.canteen.service;
 
 import java.util.List;
 import com.ruoyi.canteen.domain.Canteen;
+import com.ruoyi.canteen.domain.CanteenTreeSelect;
 
 /**
  * 食堂信息Service接口
@@ -98,4 +99,10 @@ public interface ICanteenService
      * @return 结果
      */
     public String checkCanteenDishTypeByCanteenId(Long canteenId);
+
+    /**
+     * 获取食堂下拉树列表
+     * @return
+     */
+    public List<CanteenTreeSelect> buildCanteenTreeSelect(List<Canteen> canteens);
 }

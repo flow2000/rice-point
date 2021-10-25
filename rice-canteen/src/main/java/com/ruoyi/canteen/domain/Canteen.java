@@ -1,6 +1,9 @@
 package com.ruoyi.canteen.domain;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -55,6 +58,12 @@ public class Canteen extends BaseEntity
 
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
+
+    /** 父食堂id */
+    private Long parentId;
+
+    /** 子食堂 */
+    private List<Canteen> children = new ArrayList<Canteen>();
 
     public void setCanteenId(Long canteenId)
     {
@@ -154,6 +163,24 @@ public class Canteen extends BaseEntity
     public String getDelFlag()
     {
         return delFlag;
+    }
+    public void setChildren(List<Canteen> children)
+    {
+        this.children = children;
+    }
+
+    public List<Canteen> getChildren()
+    {
+        return children;
+    }
+    public void setParentId(Long parentId)
+    {
+        this.parentId = parentId;
+    }
+
+    public Long getParentId()
+    {
+        return parentId;
     }
 
     @Override
