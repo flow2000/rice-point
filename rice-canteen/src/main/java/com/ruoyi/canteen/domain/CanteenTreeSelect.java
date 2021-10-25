@@ -21,6 +21,9 @@ public class CanteenTreeSelect implements Serializable
     /** 节点名称 */
     private String label;
 
+    /** 是否被禁用 1=禁用 0=正常(默认) */
+    private boolean disabled = false;
+
     /** 子节点 */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<CanteenTreeSelect> children;
@@ -34,6 +37,7 @@ public class CanteenTreeSelect implements Serializable
     {
         this.id = canteen.getCanteenId();
         this.label = canteen.getCanteenName();
+        this.disabled = "1".equals(canteen.getStatus());
         this.children = canteen.getChildren().stream().map(CanteenTreeSelect::new).collect(Collectors.toList());
     }
 
@@ -55,6 +59,16 @@ public class CanteenTreeSelect implements Serializable
     public void setLabel(String label)
     {
         this.label = label;
+    }
+
+    public Boolean getDisabled()
+    {
+        return disabled;
+    }
+
+    public void setDisabled(Boolean status)
+    {
+        this.disabled = status;
     }
 
     public List<CanteenTreeSelect> getChildren()
