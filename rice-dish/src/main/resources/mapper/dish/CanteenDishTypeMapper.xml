@@ -21,6 +21,14 @@
         where type_id=#{typeId}
     </delete>
 
+    <delete id="deleteCanteenDishTypeByTypeIds" parameterType="String">
+        delete from rice_canteen_dish_type
+        where type_id in
+        <foreach item="typeId" collection="array" open="(" separator="," close=")">
+            #{typeId}
+        </foreach>
+    </delete>
+
     <select id="selectCanteenDishType" parameterType="CanteenDishType" resultMap="CanteenDishTypeResult">
         select type_id, canteen_id from rice_canteen_dish_type
         <where>

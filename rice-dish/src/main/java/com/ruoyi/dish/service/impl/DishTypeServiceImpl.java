@@ -135,6 +135,8 @@ public class DishTypeServiceImpl implements IDishTypeService
     @Override
     public int deleteDishTypeByTypeIds(Long[] typeIds)
     {
+        //批量删除食堂菜品类型
+        canteenDishTypeMapper.deleteCanteenDishTypeByTypeIds(typeIds);
         return dishTypeMapper.deleteDishTypeByTypeIds(typeIds);
     }
 
@@ -147,6 +149,8 @@ public class DishTypeServiceImpl implements IDishTypeService
     @Override
     public int deleteDishTypeByTypeId(Long typeId)
     {
+        //删除食堂菜品类型
+        canteenDishTypeMapper.deleteCanteenDishTypeByTypeId(typeId);
         return dishTypeMapper.deleteDishTypeByTypeId(typeId);
     }
 

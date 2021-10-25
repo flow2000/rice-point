@@ -27,7 +27,14 @@ public interface CanteenDishTypeMapper {
     public void deleteCanteenDishTypeByTypeId(Long typeId);
 
     /**
-     * 删除食堂菜品类型
+     * 批量删除食堂菜品类型
+     *
+     * @param typeId 菜品类型id
+     */
+    public void deleteCanteenDishTypeByTypeIds(Long[] typeId);
+
+    /**
+     * 查询食堂菜品类型
      *
      * @param canteenDishType 食堂菜品类型
      */
