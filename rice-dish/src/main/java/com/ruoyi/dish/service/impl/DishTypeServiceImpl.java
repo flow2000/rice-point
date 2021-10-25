@@ -42,14 +42,8 @@ public class DishTypeServiceImpl implements IDishTypeService
             Long type_id = dishType.getTypeId();
             CanteenDishType canteenDishType = new CanteenDishType();
             canteenDishType.setTypeId(type_id);
-            List<CanteenDishType> list = canteenDishTypeMapper.selectCanteenDishType(canteenDishType);
-            if (list!=null) {
-                Long[] canteenIds = new Long[list.size()];
-                for (int i = 0; i < list.size(); i++) {
-                    canteenIds[i] = list.get(i).getCanteenId();
-                }
-                dishType.setCanteenIds(canteenIds);
-            }
+            Long[] canteenIds = selectCanteenDishTypeList(canteenDishType);
+            dishType.setCanteenIds(canteenIds);
         }
         return dishType;
     }
@@ -63,7 +57,37 @@ public class DishTypeServiceImpl implements IDishTypeService
     @Override
     public List<DishType> selectDishTypeList(DishType dishType)
     {
-        return dishTypeMapper.selectDishTypeList(dishType);
+        List<DishType> list = dishTypeMapper.selectDishTypeList(dishType);
+        if (list != null){
+            for (int i = 0; i < list.size(); i++) {
+                Long type_id = list.get(i).getTypeId();
+                CanteenDishType canteenDishType = new CanteenDishType();
+                canteenDishType.setTypeId(type_id);
+                Long[] canteenIds = selectCanteenDishTypeList(canteenDishType);
+                DishType dt = list.get(i);
+                dt.setCanteenIds(canteenIds);
+                list.set(i,dt);
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 查询食堂菜品类型列表
+     *
+     * @param canteenDishType 菜品类型
+     * @return 菜品类型
+     */
+    private Long[] selectCanteenDishTypeList(CanteenDishType canteenDishType){
+        List<CanteenDishType> list = canteenDishTypeMapper.selectCanteenDishType(canteenDishType);
+        if (list!=null) {
+            Long[] canteenIds = new Long[list.size()];
+            for (int i = 0; i < list.size(); i++) {
+                canteenIds[i] = list.get(i).getCanteenId();
+            }
+            return canteenIds;
+        }
+        return null;
     }
 
     /**
