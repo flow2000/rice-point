@@ -181,13 +181,6 @@ public class CanteenServiceImpl implements ICanteenService {
      */
     @Override
     public List<CanteenTreeSelect> buildCanteenTreeSelect(List<Canteen> canteens) {
-        for (int i = 0; i < canteens.size(); i++) {
-            Canteen canteen = canteens.get(i);
-            canteen.setParentId(0L);
-            List<Canteen> children = new ArrayList<>();
-            canteen.setChildren(children);
-            canteens.set(i,canteen);
-        }
         List<Canteen> canteenTrees = buildDeptTree(canteens);
         return  canteenTrees.stream().map(CanteenTreeSelect::new).collect(Collectors.toList());
     }
