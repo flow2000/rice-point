@@ -95,7 +95,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="checkDishTypeUnique" parameterType="DishType" resultType="int">
         select count(1)
         from rice_dish_type
-        where type_name = #{typeName} and type_id != #{typeId} and del_flag = 0
+        where type_name = #{typeName}
+        <if test="typeId!=null">and type_id != #{typeId} </if>
+        and del_flag = 0
         limit 1
     </select>
 

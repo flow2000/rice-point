@@ -200,8 +200,8 @@ public class DishTypeServiceImpl implements IDishTypeService
         int count = dishTypeMapper.checkDishTypeUnique(dishType);
         if (count > 0)
         {
-            return DishTypeConstants.NOT_UNIQUE;
+            return DishTypeConstants.UNIQUE;
         }
-        return DishTypeConstants.UNIQUE;
+        return DishTypeConstants.NOT_UNIQUE;
     }
 }

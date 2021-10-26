@@ -186,9 +186,9 @@ public class DishServiceImpl implements IDishService
         int count = dishMapper.checkDishUnique(dish);
         if (count > 0)
         {
-            return DishConstants.NOT_UNIQUE;
+            return DishConstants.UNIQUE;
         }
-        return DishConstants.UNIQUE;
+        return DishConstants.NOT_UNIQUE;
     }
 
     /**

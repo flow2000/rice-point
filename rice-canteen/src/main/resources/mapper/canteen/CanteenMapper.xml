@@ -128,7 +128,9 @@
     <select id="checkCanteenUnique" parameterType="Canteen" resultType="int">
         select count(1)
         from rice_canteen
-        where canteen_name=#{canteenName} and canteen_id != #{canteenId} and del_flag = 0
+        where canteen_name=#{canteenName}
+        <if test="canteenId!=null">and canteen_id != #{canteenId} </if>
+        and del_flag = 0
         limit 1
     </select>
 

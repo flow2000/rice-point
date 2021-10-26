@@ -85,7 +85,7 @@ public class DishController extends BaseController
     @ApiOperation("新增菜品")
     public AjaxResult add(@RequestBody Dish dish)
     {
-        if (DishConstants.NOT_UNIQUE.equals(dishService.checkDishesNameUnique(dish)))
+        if (DishConstants.UNIQUE.equals(dishService.checkDishesNameUnique(dish)))
         {
             return AjaxResult.error("新增菜品" + dish.getDishesName() + "失败,菜品名称已存在");
         }
@@ -101,7 +101,7 @@ public class DishController extends BaseController
     @ApiOperation("修改菜品")
     public AjaxResult edit(@RequestBody Dish dish)
     {
-        if (DishConstants.NOT_UNIQUE.equals(dishService.checkDishesNameUnique(dish)))
+        if (DishConstants.UNIQUE.equals(dishService.checkDishesNameUnique(dish)))
         {
             return AjaxResult.error("修改菜品" + dish.getDishesName() + "失败,菜品名称已存在");
         }

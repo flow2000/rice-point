@@ -38,12 +38,14 @@
             <if test="canteenId != null  and canteenId != ''">and rcd.canteen_id = #{canteenId}</if>
             <if test="dishesType != null ">and rt.type_name = #{dishesType}</if>
             <if test="price != null ">and price = #{price}</if>
+            and rd.del_flag=0
         </where>
     </select>
 
     <select id="selectDishByDishId" parameterType="Long" resultMap="DishResult">
         <include refid="selectDishVo"/>
         where rd.dish_id = #{dishId}
+        and rd.del_flag=0
         limit 1
     </select>
 
@@ -113,7 +115,9 @@
     <select id="checkDishUnique" parameterType="Dish" resultType="int">
         select count(1)
         from rice_dish
-        where dishes_name=#{dishesName} and dish_id!=#{dishId} and del_flag=0
+        where dishes_name=#{dishesName}
+        <if test="dishId!=null">and dish_id!=#{dishId}</if>
+        and del_flag=0
         limit 1
     </select>
 
