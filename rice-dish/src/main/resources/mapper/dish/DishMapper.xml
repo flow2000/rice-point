@@ -56,7 +56,6 @@
             <if test="typeId != null ">type_id,</if>
             <if test="url != null">url,</if>
             <if test="price != null">price,</if>
-            <if test="onsale != null">onsale,</if>
             <if test="status != null">status,</if>
             <if test="delFlag != null">del_flag,</if>
             <if test="createBy != null">create_by,</if>
@@ -66,10 +65,9 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="dishesName != null">#{dishesName},</if>
-            <if test="typeId != null ">#{typeId}</if>
+            <if test="typeId != null ">#{typeId},</if>
             <if test="url != null">#{url},</if>
             <if test="price != null">#{price},</if>
-            <if test="onsale != null">#{onsale},</if>
             <if test="status != null">#{status},</if>
             <if test="delFlag != null">#{delFlag},</if>
             <if test="createBy != null">#{createBy},</if>
