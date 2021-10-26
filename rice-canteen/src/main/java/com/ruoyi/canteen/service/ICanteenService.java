@@ -95,7 +95,7 @@ public interface ICanteenService
     /**
      * 检查是否存在食堂和菜品类型关联
      *
-     * @param canteenId 食堂id组
+     * @param canteenId 食堂id
      * @return 结果
      */
     public String checkCanteenDishTypeByCanteenId(Long canteenId);
@@ -105,4 +105,20 @@ public interface ICanteenService
      * @return
      */
     public List<CanteenTreeSelect> buildCanteenTreeSelect(List<Canteen> canteens);
+
+    /**
+     * 检查是否存在食堂和菜品类型关联
+     *
+     * @param canteenIds 食堂id组
+     * @return 结果
+     */
+    String checkCanteenDishByCanteenIds(Long[] canteenIds);
+
+    /**
+     * 检查是否存在食堂和菜品类型关联
+     *
+     * @param canteenId 食堂id
+     * @return 结果
+     */
+    String checkCanteenDishByCanteenId(Long canteenId);
 }

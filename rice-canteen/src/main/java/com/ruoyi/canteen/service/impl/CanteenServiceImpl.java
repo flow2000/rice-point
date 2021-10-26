@@ -163,7 +163,7 @@ public class CanteenServiceImpl implements ICanteenService {
     /**
      * 检查是否存在食堂和菜品类型关联
      *
-     * @param canteenId 饭堂id
+     * @param canteenId 食堂id
      * @return 结果
      */
     @Override
@@ -174,6 +174,37 @@ public class CanteenServiceImpl implements ICanteenService {
         }
         return CanteenConstants.EXIST;
     }
+
+    /**
+     * 检查是否存在食堂和菜品类型关联
+     *
+     * @param canteenIds 食堂id组
+     * @return 结果
+     */
+    @Override
+    public String checkCanteenDishByCanteenIds(Long[] canteenIds) {
+        int count = canteenMapper.checkCanteenDishByCanteenIds(canteenIds);
+        if (count > 0) {
+            return CanteenConstants.NOT_EXIST;
+        }
+        return CanteenConstants.EXIST;
+    }
+
+    /**
+     * 检查是否存在食堂和菜品类型关联
+     *
+     * @param canteenId 食堂id
+     * @return 结果
+     */
+    @Override
+    public String checkCanteenDishByCanteenId(Long canteenId) {
+        int count = canteenMapper.checkCanteenDishByCanteenId(canteenId);
+        if (count > 0) {
+            return CanteenConstants.NOT_EXIST;
+        }
+        return CanteenConstants.EXIST;
+    }
+
 
     /**
      * 获取食堂下拉树列表

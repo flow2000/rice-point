@@ -120,7 +120,11 @@ public class CanteenController extends BaseController {
     public AjaxResult remove(@PathVariable Long[] canteenIds) {
         if (CanteenConstants.EXIST.equals(canteenService.checkCanteenDishTypeByCanteenIds(canteenIds)))
         {
-            return AjaxResult.error("食堂已分配,不能删除");
+            return AjaxResult.error("食堂已分配到菜品类型,不能删除");
+        }
+        if (CanteenConstants.EXIST.equals(canteenService.checkCanteenDishByCanteenIds(canteenIds)))
+        {
+            return AjaxResult.error("食堂已分配菜品,不能删除");
         }
         return toAjax(canteenService.deleteCanteenByCanteenIds(canteenIds));
     }

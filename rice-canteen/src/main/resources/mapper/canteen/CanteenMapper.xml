@@ -149,4 +149,20 @@
             #{canteenId}
         </foreach>
     </select>
+
+    <select id="checkCanteenDishByCanteenIds" resultType="int">
+        select count(1) from rice_canteen_dish
+        where canteen_id in
+        <foreach item="canteenId" collection="array" open="(" separator="," close=")">
+            #{canteenId}
+        </foreach>
+    </select>
+
+    <select id="checkCanteenDishByCanteenId" resultType="int">
+        select count(1) from rice_canteen_dish
+        where canteen_id  in
+        <foreach item="canteenId" collection="array" open="(" separator="," close=")">
+            #{canteenId}
+        </foreach>
+    </select>
 </mapper>

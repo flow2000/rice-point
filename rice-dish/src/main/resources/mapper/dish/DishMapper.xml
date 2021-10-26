@@ -33,10 +33,10 @@
     <select id="selectDishList" parameterType="Dish" resultMap="DishResult">
         <include refid="selectDishVo"/>
         <where>
-            <if test="dishesName != null  and dishesName != ''">and dishes_name like concat('%', #{dishesName}, '%')
+            <if test="dishesName != null and dishesName != ''">and dishes_name like concat('%', #{dishesName}, '%')
             </if>
-            <if test="canteenId != null  and canteenId != ''">and rcd.canteen_id = #{canteenId}</if>
-            <if test="dishesType != null ">and rt.type_name = #{dishesType}</if>
+            <if test="canteenId != null">and rcd.canteen_id = #{canteenId}</if>
+            <if test="dishesType != null and dishesType != ''">and rt.type_name = #{dishesType}</if>
             <if test="price != null ">and price = #{price}</if>
             and rd.del_flag=0
         </where>
@@ -52,7 +52,7 @@
     <insert id="insertDish" parameterType="Dish" useGeneratedKeys="true" keyProperty="dishId">
         insert into rice_dish
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="dishesName != null">dishes_name,</if>
+            <if test="dishesName != null and dishesName != ''">dishes_name,</if>
             <if test="typeId != null ">type_id,</if>
             <if test="url != null">url,</if>
             <if test="price != null">price,</if>
@@ -64,7 +64,7 @@
             <if test="updateTime != null">update_time,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="dishesName != null">#{dishesName},</if>
+            <if test="dishesName != null and dishesName != '' ">#{dishesName},</if>
             <if test="typeId != null ">#{typeId},</if>
             <if test="url != null">#{url},</if>
             <if test="price != null">#{price},</if>
@@ -80,7 +80,7 @@
     <update id="updateDish" parameterType="Dish">
         update rice_dish
         <trim prefix="SET" suffixOverrides=",">
-            <if test="dishesName != null">dishes_name = #{dishesName},</if>
+            <if test="dishesName != null and dishesName != ''">dishes_name = #{dishesName},</if>
             <if test="typeId != null ">type_id = #{typeId},</if>
             <if test="url != null">url = #{url},</if>
             <if test="price != null">price = #{price},</if>
@@ -122,7 +122,7 @@
     <update id="updateDishStatus" parameterType="Dish">
         update rice_dish
         <trim prefix="SET" suffixOverrides=",">
-            <if test="status != null">status = #{status},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
         where dish_id = #{dishId}
