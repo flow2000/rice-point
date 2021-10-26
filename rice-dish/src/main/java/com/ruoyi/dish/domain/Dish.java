@@ -42,7 +42,7 @@ public class Dish extends BaseEntity
 
     /** 月售量 */
     @Excel(name = "月售量")
-    private Long onsale;
+    private int onsale;
 
     /** 菜品状态（0正常 1停用） */
     @Excel(name = "菜品状态", readConverterExp = "0=正常,1=停用")
@@ -117,12 +117,12 @@ public class Dish extends BaseEntity
     {
         return price;
     }
-    public void setOnsale(Long onsale)
+    public void setOnsale(int onsale)
     {
         this.onsale = onsale;
     }
 
-    public Long getOnsale()
+    public int getOnsale()
     {
         return onsale;
     }
