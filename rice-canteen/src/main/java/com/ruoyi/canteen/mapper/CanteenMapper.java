@@ -92,7 +92,7 @@ public interface CanteenMapper
     public int checkCanteenDishTypeByCanteenId(Long canteenId);
 
     /**
-     * 检查是否存在食堂和菜品类型关联
+     * 检查是否存在食堂和菜品关联
      *
      * @param canteenIds 食堂id组
      * @return 结果
@@ -100,7 +100,7 @@ public interface CanteenMapper
     public int checkCanteenDishByCanteenIds(Long[] canteenIds);
 
     /**
-     * 检查是否存在食堂和菜品类型关联
+     * 检查是否存在食堂和菜品关联
      *
      * @param canteenId 食堂id
      * @return 结果

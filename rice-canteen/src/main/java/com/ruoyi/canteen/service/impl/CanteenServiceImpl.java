@@ -170,13 +170,13 @@ public class CanteenServiceImpl implements ICanteenService {
     public String checkCanteenDishTypeByCanteenId(Long canteenId) {
         int count = canteenMapper.checkCanteenDishTypeByCanteenId(canteenId);
         if (count > 0) {
-            return CanteenConstants.NOT_EXIST;
+            return CanteenConstants.EXIST;
         }
-        return CanteenConstants.EXIST;
+        return CanteenConstants.NOT_EXIST;
     }
 
     /**
-     * 检查是否存在食堂和菜品类型关联
+     * 检查是否存在食堂和菜品关联
      *
      * @param canteenIds 食堂id组
      * @return 结果
@@ -185,13 +185,13 @@ public class CanteenServiceImpl implements ICanteenService {
     public String checkCanteenDishByCanteenIds(Long[] canteenIds) {
         int count = canteenMapper.checkCanteenDishByCanteenIds(canteenIds);
         if (count > 0) {
-            return CanteenConstants.NOT_EXIST;
+            return CanteenConstants.EXIST;
         }
-        return CanteenConstants.EXIST;
+        return CanteenConstants.NOT_EXIST;
     }
 
     /**
-     * 检查是否存在食堂和菜品类型关联
+     * 检查是否存在食堂和菜品关联
      *
      * @param canteenId 食堂id
      * @return 结果
@@ -200,9 +200,9 @@ public class CanteenServiceImpl implements ICanteenService {
     public String checkCanteenDishByCanteenId(Long canteenId) {
         int count = canteenMapper.checkCanteenDishByCanteenId(canteenId);
         if (count > 0) {
-            return CanteenConstants.NOT_EXIST;
+            return CanteenConstants.EXIST;
         }
-        return CanteenConstants.EXIST;
+        return CanteenConstants.NOT_EXIST;
     }
 
 
