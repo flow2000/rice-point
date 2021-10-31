@@ -54,24 +54,6 @@ public class SysLoginController
     }
 
     /**
-     * app登录
-     *
-     * @param loginBody 登录信息
-     * @return 结果
-     */
-    @ApiOperation("app登录")
-    @PostMapping("/appLogin")
-    public AjaxResult appLogin(@RequestBody LoginBody loginBody)
-    {
-        AjaxResult ajax = AjaxResult.success();
-        // 生成令牌
-        String token = loginService.appLogin(loginBody.getUsername(), loginBody.getPassword());
-        ajax.put(Constants.TOKEN, token);
-        return ajax;
-    }
-
-
-    /**
      * 获取用户信息
      *
      * @return 用户信息

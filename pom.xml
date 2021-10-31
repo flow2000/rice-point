@@ -219,6 +219,13 @@
                 <version>${ruoyi.version}</version>
             </dependency>
 
+            <!-- 安卓接口 -->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>rice-android</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+
             <!-- 通用工具-->
             <dependency>
                 <groupId>com.ruoyi</groupId>
@@ -239,6 +246,7 @@
         <module>rice-canteen</module>
         <module>rice-dish</module>
         <module>rice-ticket</module>
+        <module>rice-android</module>
     </modules>
     <packaging>pom</packaging>
 

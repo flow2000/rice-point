@@ -76,6 +76,10 @@
             <artifactId>rice-ticket</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>rice-android</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
