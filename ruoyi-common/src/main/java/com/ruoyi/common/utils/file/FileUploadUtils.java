@@ -113,6 +113,9 @@ public class FileUploadUtils
         File desc = getAbsoluteFile(baseDir, fileName);
         file.transferTo(desc);
         String pathFileName = getPathFileName(baseDir, fileName);
+
+        ConnectTencentCloud connectTencentCloud = new ConnectTencentCloud();
+        connectTencentCloud.uploadObject(desc, pathFileName);
         return pathFileName;
     }
 
