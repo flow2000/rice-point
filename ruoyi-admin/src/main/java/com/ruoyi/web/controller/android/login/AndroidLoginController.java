@@ -44,8 +44,9 @@ public class AndroidLoginController extends BaseController {
             ajax.put("accessToken", androidToken.getAccessToken());
             ajax.put("refreshTokenExpiresIn", androidToken.getRefreshTokenExpiresIn());
             ajax.put("accessTokenExpiresIn", androidToken.getAccessTokenExpiresIn());
+        }else {
+            ajax = AjaxResult.error("用户不存在或帐号密码错误");
         }
-        ajax = AjaxResult.error("用户不存在或帐号密码错误");
         return ajax;
     }
 }

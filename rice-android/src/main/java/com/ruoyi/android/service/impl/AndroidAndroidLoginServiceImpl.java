@@ -41,11 +41,14 @@ public class AndroidAndroidLoginServiceImpl implements IAndroidLoginService {
             return null;
         }
 
-        //解密password
+        //数据库查询得到的密码
         String password = androidUser.getPassword();
 
+        //登录密码
+        String pd = androidLoginBody.getPassword();
+
         //密码错误
-        if (password.equals(androidLoginBody.getPassword())){
+        if (!password.equals(pd)){
             return null;
         }
 
