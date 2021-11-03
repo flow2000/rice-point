@@ -1,14 +1,23 @@
 package com.ruoyi.android.service.impl;
 
 import com.ruoyi.android.domain.AndroidLoginBody;
-import com.ruoyi.android.domain.AndroidToken;
-import com.ruoyi.android.domain.AndroidUser;
-import com.ruoyi.android.mapper.AndroidLoginMapper;
-import com.ruoyi.android.service.AndroidTokenService;
 import com.ruoyi.android.service.IAndroidLoginService;
-import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.constant.Constants;
+import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.exception.ServiceException;
+import com.ruoyi.common.exception.user.UserPasswordNotMatchException;
+import com.ruoyi.common.utils.MessageUtils;
+import com.ruoyi.framework.manager.AsyncManager;
+import com.ruoyi.framework.manager.factory.AsyncFactory;
+import com.ruoyi.framework.web.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * 安卓登录Service业务层处理
@@ -20,10 +29,10 @@ import org.springframework.stereotype.Service;
 public class AndroidLoginServiceImpl implements IAndroidLoginService {
 
     @Autowired
-    private AndroidTokenService androidTokenService;
+    private TokenService tokenService;
 
-    @Autowired
-    private AndroidLoginMapper androidLoginMapper;
+    @Resource
+    private AuthenticationManager authenticationManager;
 
     /**
      * android登录
@@ -32,44 +41,35 @@ public class AndroidLoginServiceImpl implements IAndroidLoginService {
      * @return 结果
      */
     @Override
-    public AndroidToken login(AndroidLoginBody androidLoginBody) {
+    public String login(AndroidLoginBody androidLoginBody) {
 
-        //数据库查找用户,返回androidUser用户对象
-        AndroidUser androidUser = androidLoginMapper.androidLogin(androidLoginBody);
+        // 用户验证
+        Authentication authentication = null;
 
-        //用户不存在
-        if (androidUser == null){
-            return null;
+        String userName = androidLoginBody.getUserName();
+        String password = androidLoginBody.getPassword();
+        try
+        {
+            // 该方法会去调用UserDetailsServiceImpl.loadUserByUsername
+            authentication = authenticationManager
+                    .authenticate(new UsernamePasswordAuthenticationToken(userName, password));
         }
-
-        //数据库查询得到的密码
-        String password = androidUser.getPassword();
-
-        //登录密码
-        String pd = androidLoginBody.getPassword();
-
-        //密码错误
-        if (!password.equals(pd)){
-            return null;
+        catch (Exception e)
+        {
+            if (e instanceof BadCredentialsException)
+            {
+                AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, Constants.LOGIN_FAIL, MessageUtils.message("user.password.not.match")));
+                throw new UserPasswordNotMatchException();
+            }
+            else
+            {
+                AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, Constants.LOGIN_FAIL, e.getMessage()));
+                throw new ServiceException(e.getMessage());
+            }
         }
-
-        //生成访问令牌并保存redis
-        AndroidToken androidToken = androidTokenService.createToken(androidUser);
-
-        //生成刷新令牌
-        String refreshToken = androidTokenService.createRefreshToken();
-        androidToken.setUserId(androidUser.getUserId());
-        androidToken.setRefreshToken(refreshToken);
-        androidToken.setRefreshTokenExpiresIn(androidTokenService.getRefreshTokenExpiresIn());
-        androidToken.setCreateTime(DateUtils.getNowDate());
-
-        //删除原有刷新token
-        androidLoginMapper.deleteRefreshToken(androidToken);
-        //保存数据库
-        androidLoginMapper.insertRefreshToken(androidToken);
-
-        //返回token对象
-        return androidToken;
+        AsyncManager.me().execute(AsyncFactory.recordLogininfor(userName, Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
+        LoginUser loginUser = (LoginUser) authentication.getPrincipal();
+        // 生成token
+        return tokenService.createToken(loginUser);
     }
-
 }

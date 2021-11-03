@@ -1,7 +1,7 @@
 package com.ruoyi.web.controller.android.login;
 
-import com.ruoyi.android.domain.AndroidToken;
 import com.ruoyi.android.service.IAndroidLoginService;
+import com.ruoyi.common.constant.Constants;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.android.domain.AndroidLoginBody;
@@ -35,18 +35,10 @@ public class AndroidLoginController extends BaseController {
     @ApiOperation("安卓登录")
     @PostMapping("/login")
     public AjaxResult login(@RequestBody AndroidLoginBody androidLoginBody) {
-        AjaxResult ajax = null;
-        // 生成令牌数组
-        AndroidToken androidToken = androidLoginService.login(androidLoginBody);
-        if (androidToken != null) {
-            ajax = AjaxResult.success();
-            ajax.put("refreshToken", androidToken.getRefreshToken());
-            ajax.put("accessToken", androidToken.getAccessToken());
-            ajax.put("refreshTokenExpiresIn", androidToken.getRefreshTokenExpiresIn());
-            ajax.put("accessTokenExpiresIn", androidToken.getAccessTokenExpiresIn());
-        }else {
-            ajax = AjaxResult.error("用户不存在或帐号密码错误");
-        }
+        AjaxResult ajax = AjaxResult.success();
+        // 生成令牌
+        String token = androidLoginService.login(androidLoginBody);
+        ajax.put(Constants.TOKEN, token);
         return ajax;
     }
 }
