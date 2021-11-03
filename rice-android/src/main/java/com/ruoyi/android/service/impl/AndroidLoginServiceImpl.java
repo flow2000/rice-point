@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @date 2021-10-31
  */
 @Service
-public class AndroidAndroidLoginServiceImpl implements IAndroidLoginService {
+public class AndroidLoginServiceImpl implements IAndroidLoginService {
 
     @Autowired
     private AndroidTokenService androidTokenService;
@@ -63,6 +63,8 @@ public class AndroidAndroidLoginServiceImpl implements IAndroidLoginService {
         androidToken.setRefreshTokenExpiresIn(androidTokenService.getRefreshTokenExpiresIn());
         androidToken.setCreateTime(DateUtils.getNowDate());
 
+        //删除原有刷新token
+        androidLoginMapper.deleteRefreshToken(androidToken);
         //保存数据库
         androidLoginMapper.insertRefreshToken(androidToken);
 
