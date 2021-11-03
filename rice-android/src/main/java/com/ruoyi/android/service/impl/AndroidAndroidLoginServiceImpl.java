@@ -6,6 +6,7 @@ import com.ruoyi.android.domain.AndroidUser;
 import com.ruoyi.android.mapper.AndroidLoginMapper;
 import com.ruoyi.android.service.AndroidTokenService;
 import com.ruoyi.android.service.IAndroidLoginService;
+import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,8 +53,21 @@ public class AndroidAndroidLoginServiceImpl implements IAndroidLoginService {
             return null;
         }
 
-        //生成token对象并返回
-        return androidTokenService.createToken(androidUser);
+        //生成访问令牌并保存redis
+        AndroidToken androidToken = androidTokenService.createToken(androidUser);
+
+        //生成刷新令牌
+        String refreshToken = androidTokenService.createRefreshToken();
+        androidToken.setUserId(androidUser.getUserId());
+        androidToken.setRefreshToken(refreshToken);
+        androidToken.setRefreshTokenExpiresIn(androidTokenService.getRefreshTokenExpiresIn());
+        androidToken.setCreateTime(DateUtils.getNowDate());
+
+        //保存数据库
+        androidLoginMapper.insertRefreshToken(androidToken);
+
+        //返回token对象
+        return androidToken;
     }
 
 }

@@ -38,11 +38,11 @@ public class AndroidTokenService {
     @Value("${token.secret}")
     private String secret;
 
-    // 访问令牌有效期（默认30分钟）
-    private final int accessTokenExpiresIn = 30 * 60;
+    // 访问令牌有效期（默认1天，单位：秒）
+    private final int accessTokenExpiresIn = 24 * 60 * 60;
 
-    // 刷新令牌有效期（默认30天）
-    private final int refreshTokenExpiresIn = 30 * 24 * 60;
+    // 刷新令牌有效期（默认30天，单位：秒）
+    private final Long refreshTokenExpiresIn = 30 * 24 * 60 * 60L;
 
     protected static final long MILLIS_SECOND = 1000;
 
@@ -63,21 +63,16 @@ public class AndroidTokenService {
         androidToken.setAccessToken(createAccessToken(androidUser));
         androidToken.setAccessTokenExpiresIn(accessTokenExpiresIn);
 
-        androidToken.setRefreshToken(createRefreshToken(androidUser));
-        androidToken.setRefreshTokenExpiresIn(refreshTokenExpiresIn);
         return androidToken;
     }
 
     /**
      * 创建刷新令牌
      *
-     * @param androidUser 用户信息
      * @return 刷新令牌
      */
-    public String createRefreshToken(AndroidUser androidUser) {
+    public String createRefreshToken() {
         String refreshToken = IdUtils.fastUUID();
-        androidUser.setAccessToken(refreshToken);
-        refreshToken(androidUser);
         Map<String, Object> claims = new HashMap<>();
         claims.put(Constants.LOGIN_USER_KEY, refreshToken);
         return createToken(claims);
@@ -150,10 +145,8 @@ public class AndroidTokenService {
     public void refreshToken(AndroidUser androidUser)
     {
         String AccessKey = getTokenKey(androidUser.getAccessToken());
-        String refreshKey = getTokenKey(androidUser.getRefreshToken());
 
-        redisCache.setCacheObject(AccessKey, androidUser, accessTokenExpiresIn, TimeUnit.MINUTES);
-        redisCache.setCacheObject(refreshKey, androidUser, refreshTokenExpiresIn, TimeUnit.MINUTES);
+        redisCache.setCacheObject(AccessKey, androidUser, accessTokenExpiresIn, TimeUnit.SECONDS);
     }
 
     /**
@@ -175,5 +168,13 @@ public class AndroidTokenService {
     private String getTokenKey(String uuid)
     {
         return Constants.LOGIN_TOKEN_KEY + uuid;
+    }
+
+    /**
+     * 获取刷新令牌有效期
+     * @return 刷新令牌有效期
+     */
+    public Long getRefreshTokenExpiresIn(){
+        return refreshTokenExpiresIn;
     }
 }

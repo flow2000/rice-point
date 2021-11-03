@@ -34,5 +34,38 @@
         </where>
     </select>
 
+    <insert id="insertRefreshToken" parameterType="AndroidToken">
+        insert into rice_token
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="refreshToken != null">refreshToken,</if>
+            <if test="refreshTokenExpiresIn != null">refreshTokenExpiresIn,</if>
+            <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="refreshToken != null">#{refreshToken},</if>
+            <if test="refreshTokenExpiresIn != null">#{refreshTokenExpiresIn},</if>
+            <if test="createTime != null">#{createTime},</if>
+        </trim>
+    </insert>
 
+    <update id="updateRefreshToken" parameterType="AndroidToken">
+        update rice_token
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="refreshToken != null">refreshToken = #{refreshToken},</if>
+            <if test="refreshTokenExpiresIn != null">refreshTokenExpiresIn = #{refreshTokenExpiresIn},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        <where>
+            user_id = #{userId}
+        </where>
+    </update>
+
+    <delete id="deleteRefreshToken" parameterType="AndroidToken">
+        delete from rice_token
+        <where>
+            user_id = #{userId}
+        </where>
+    </delete>
 </mapper>
