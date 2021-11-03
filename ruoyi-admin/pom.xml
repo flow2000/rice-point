@@ -61,21 +61,25 @@
             <artifactId>ruoyi-generator</artifactId>
         </dependency>
 
+        <!-- 食堂管理-->
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>rice-canteen</artifactId>
         </dependency>
 
+        <!-- 菜品管理-->
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>rice-dish</artifactId>
         </dependency>
 
+        <!-- 投票管理-->
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>rice-ticket</artifactId>
         </dependency>
 
+        <!-- 安卓-->
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>rice-android</artifactId>
