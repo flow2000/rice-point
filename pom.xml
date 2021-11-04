@@ -219,6 +219,13 @@
                 <version>${ruoyi.version}</version>
             </dependency>
 
+            <!-- 订单管理-->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>rice-order</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+
             <!-- 安卓接口 -->
             <dependency>
                 <groupId>com.ruoyi</groupId>
@@ -247,6 +254,7 @@
         <module>rice-dish</module>
         <module>rice-ticket</module>
         <module>rice-android</module>
+        <module>rice-order</module>
     </modules>
     <packaging>pom</packaging>
 

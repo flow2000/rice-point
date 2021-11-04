@@ -79,6 +79,12 @@
             <artifactId>rice-ticket</artifactId>
         </dependency>
 
+        <!-- 订单管理-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>rice-order</artifactId>
+        </dependency>
+
         <!-- 安卓-->
         <dependency>
             <groupId>com.ruoyi</groupId>
