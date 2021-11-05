@@ -3,10 +3,11 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.order.mapper.OrderMapper">
-    
+
     <resultMap type="Order" id="OrderResult">
         <result property="orderId"    column="order_id"    />
         <result property="orderCode"    column="order_code"    />
+        <result property="mealNumber"    column="meal_number"    />
         <result property="canteenId"    column="canteen_id"    />
         <result property="orderPrice"    column="order_price"    />
         <result property="status"    column="status"    />
@@ -15,22 +16,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectOrderVo">
-        select order_id, order_code, canteen_id, order_price, status, del_flag, create_time from rice_order
+        select order_id, order_code, meal_number, canteen_id, order_price, status, del_flag, create_time from rice_order
     </sql>
 
     <select id="selectOrderList" parameterType="Order" resultMap="OrderResult">
         <include refid="selectOrderVo"/>
-        <where>  
+        <where>
             <if test="status != null  and status != ''"> and status = #{status}</if>
-            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="mealNumber != null  and mealNumber != ''"> and meal_number = #{mealNumber}</if>
+            <if test="timeList != null "> and create_time between #{timeList[0]} and #{timeList[1]}</if>
         </where>
     </select>
-    
+
     <select id="selectOrderByOrderId" parameterType="Long" resultMap="OrderResult">
         <include refid="selectOrderVo"/>
         where order_id = #{orderId}
     </select>
-        
+
     <insert id="insertOrder" parameterType="Order" useGeneratedKeys="true" keyProperty="orderId">
         insert into rice_order
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -69,7 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteOrderByOrderIds" parameterType="String">
-        delete from rice_order where order_id in 
+        delete from rice_order where order_id in
         <foreach item="orderId" collection="array" open="(" separator="," close=")">
             #{orderId}
         </foreach>
