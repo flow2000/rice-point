@@ -52,6 +52,9 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public int insertOrder(Order order) {
 //        Order order1 =
+        if (order.getErrorReason()==null){
+            order.setErrorReason("");
+        }
         order.setCreateTime(DateUtils.getNowDate());
         order.setOrderCode(IdUtils.fastSimpleUUID());
         return orderMapper.insertOrder(order);
@@ -65,6 +68,9 @@ public class OrderServiceImpl implements IOrderService {
      */
     @Override
     public int updateOrder(Order order) {
+        if (order.getErrorReason()==null){
+            order.setErrorReason("");
+        }
         return orderMapper.updateOrder(order);
     }
 

@@ -46,6 +46,10 @@ public class Order extends BaseEntity
     @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
+    /** 订单处理失败时给出理由 */
+    @Excel(name = "失败理由")
+    private String errorReason;
+
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
 
@@ -115,6 +119,22 @@ public class Order extends BaseEntity
         this.createTime = createTime;
     }
 
+    public String getErrorReason() {
+        return errorReason;
+    }
+
+    public void setErrorReason(String errorReason) {
+        this.errorReason = errorReason;
+    }
+
+    public String getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(String delFlag) {
+        this.delFlag = delFlag;
+    }
+
     public List<Date> getTimeList() {
         return timeList;
     }
@@ -133,6 +153,8 @@ public class Order extends BaseEntity
                 ", orderPrice=" + orderPrice +
                 ", status='" + status + '\'' +
                 ", createTime=" + createTime +
+                ", errorReason='" + errorReason + '\'' +
+                ", delFlag='" + delFlag + '\'' +
                 ", timeList=" + timeList +
                 '}';
     }
