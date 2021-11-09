@@ -5,9 +5,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.ruoyi.common.utils.uuid.IdUtils;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
@@ -34,6 +31,9 @@ public class Order extends BaseEntity
     /** 就餐食堂id */
     private Long canteenId;
 
+    /** 菜品订单列表 */
+    List<DishOrder> dishOrders;
+
     /** 订单价格合计 */
     private BigDecimal orderPrice;
 
@@ -50,16 +50,9 @@ public class Order extends BaseEntity
     @Excel(name = "失败理由")
     private String errorReason;
 
-    /** 删除标志（0代表存在 2代表删除） */
-    private String delFlag;
-
     /** 时间范围 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private List<Date> timeList;
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
 
     public Long getOrderId() {
         return orderId;
@@ -91,6 +84,14 @@ public class Order extends BaseEntity
 
     public void setCanteenId(Long canteenId) {
         this.canteenId = canteenId;
+    }
+
+    public List<DishOrder> getDishOrders() {
+        return dishOrders;
+    }
+
+    public void setDishOrders(List<DishOrder> dishOrders) {
+        this.dishOrders = dishOrders;
     }
 
     public BigDecimal getOrderPrice() {
@@ -127,14 +128,6 @@ public class Order extends BaseEntity
         this.errorReason = errorReason;
     }
 
-    public String getDelFlag() {
-        return delFlag;
-    }
-
-    public void setDelFlag(String delFlag) {
-        this.delFlag = delFlag;
-    }
-
     public List<Date> getTimeList() {
         return timeList;
     }
@@ -150,11 +143,11 @@ public class Order extends BaseEntity
                 ", orderCode='" + orderCode + '\'' +
                 ", mealNumber=" + mealNumber +
                 ", canteenId=" + canteenId +
+                ", dishOrders=" + dishOrders +
                 ", orderPrice=" + orderPrice +
                 ", status='" + status + '\'' +
                 ", createTime=" + createTime +
                 ", errorReason='" + errorReason + '\'' +
-                ", delFlag='" + delFlag + '\'' +
                 ", timeList=" + timeList +
                 '}';
     }

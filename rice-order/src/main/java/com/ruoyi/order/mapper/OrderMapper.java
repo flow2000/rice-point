@@ -1,19 +1,20 @@
 package com.ruoyi.order.mapper;
 
 import java.util.List;
+
 import com.ruoyi.order.domain.Order;
 
 /**
  * 订单Mapper接口
- * 
+ *
  * @author panghai
  * @date 2021-11-04
  */
-public interface OrderMapper 
+public interface OrderMapper
 {
     /**
      * 查询订单
-     * 
+     *
      * @param orderId 订单主键
      * @return 订单
      */
@@ -21,7 +22,7 @@ public interface OrderMapper
 
     /**
      * 查询订单列表
-     * 
+     *
      * @param order 订单
      * @return 订单集合
      */
@@ -29,7 +30,7 @@ public interface OrderMapper
 
     /**
      * 新增订单
-     * 
+     *
      * @param order 订单
      * @return 结果
      */
@@ -37,7 +38,7 @@ public interface OrderMapper
 
     /**
      * 修改订单
-     * 
+     *
      * @param order 订单
      * @return 结果
      */
@@ -45,7 +46,7 @@ public interface OrderMapper
 
     /**
      * 删除订单
-     * 
+     *
      * @param orderId 订单主键
      * @return 结果
      */
@@ -53,9 +54,16 @@ public interface OrderMapper
 
     /**
      * 批量删除订单
-     * 
+     *
      * @param orderIds 需要删除的数据主键集合
      * @return 结果
      */
     public int deleteOrderByOrderIds(Long[] orderIds);
+
+    /**
+     * 查询订单中今天最后一个取餐号
+     *
+     * @return 结果
+     */
+    public Order selectLastMealNumberInToday();
 }

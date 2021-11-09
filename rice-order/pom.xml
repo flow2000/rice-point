@@ -18,6 +18,12 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-common</artifactId>
         </dependency>
+
+        <!--   菜品管理     -->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>rice-dish</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

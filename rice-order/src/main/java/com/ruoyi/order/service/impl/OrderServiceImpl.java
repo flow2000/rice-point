@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.uuid.IdUtils;
+import com.ruoyi.order.domain.DishOrder;
+import com.ruoyi.order.mapper.DishOrderMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.order.mapper.OrderMapper;
@@ -20,6 +22,9 @@ import com.ruoyi.order.service.IOrderService;
 public class OrderServiceImpl implements IOrderService {
     @Autowired
     private OrderMapper orderMapper;
+
+    @Autowired
+    private DishOrderMapper dishOrderMapper;
 
     /**
      * 查询订单
@@ -40,7 +45,17 @@ public class OrderServiceImpl implements IOrderService {
      */
     @Override
     public List<Order> selectOrderList(Order order) {
-        return orderMapper.selectOrderList(order);
+        List<Order> list = orderMapper.selectOrderList(order);
+        if (list != null){
+            for (int i = 0; i < list.size(); i++) {
+                DishOrder dishOrder = new DishOrder();
+                dishOrder.setOrderId(list.get(i).getOrderId());
+                Order o = list.get(i);
+                o.setDishOrders(dishOrderMapper.selectDishOrderList(dishOrder));
+                list.set(i,o);
+            }
+        }
+        return list;
     }
 
     /**
@@ -51,13 +66,16 @@ public class OrderServiceImpl implements IOrderService {
      */
     @Override
     public int insertOrder(Order order) {
-//        Order order1 =
+        List<DishOrder> dishOrders = order.getDishOrders();
         if (order.getErrorReason()==null){
             order.setErrorReason("");
         }
         order.setCreateTime(DateUtils.getNowDate());
         order.setOrderCode(IdUtils.fastSimpleUUID());
-        return orderMapper.insertOrder(order);
+        order.setMealNumber(selectLastMealNumberInToday() + 1);
+        int row = orderMapper.insertOrder(order);
+        dishOrderMapper.insertDishOrders(dishOrders);
+        return row;
     }
 
     /**
@@ -82,6 +100,8 @@ public class OrderServiceImpl implements IOrderService {
      */
     @Override
     public int deleteOrderByOrderIds(Long[] orderIds) {
+        // 删除菜品订单
+        dishOrderMapper.deleteDishOrderByOrderIds(orderIds);
         return orderMapper.deleteOrderByOrderIds(orderIds);
     }
 
@@ -93,6 +113,21 @@ public class OrderServiceImpl implements IOrderService {
      */
     @Override
     public int deleteOrderByOrderId(Long orderId) {
+        // 删除菜品订单
+        dishOrderMapper.deleteDishOrderByOrderId(orderId);
         return orderMapper.deleteOrderByOrderId(orderId);
+    }
+
+    /**
+     * 查询订单中今天最后一个取餐号
+     *
+     * @return 结果
+     */
+    private int selectLastMealNumberInToday(){
+        Order order = orderMapper.selectLastMealNumberInToday();
+        if (order == null){
+            return 0;
+        }
+        return order.getMealNumber();
     }
 }
