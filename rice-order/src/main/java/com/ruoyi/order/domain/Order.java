@@ -26,6 +26,7 @@ public class Order extends BaseEntity
     private String orderCode;
 
     /** 取餐号码 */
+    @Excel(name = "取餐号码")
     private int mealNumber;
 
     /** 就餐食堂id */
@@ -35,6 +36,7 @@ public class Order extends BaseEntity
     List<DishOrder> dishOrders;
 
     /** 订单价格合计 */
+    @Excel(name = "合计")
     private BigDecimal orderPrice;
 
     /** 订单状态（0未处理 1已完成 2处理失败 3已取消） */

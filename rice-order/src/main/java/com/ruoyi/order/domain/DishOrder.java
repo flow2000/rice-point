@@ -27,6 +27,9 @@ public class DishOrder extends BaseEntity
     /** 菜品数量 */
     private Long number;
 
+    /** 菜品价格 */
+    private double price;
+
     public Long getOrderId() {
         return orderId;
     }
@@ -67,6 +70,14 @@ public class DishOrder extends BaseEntity
         this.number = number;
     }
 
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     @Override
     public String toString() {
         return "DishOrder{" +
@@ -75,6 +86,7 @@ public class DishOrder extends BaseEntity
                 ", dishesName='" + dishesName + '\'' +
                 ", url='" + url + '\'' +
                 ", number=" + number +
+                ", price=" + price +
                 '}';
     }
 }

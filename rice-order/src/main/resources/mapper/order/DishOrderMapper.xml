@@ -10,10 +10,11 @@
         <result property="number"    column="number"    />
         <result property="dishesName"    column="dishes_name"    />
         <result property="url"    column="url"    />
+        <result property="price"    column="price"    />
     </resultMap>
 
     <sql id="selectDishOrderVo">
-        select rdo.order_id, rdo.dish_id, rdo.`number`, rd.dishes_name, rd.url
+        select rdo.order_id, rdo.dish_id, rdo.`number`, rd.dishes_name, rd.url, rd.price
         from rice_dish_order rdo
             left join rice_dish rd on rd.dish_id = rdo.dish_id
     </sql>
@@ -23,7 +24,7 @@
         <where>
             <if test="orderId != null">order_id=#{orderId}</if>
             <if test="dishId != null">rdo.dish_id=#{dishId}</if>
-            <if test="number != null">number=#{number}</if>
+            <if test="number != null">`number`=#{number}</if>
         </where>
     </select>
 
