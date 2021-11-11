@@ -5,15 +5,15 @@ import com.ruoyi.ticket.domain.Ticket;
 
 /**
  * 投票信息Mapper接口
- * 
+ *
  * @author panghai
  * @date 2021-10-23
  */
-public interface TicketMapper 
+public interface TicketMapper
 {
     /**
      * 查询投票信息
-     * 
+     *
      * @param ticketId 投票信息主键
      * @return 投票信息
      */
@@ -21,7 +21,7 @@ public interface TicketMapper
 
     /**
      * 查询投票信息列表
-     * 
+     *
      * @param ticket 投票信息
      * @return 投票信息集合
      */
@@ -29,7 +29,7 @@ public interface TicketMapper
 
     /**
      * 新增投票信息
-     * 
+     *
      * @param ticket 投票信息
      * @return 结果
      */
@@ -37,7 +37,7 @@ public interface TicketMapper
 
     /**
      * 修改投票信息
-     * 
+     *
      * @param ticket 投票信息
      * @return 结果
      */
@@ -45,7 +45,7 @@ public interface TicketMapper
 
     /**
      * 删除投票信息
-     * 
+     *
      * @param ticketId 投票信息主键
      * @return 结果
      */
@@ -53,9 +53,23 @@ public interface TicketMapper
 
     /**
      * 批量删除投票信息
-     * 
+     *
      * @param ticketIds 需要删除的数据主键集合
      * @return 结果
      */
     public int deleteTicketByTicketIds(Long[] ticketIds);
+
+    /**
+     * 查询共有几期投票信息
+     *
+     * @return 结果
+     */
+    public int getTotalTime();
+
+    /**
+     * 查询某种菜品近7期的投票信息
+     *
+     * @return 结果
+     */
+    public List<Ticket> getDishTicket(Ticket ticket);
 }

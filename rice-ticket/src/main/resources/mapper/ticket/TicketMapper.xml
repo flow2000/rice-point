@@ -3,31 +3,36 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.ticket.mapper.TicketMapper">
-    
+
     <resultMap type="Ticket" id="TicketResult">
         <result property="ticketId"    column="ticket_id"    />
         <result property="dishId"    column="dish_id"    />
+        <result property="dishesName"    column="dishes_name"    />
         <result property="ticketNumber"    column="ticket_number"    />
         <result property="time"    column="time"    />
         <result property="createTime"    column="create_time"    />
     </resultMap>
 
     <sql id="selectTicketVo">
-        select ticket_id, dish_id, ticket_number, time, create_time from rice_ticket
+        select rt.ticket_id, rt.dish_id,rd.dishes_name,rt.time,rt.ticket_number,rt.create_time
+        from `rice_ticket` rt
+            left join rice_dish rd on rd.dish_id=rt.dish_id
     </sql>
 
     <select id="selectTicketList" parameterType="Ticket" resultMap="TicketResult">
         <include refid="selectTicketVo"/>
-        <where>  
-            <if test="time != null "> and time = #{time}</if>
+        <where>
+            <if test="time != null "> and `time` = #{time}</if>
         </where>
+        order by rt.ticket_number desc
+        limit 12
     </select>
-    
+
     <select id="selectTicketByTicketId" parameterType="Long" resultMap="TicketResult">
         <include refid="selectTicketVo"/>
         where ticket_id = #{ticketId}
     </select>
-        
+
     <insert id="insertTicket" parameterType="Ticket">
         insert into rice_ticket
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -51,7 +56,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="dishId != null">dish_id = #{dishId},</if>
             <if test="ticketNumber != null">ticket_number = #{ticketNumber},</if>
-            <if test="time != null">time = #{time},</if>
+            <if test="time != null">`time` = #{time},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
         </trim>
         where ticket_id = #{ticketId}
@@ -62,9 +67,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteTicketByTicketIds" parameterType="String">
-        delete from rice_ticket where ticket_id in 
+        delete from rice_ticket where ticket_id in
         <foreach item="ticketId" collection="array" open="(" separator="," close=")">
             #{ticketId}
         </foreach>
     </delete>
+
+    <select id="getTotalTime" resultType="int">
+        select time from `rice_ticket` order by time desc limit 1
+    </select>
+
+    <select id="getDishTicket" parameterType="Ticket" resultMap="TicketResult">
+        <include refid="selectTicketVo"/>
+        <where>
+            <if test="dishesName!=null">rd.dishes_name=#{dishesName}</if>
+        </where>
+        order by rt.time desc limit 7
+    </select>
 </mapper>

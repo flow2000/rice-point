@@ -100,4 +100,24 @@ public class TicketController extends BaseController
     {
         return toAjax(ticketService.deleteTicketByTicketIds(ticketIds));
     }
+
+    /**
+     * 查询共有几期投票信息
+     */
+    @Log(title = "投票信息", businessType = BusinessType.DELETE)
+    @GetMapping("/getTotalTime")
+    public AjaxResult getTotalTime()
+    {
+        return AjaxResult.success(ticketService.getTotalTime());
+    }
+
+    /**
+     * 查询某种菜品近7期的投票信息
+     */
+    @Log(title = "投票信息", businessType = BusinessType.DELETE)
+    @GetMapping("/getDishTicket")
+    public AjaxResult getDishTicket(Ticket ticket)
+    {
+        return AjaxResult.success(ticketService.getDishTicket(ticket));
+    }
 }
