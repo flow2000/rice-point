@@ -17,7 +17,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 用户对象 sys_user
- * 
+ *
  * @author ruoyi
  */
 public class SysUser extends BaseEntity
@@ -82,6 +82,8 @@ public class SysUser extends BaseEntity
         @Excel(name = "部门负责人", targetAttr = "leader", type = Type.EXPORT)
     })
     private SysDept dept;
+
+    private String roleName;
 
     /** 角色对象 */
     private List<SysRole> roles;
@@ -271,6 +273,14 @@ public class SysUser extends BaseEntity
     public void setDept(SysDept dept)
     {
         this.dept = dept;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
     public List<SysRole> getRoles()
