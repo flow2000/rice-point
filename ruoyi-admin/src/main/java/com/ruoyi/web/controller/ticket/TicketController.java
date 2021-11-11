@@ -38,11 +38,9 @@ public class TicketController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('ticket:info:list')")
     @GetMapping("/list")
-    public TableDataInfo list(Ticket ticket)
+    public AjaxResult list(Ticket ticket)
     {
-        startPage();
-        List<Ticket> list = ticketService.selectTicketList(ticket);
-        return getDataTable(list);
+        return AjaxResult.success(ticketService.selectTicketList(ticket));
     }
 
     /**
