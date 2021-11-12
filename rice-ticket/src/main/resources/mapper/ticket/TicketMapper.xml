@@ -71,10 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateTicket" parameterType="Ticket">
         update rice_ticket
         <trim prefix="SET" suffixOverrides=",">
-            <if test="dishId != null">dish_id = #{dishId},</if>
             ticket_number = ticket_number+1,
-            <if test="time != null">`time` = #{time},</if>
-            <if test="createTime != null">create_time = #{createTime},</if>
         </trim>
         where ticket_id = #{ticketId}
     </update>
