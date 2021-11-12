@@ -93,6 +93,11 @@ public class TicketController extends BaseController
         if (ticket.getTicketId() == null || ticket.getTicketId() == 0L ){
             return AjaxResult.error("投票菜品不明确");
         }
+        int time = ticketService.getTotalTime();
+        Ticket t = ticketService.selectTicketByTicketId(ticket.getTicketId());
+        if (t.getTime() != time){
+            return AjaxResult.error("请进行最新一期的投票");
+        }
         SysUser user = userService.selectUserByUserName(userName);
         if (user == null){
             return AjaxResult.error("请重新登录");
