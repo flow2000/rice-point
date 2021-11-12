@@ -90,6 +90,9 @@ public class TicketController extends BaseController
         if (userName == null || "".equals(userName)){
             return AjaxResult.error("用户名为空");
         }
+        if (ticket.getTicketId() == null || ticket.getTicketId() == 0L ){
+            return AjaxResult.error("投票菜品不明确");
+        }
         SysUser user = userService.selectUserByUserName(userName);
         if (user == null){
             return AjaxResult.error("请重新登录");
