@@ -141,6 +141,9 @@ public class TicketController extends BaseController
     @GetMapping("/getDishTicket")
     public AjaxResult getDishTicket(Ticket ticket)
     {
+        if (ticket.getDishesName() == null || "".equals(ticket.getDishesName())){
+            AjaxResult.error("菜品名称不为空");
+        }
         return AjaxResult.success(ticketService.getDishTicket(ticket));
     }
 }
