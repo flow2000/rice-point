@@ -19,7 +19,6 @@ public class Ticket extends BaseEntity
     private Long ticketId;
 
     /** 菜品id */
-    @Excel(name = "菜品id")
     private Long dishId;
 
     /** 菜品名称 */
