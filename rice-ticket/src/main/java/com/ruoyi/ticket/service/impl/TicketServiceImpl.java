@@ -1,8 +1,14 @@
 package com.ruoyi.ticket.service.impl;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.dish.domain.Dish;
+import com.ruoyi.dish.mapper.DishMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.ticket.mapper.TicketMapper;
@@ -20,6 +26,9 @@ public class TicketServiceImpl implements ITicketService
 {
     @Autowired
     private TicketMapper ticketMapper;
+
+    @Autowired
+    private DishMapper dishMapper;
 
     /**
      * 查询投票信息
@@ -121,5 +130,45 @@ public class TicketServiceImpl implements ITicketService
         List<Ticket> list = ticketMapper.getDishTicket(ticket);
         Collections.reverse(list);
         return list;
+    }
+
+    /**
+     * 重置用户投票数
+     * 每日重置一次
+     */
+    @Override
+    public void resetUserVotes() {
+       ticketMapper.resetUserVotes();
+    }
+
+    /**
+     * 进入下一期菜品投票
+     * 每个月为一期
+     */
+    @Override
+    public void resetDishVotes() {
+        int time = ticketMapper.getTotalTime();
+        time++;
+        List<Dish> list = dishMapper.selectDishList(new Dish());
+        List<Long> ids = list.stream().map(Dish::getDishId).collect(Collectors.toList());
+        List<Ticket> ticketList = new ArrayList<>();
+        for (Long id : ids) {
+            Ticket ticket = new Ticket();
+            ticket.setTicketNumber(0);
+            ticket.setTime(time);
+            ticket.setDishId(id);
+            ticket.setCreateTime(DateUtils.getNowDate());
+            ticketList.add(ticket);
+        }
+        ticketMapper.insertTickets(ticketList);
+    }
+
+    /**
+     * 更新用户投票数
+     *
+     */
+    @Override
+    public int updateUserVotes(SysUser user) {
+        return ticketMapper.updateUserVotes(user);
     }
 }

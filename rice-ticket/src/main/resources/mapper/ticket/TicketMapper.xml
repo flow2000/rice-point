@@ -51,11 +51,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
+    <insert id="insertTickets">
+        insert into rice_ticket
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dishId != null">dish_id,</if>
+            <if test="ticketNumber != null">ticket_number,</if>
+            <if test="time != null">`time`,</if>
+            <if test="createTime != null">create_time,</if>
+        </trim>
+        values
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item.dishId},
+            #{item.ticketNumber},
+            #{item.time},
+            #{item.createTime},
+        </foreach>
+    </insert>
+
     <update id="updateTicket" parameterType="Ticket">
         update rice_ticket
         <trim prefix="SET" suffixOverrides=",">
             <if test="dishId != null">dish_id = #{dishId},</if>
-            <if test="ticketNumber != null">ticket_number = #{ticketNumber},</if>
+            ticket_number = ticket_number+1,
             <if test="time != null">`time` = #{time},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
         </trim>
@@ -84,4 +101,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by rt.time desc limit 7
     </select>
+
+    <update id="resetUserVotes">
+        update sys_user set votes = 0
+    </update>
+
+    <update id="updateUserVotes" parameterType="SysUser">
+        update sys_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="votes != null">votes = #{votes},</if>
+        </trim>
+        where user_id = #{userId}
+    </update>
+
 </mapper>

@@ -1,6 +1,8 @@
 package com.ruoyi.ticket.service;
 
 import java.util.List;
+
+import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.ticket.domain.Ticket;
 
 /**
@@ -72,4 +74,22 @@ public interface ITicketService
      * @return 结果
      */
     public List<Ticket> getDishTicket(Ticket ticket);
+
+    /**
+     * 重置用户投票数
+     * 每日重置一次
+     */
+    public void resetUserVotes();
+
+    /**
+     * 进入下一期菜品投票
+     * 每个月为一期
+     */
+    public void resetDishVotes();
+
+    /**
+     * 更新用户投票数
+     *
+     */
+    public int updateUserVotes(SysUser user);
 }

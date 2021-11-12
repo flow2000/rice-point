@@ -18,6 +18,9 @@ public class Ticket extends BaseEntity
     /** 投票id */
     private Long ticketId;
 
+    /** 用户名 */
+    private String userName;
+
     /** 菜品id */
     private Long dishId;
 
@@ -41,6 +44,13 @@ public class Ticket extends BaseEntity
     public Long getTicketId()
     {
         return ticketId;
+    }
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUserName() {
+        return userName;
     }
     public void setDishId(Long dishId)
     {
@@ -81,6 +91,7 @@ public class Ticket extends BaseEntity
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("ticketId", getTicketId())
+            .append("userName", getUserName())
             .append("dishId", getDishId())
             .append("dishesName", getDishesName())
             .append("ticketNumber", getTicketNumber())

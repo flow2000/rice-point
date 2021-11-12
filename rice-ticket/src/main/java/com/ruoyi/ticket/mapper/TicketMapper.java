@@ -1,6 +1,8 @@
 package com.ruoyi.ticket.mapper;
 
 import java.util.List;
+
+import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.ticket.domain.Ticket;
 
 /**
@@ -34,6 +36,14 @@ public interface TicketMapper
      * @return 结果
      */
     public int insertTicket(Ticket ticket);
+
+    /**
+     * 新增投票信息
+     *
+     * @param ticketList 投票信息组
+     * @return 结果
+     */
+    public int insertTickets(List<Ticket> ticketList);
 
     /**
      * 修改投票信息
@@ -72,4 +82,16 @@ public interface TicketMapper
      * @return 结果
      */
     public List<Ticket> getDishTicket(Ticket ticket);
+
+    /**
+     * 重置用户投票数
+     * 每日重置一次
+     */
+    public void resetUserVotes();
+
+    /**
+     * 更新用户投票数
+     *
+     */
+    public int updateUserVotes(SysUser user);
 }

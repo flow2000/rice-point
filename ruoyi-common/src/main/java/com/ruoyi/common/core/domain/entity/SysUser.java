@@ -83,7 +83,11 @@ public class SysUser extends BaseEntity
     })
     private SysDept dept;
 
+    /** 角色名称 */
     private String roleName;
+
+    /** 今日投票数 */
+    private int votes;
 
     /** 角色对象 */
     private List<SysRole> roles;
@@ -281,6 +285,14 @@ public class SysUser extends BaseEntity
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
+    }
+
+    public int getVotes() {
+        return votes;
+    }
+
+    public void setVotes(int votes) {
+        this.votes = votes;
     }
 
     public List<SysRole> getRoles()
