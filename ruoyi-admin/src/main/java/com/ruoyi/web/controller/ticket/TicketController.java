@@ -75,6 +75,9 @@ public class TicketController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody Ticket ticket)
     {
+        if (ticket.getTime()==null || ticket.getTime() == 0 || ticket.getTime()<=0){
+            return AjaxResult.error("期数不合法");
+        }
         return toAjax(ticketService.insertTicket(ticket));
     }
 
