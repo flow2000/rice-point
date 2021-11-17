@@ -26,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              and rd.del_flag=0
         </where>
         order by rt.ticket_number desc
-        limit 12
+        limit 10
     </select>
 
     <select id="selectTicketByTicketId" parameterType="Long" resultMap="TicketResult">
