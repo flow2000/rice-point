@@ -1,8 +1,6 @@
 package com.ruoyi.ticket.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.ruoyi.common.core.domain.entity.SysUser;
@@ -170,5 +168,44 @@ public class TicketServiceImpl implements ITicketService
     @Override
     public int updateUserVotes(SysUser user) {
         return ticketMapper.updateUserVotes(user);
+    }
+
+    /**
+     * 查询用户投票数
+     * @return 结果
+     */
+    @Override
+    public int selectTicketAmount() {
+        return ticketMapper.selectTicketAmount();
+    }
+
+    /**
+     * 查询每周投票数
+     * @return 结果
+     */
+    @Override
+    public Map<String, Object> selectWeekTicketMap() {
+        Ticket ticket = new Ticket();
+        int time = ticketMapper.getTotalTime();
+        if (time == 0){
+            time++;
+        }
+        if (ticket.getTime() == null){
+            ticket.setTime(time);
+        }
+        List<Ticket> list = ticketMapper.selectTicketList(ticket);
+        Map<String, Object> res = new HashMap<>();
+        String[] t = new String[list.size()];
+        int[] a = new int[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            Ticket ti = list.get(i);
+            t[i] = ti.getDishesName();
+            a[i] = ti.getTicketNumber();
+        }
+        res.put("legend", "票数");
+        res.put("type", "bar");
+        res.put("xdata", t);
+        res.put("ydata", a);
+        return res;
     }
 }

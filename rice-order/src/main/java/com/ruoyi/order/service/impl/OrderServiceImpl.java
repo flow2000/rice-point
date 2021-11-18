@@ -1,6 +1,9 @@
 package com.ruoyi.order.service.impl;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.uuid.IdUtils;
@@ -130,4 +133,71 @@ public class OrderServiceImpl implements IOrderService {
         }
         return order.getMealNumber();
     }
+
+    /**
+     * 查询订单总量
+     *
+     * @return 结果
+     */
+    @Override
+    public int selectOrderAmount() {
+        return orderMapper.selectOrderAmount();
+    }
+
+    /**
+     * 查询订单交易额
+     *
+     * @return 结果
+     */
+    @Override
+    public BigDecimal selectOrderMoneyAmount() {
+        return orderMapper.selectOrderMoneyAmount();
+    }
+
+    /**
+     * 查询每周订单量
+     *
+     * @return 结果
+     */
+    @Override
+    public Map<String, Object> selectOrderWeekMap() {
+        List<Map<String, Object>> list= orderMapper.selectWeekOrderAmount();
+        Map<String, Object> res = new HashMap<>();
+        String[] t = new String[list.size()];
+        Long[] a = new Long[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            Map<String, Object> map = list.get(i);
+            t[i] = (String) map.get("createTime");
+            a[i] = (Long) map.get("amount");
+        }
+        res.put("legend", "订单数");
+        res.put("type", "line");
+        res.put("xdata", t);
+        res.put("ydata", a);
+        return res;
+    }
+
+    /**
+     * 查询每周订单交易额
+     *
+     * @return 结果
+     */
+    @Override
+    public Map<String, Object> selectWeekOrderMoneyMap() {
+        List<Map<String, Object>> list= orderMapper.selectWeekOrderMoneyAmount();
+        Map<String, Object> res = new HashMap<>();
+        String[] t = new String[list.size()];
+        BigDecimal[] a = new BigDecimal[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            Map<String, Object> map = list.get(i);
+            t[i] = (String) map.get("createTime");
+            a[i] = (BigDecimal) map.get("amount");
+        }
+        res.put("legend", "交易金额");
+        res.put("type", "line");
+        res.put("xdata", t);
+        res.put("ydata", a);
+        return res;
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.ruoyi.ticket.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.ticket.domain.Ticket;
@@ -92,4 +93,16 @@ public interface ITicketService
      *
      */
     public int updateUserVotes(SysUser user);
+
+    /**
+     * 查询用户投票数
+     * @return 结果
+     */
+    public int selectTicketAmount();
+
+    /**
+     * 查询每周投票数
+     * @return 结果
+     */
+    Map<String, Object> selectWeekTicketMap();
 }

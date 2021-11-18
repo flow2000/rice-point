@@ -94,4 +94,10 @@ public interface TicketMapper
      *
      */
     public int updateUserVotes(SysUser user);
+
+    /**
+     * 查询用户投票数
+     * @return 结果
+     */
+    public int selectTicketAmount();
 }

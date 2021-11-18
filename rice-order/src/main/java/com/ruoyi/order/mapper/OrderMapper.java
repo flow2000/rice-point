@@ -1,6 +1,8 @@
 package com.ruoyi.order.mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import com.ruoyi.order.domain.Order;
 
@@ -66,4 +68,32 @@ public interface OrderMapper
      * @return 结果
      */
     public Order selectLastMealNumberInToday();
+
+    /**
+     * 查询订单总量
+     *
+     * @return 结果
+     */
+    public int selectOrderAmount();
+
+    /**
+     * 查询订单交易额
+     *
+     * @return 结果
+     */
+    public BigDecimal selectOrderMoneyAmount();
+
+    /**
+     * 查询每周订单量
+     *
+     * @return 结果
+     */
+    public List<Map<String, Object>> selectWeekOrderAmount();
+
+    /**
+     * 查询每周订单交易额
+     *
+     * @return 结果
+     */
+    public List<Map<String, Object>> selectWeekOrderMoneyAmount();
 }

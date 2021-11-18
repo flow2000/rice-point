@@ -112,4 +112,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where user_id = #{userId}
     </update>
 
+    <select id="selectTicketAmount" resultType="int">
+        select sum(ticket_number) from rice_ticket;
+    </select>
 </mapper>
