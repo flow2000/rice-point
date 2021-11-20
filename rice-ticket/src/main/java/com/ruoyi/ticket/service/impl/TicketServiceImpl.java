@@ -186,13 +186,6 @@ public class TicketServiceImpl implements ITicketService
     @Override
     public Map<String, Object> selectWeekTicketMap() {
         Ticket ticket = new Ticket();
-        int time = ticketMapper.getTotalTime();
-        if (time == 0){
-            time++;
-        }
-        if (ticket.getTime() == null){
-            ticket.setTime(time);
-        }
         List<Ticket> list = ticketMapper.selectTicketList(ticket);
         Map<String, Object> res = new HashMap<>();
         String[] t = new String[list.size()];
@@ -202,7 +195,7 @@ public class TicketServiceImpl implements ITicketService
             t[i] = ti.getDishesName();
             a[i] = ti.getTicketNumber();
         }
-        res.put("legend", "票数");
+        res.put("legend", "菜品总票数");
         res.put("type", "bar");
         res.put("xdata", t);
         res.put("ydata", a);
