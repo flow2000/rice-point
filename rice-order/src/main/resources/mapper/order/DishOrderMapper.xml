@@ -24,7 +24,7 @@
         <where>
             <if test="orderId != null">order_id=#{orderId}</if>
             <if test="dishId != null">rdo.dish_id=#{dishId}</if>
-            <if test="number != null">`number`=#{number}</if>
+            <if test="number != null and number != 0">number=#{number}</if>
         </where>
     </select>
 
@@ -38,12 +38,12 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="orderId != null">order_id,</if>
             <if test="dishId != null">dish_id,</if>
-            <if test="number != null">`number`,</if>
+            <if test="number != null and number != 0">`number`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="orderId != null">#{orderId},</if>
             <if test="dishId != null">#{dishId},</if>
-            <if test="number != null">#{number},</if>
+            <if test="number != null and number != 0">#{number},</if>
         </trim>
     </insert>
 
@@ -53,15 +53,6 @@
             (#{item.orderId},#{item.dishId},#{item.number})
         </foreach>
     </insert>
-
-    <update id="updateDishOrder" parameterType="DishOrder">
-        update rice_dish_order
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="dishId != null">dish_id = #{dishId},</if>
-            <if test="number != null">number = #{number},</if>
-        </trim>
-        where order_id = #{orderId}
-    </update>
 
     <delete id="deleteDishOrderByOrderId" parameterType="Long">
         delete from rice_dish_order where order_id = #{orderId}

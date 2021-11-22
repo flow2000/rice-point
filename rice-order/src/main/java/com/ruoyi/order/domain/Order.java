@@ -21,6 +21,9 @@ public class Order extends BaseEntity
     /** 订单id */
     private Long orderId;
 
+    /** 用户id */
+    private Long userId;
+
     /** 订单编号 */
     @Excel(name = "订单编号")
     private String orderCode;
@@ -36,8 +39,12 @@ public class Order extends BaseEntity
     List<DishOrder> dishOrders;
 
     /** 订单价格合计 */
-    @Excel(name = "合计")
+    @Excel(name = "总计")
     private BigDecimal orderPrice;
+
+    /** 实付款 */
+    @Excel(name = "实付款")
+    private BigDecimal orderPaid;
 
     /** 订单状态（0未处理 1已完成 2处理失败 3已取消） */
     @Excel(name = "订单状态", readConverterExp = "0=未处理,1=已完成,2=处理失败,3=已取消")
@@ -62,6 +69,14 @@ public class Order extends BaseEntity
 
     public void setOrderId(Long orderId) {
         this.orderId = orderId;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getOrderCode() {
@@ -104,6 +119,14 @@ public class Order extends BaseEntity
         this.orderPrice = orderPrice;
     }
 
+    public BigDecimal getOrderPaid() {
+        return orderPaid;
+    }
+
+    public void setOrderPaid(BigDecimal orderPaid) {
+        this.orderPaid = orderPaid;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -142,11 +165,13 @@ public class Order extends BaseEntity
     public String toString() {
         return "Order{" +
                 "orderId=" + orderId +
+                "userId=" + userId +
                 ", orderCode='" + orderCode + '\'' +
                 ", mealNumber=" + mealNumber +
                 ", canteenId=" + canteenId +
                 ", dishOrders=" + dishOrders +
                 ", orderPrice=" + orderPrice +
+                ", orderPaid=" + orderPaid +
                 ", status='" + status + '\'' +
                 ", createTime=" + createTime +
                 ", errorReason='" + errorReason + '\'' +

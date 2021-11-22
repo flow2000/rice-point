@@ -57,18 +57,6 @@ public class DishOrderServiceImpl implements IDishOrderService
     }
 
     /**
-     * 修改菜品订单
-     *
-     * @param dishOrder 菜品订单
-     * @return 结果
-     */
-    @Override
-    public int updateDishOrder(DishOrder dishOrder)
-    {
-        return dishOrderMapper.updateDishOrder(dishOrder);
-    }
-
-    /**
      * 批量删除菜品订单
      *
      * @param orderIds 需要删除的菜品订单主键

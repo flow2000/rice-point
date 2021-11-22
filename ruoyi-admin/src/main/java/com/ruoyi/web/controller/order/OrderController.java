@@ -1,6 +1,8 @@
 package com.ruoyi.web.controller.order;
 
 import java.util.List;
+
+import com.ruoyi.order.domain.DishOrder;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -76,6 +78,16 @@ public class OrderController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody Order order)
     {
+        if (order.getUserId() == null){
+            return AjaxResult.error("系统错误，用户不能为空");
+        }
+        if (order.getCanteenId() == null){
+            return AjaxResult.error("系统错误，食堂不能为空");
+        }
+        List<DishOrder> dishOrders = order.getDishOrders();
+        if (dishOrders == null || dishOrders.size() == 0){
+            return AjaxResult.error("请先选择菜品");
+        }
         return toAjax(orderService.insertOrder(order));
     }
 
@@ -87,6 +99,12 @@ public class OrderController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody Order order)
     {
+        if (order.getOrderId() == null){
+            return AjaxResult.error("系统错误，订单id不能为空");
+        }
+        if (order.getStatus() == null || "0".equals(order.getStatus())){
+            return AjaxResult.error("处理选项不能为空");
+        }
         return toAjax(orderService.updateOrder(order));
     }
 

@@ -37,14 +37,6 @@ public interface IDishOrderService
     public int insertDishOrder(DishOrder dishOrder);
 
     /**
-     * 修改菜品订单
-     *
-     * @param dishOrder 菜品订单
-     * @return 结果
-     */
-    public int updateDishOrder(DishOrder dishOrder);
-
-    /**
      * 批量删除菜品订单
      *
      * @param orderIds 需要删除的菜品订单主键集合

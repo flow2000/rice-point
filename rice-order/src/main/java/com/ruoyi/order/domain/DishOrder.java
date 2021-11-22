@@ -25,7 +25,7 @@ public class DishOrder extends BaseEntity
     private String url;
 
     /** 菜品数量 */
-    private Long number;
+    private int number;
 
     /** 菜品价格 */
     private double price;
@@ -62,11 +62,11 @@ public class DishOrder extends BaseEntity
         this.url = url;
     }
 
-    public Long getNumber() {
+    public int getNumber() {
         return number;
     }
 
-    public void setNumber(Long number) {
+    public void setNumber(int number) {
         this.number = number;
     }
 

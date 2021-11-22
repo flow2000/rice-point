@@ -1,9 +1,7 @@
 package com.ruoyi.order.service.impl;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.uuid.IdUtils;
@@ -37,7 +35,13 @@ public class OrderServiceImpl implements IOrderService {
      */
     @Override
     public Order selectOrderByOrderId(Long orderId) {
-        return orderMapper.selectOrderByOrderId(orderId);
+        Order order = orderMapper.selectOrderByOrderId(orderId);
+        if (order != null) {
+            DishOrder dishOrder = new DishOrder();
+            dishOrder.setOrderId(orderId);
+            order.setDishOrders(dishOrderMapper.selectDishOrderList(dishOrder));
+        }
+        return order;
     }
 
     /**
@@ -49,13 +53,13 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public List<Order> selectOrderList(Order order) {
         List<Order> list = orderMapper.selectOrderList(order);
-        if (list != null){
+        if (list != null) {
             for (int i = 0; i < list.size(); i++) {
                 DishOrder dishOrder = new DishOrder();
                 dishOrder.setOrderId(list.get(i).getOrderId());
                 Order o = list.get(i);
                 o.setDishOrders(dishOrderMapper.selectDishOrderList(dishOrder));
-                list.set(i,o);
+                list.set(i, o);
             }
         }
         return list;
@@ -70,14 +74,30 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public int insertOrder(Order order) {
         List<DishOrder> dishOrders = order.getDishOrders();
-        if (order.getErrorReason()==null){
+        double sum = 0;
+        if (order.getErrorReason() == null) {
             order.setErrorReason("");
         }
+        // 计算总价
+        for (DishOrder d : dishOrders) {
+            sum += d.getNumber() * d.getPrice();
+        }
+        // 设置订单初始值
+        order.setOrderPrice(new BigDecimal(String.valueOf(sum)));
         order.setCreateTime(DateUtils.getNowDate());
-        order.setOrderCode(IdUtils.fastSimpleUUID());
+        order.setOrderCode(IdUtils.generateOrderID(order.getUserId()));
         order.setMealNumber(selectLastMealNumberInToday() + 1);
+        // 插入订单数据
         int row = orderMapper.insertOrder(order);
-        dishOrderMapper.insertDishOrders(dishOrders);
+        for (int i = 0; i < dishOrders.size(); i++) {
+            DishOrder dishOrder = dishOrders.get(i);
+            dishOrder.setOrderId(order.getOrderId());
+            dishOrders.set(i, dishOrder);
+        }
+        if (row > 0) {
+            // 插入菜品订单数据
+            dishOrderMapper.insertDishOrders(dishOrders);
+        }
         return row;
     }
 
@@ -89,8 +109,12 @@ public class OrderServiceImpl implements IOrderService {
      */
     @Override
     public int updateOrder(Order order) {
-        if (order.getErrorReason()==null){
+        if (order.getErrorReason() == null) {
             order.setErrorReason("");
+        }
+        // 订单状态为成功写入实付款
+        if ("1".equals(order.getStatus())){
+            order.setOrderPaid(order.getOrderPrice());
         }
         return orderMapper.updateOrder(order);
     }
@@ -126,9 +150,9 @@ public class OrderServiceImpl implements IOrderService {
      *
      * @return 结果
      */
-    private int selectLastMealNumberInToday(){
+    private int selectLastMealNumberInToday() {
         Order order = orderMapper.selectLastMealNumberInToday();
-        if (order == null){
+        if (order == null) {
             return 0;
         }
         return order.getMealNumber();
@@ -161,7 +185,7 @@ public class OrderServiceImpl implements IOrderService {
      */
     @Override
     public Map<String, Object> selectOrderWeekMap() {
-        List<Map<String, Object>> list= orderMapper.selectWeekOrderAmount();
+        List<Map<String, Object>> list = orderMapper.selectWeekOrderAmount();
         Map<String, Object> res = new HashMap<>();
         String[] t = new String[list.size()];
         Long[] a = new Long[list.size()];
@@ -184,7 +208,7 @@ public class OrderServiceImpl implements IOrderService {
      */
     @Override
     public Map<String, Object> selectWeekOrderMoneyMap() {
-        List<Map<String, Object>> list= orderMapper.selectWeekOrderMoneyAmount();
+        List<Map<String, Object>> list = orderMapper.selectWeekOrderMoneyAmount();
         Map<String, Object> res = new HashMap<>();
         String[] t = new String[list.size()];
         BigDecimal[] a = new BigDecimal[list.size()];
