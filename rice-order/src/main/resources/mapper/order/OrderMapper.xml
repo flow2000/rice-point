@@ -38,7 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectOrderList" parameterType="Order" resultMap="OrderResult">
         <include refid="selectOrderVo"/>
         <where>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="orderCode != null  and orderCode != ''"> and order_code like concat('%', #{orderCode}, '%')</if>
             <if test="mealNumber != null  and mealNumber != ''"> and meal_number = #{mealNumber}</if>
             <if test="timeList != null "> and create_time between #{timeList[0]} and #{timeList[1]}</if>
         </where>
