@@ -96,4 +96,11 @@ public interface OrderMapper
      * @return 结果
      */
     public List<Map<String, Object>> selectWeekOrderMoneyAmount();
+
+    /**
+     * 增加订单对应菜品的月售量
+     *
+     * @param order 订单
+     */
+    public void updateDishOnsale(Order order);
 }

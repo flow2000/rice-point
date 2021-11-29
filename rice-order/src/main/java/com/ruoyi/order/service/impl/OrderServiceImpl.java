@@ -112,9 +112,11 @@ public class OrderServiceImpl implements IOrderService {
         if (order.getErrorReason() == null) {
             order.setErrorReason("");
         }
-        // 订单状态为成功写入实付款
+        // 订单状态为成功写入实付款,增加对应菜品月售量
         if ("1".equals(order.getStatus())){
             order.setOrderPaid(order.getOrderPrice());
+            // 增加订单对应菜品的月售量
+            orderMapper.updateDishOnsale(order);
         }
         return orderMapper.updateOrder(order);
     }
