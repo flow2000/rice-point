@@ -28,6 +28,14 @@ public interface DishMapper
     public List<Dish> selectDishList(Dish dish);
 
     /**
+     * 查询今日上架菜品列表
+     *
+     * @param dish 菜品
+     * @return 菜品集合
+     */
+    public List<Dish> selectTodayDishList(Dish dish);
+
+    /**
      * 新增菜品
      *
      * @param dish 菜品

@@ -61,6 +61,17 @@ public class DishServiceImpl implements IDishService
     }
 
     /**
+     * 查询今日上架菜品列表
+     *
+     * @param dish 菜品
+     * @return 菜品集合
+     */
+    @Override
+    public List<Dish> selectTodayDishList(Dish dish) {
+        return dishMapper.selectTodayDishList(dish);
+    }
+
+    /**
      * 查询食堂菜品列表
      *
      * @param canteenDish 菜品类型

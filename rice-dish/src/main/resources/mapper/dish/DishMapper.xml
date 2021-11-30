@@ -48,6 +48,14 @@
         </where>
     </select>
 
+    <select id="selectTodayDishList" parameterType="Dish" resultMap="DishResult">
+        <include refid="selectDishVo"/>
+        <where>
+            shelf_date like concat('%', date_format(curdate(),'%w'), '%')
+            and rd.del_flag=0
+        </where>
+    </select>
+
     <select id="selectDishByDishId" parameterType="Long" resultMap="DishResult">
         <include refid="selectDishVo"/>
         where rd.dish_id = #{dishId}
