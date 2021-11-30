@@ -74,4 +74,20 @@ public interface DishMapper
      * @return 结果
      */
     public int updateDishStatus(Dish dish);
+
+    /**
+     * 上架菜品
+     *
+     * @param dish 菜品
+     * @return 结果
+     */
+    public int updateDishByDishId(Dish dish);
+
+    /**
+     * 批量上架菜品
+     *
+     * @param dish 菜品
+     * @return 结果
+     */
+    public int updateDishByDishIds(Dish dish);
 }

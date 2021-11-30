@@ -1,6 +1,7 @@
 package com.ruoyi.dish.service.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
@@ -56,19 +57,7 @@ public class DishServiceImpl implements IDishService
     @Override
     public List<Dish> selectDishList(Dish dish)
     {
-        List<Dish> list = dishMapper.selectDishList(dish);
-        if (list != null){
-            for (int i = 0; i < list.size(); i++) {
-                Long dish_id = list.get(i).getDishId();
-                CanteenDish canteenDish = new CanteenDish();
-                canteenDish.setDishId(dish_id);
-                Long[] canteenIds = selectCanteenDishList(canteenDish);
-                Dish d = list.get(i);
-                d.setCanteenIds(canteenIds);
-                list.set(i,d);
-            }
-        }
-        return list;
+        return dishMapper.selectDishList(dish);
     }
 
     /**
@@ -201,5 +190,27 @@ public class DishServiceImpl implements IDishService
     public int changeDishStatus(Dish dish) {
         dish.setUpdateTime(DateUtils.getNowDate());
         return dishMapper.updateDishStatus(dish);
+    }
+
+    /**
+     * 上架菜品
+     *
+     * @param dish 菜品
+     * @return 结果
+     */
+    @Override
+    public int uploadDish(Dish dish) {
+        return dishMapper.updateDishByDishId(dish);
+    }
+
+    /**
+     * 批量上架菜品
+     *
+     * @param dish 菜品
+     * @return 结果
+     */
+    @Override
+    public int uploadDishes(Dish dish) {
+        return dishMapper.updateDishByDishIds(dish);
     }
 }

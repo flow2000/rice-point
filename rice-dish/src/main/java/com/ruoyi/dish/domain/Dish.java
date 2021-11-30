@@ -51,8 +51,14 @@ public class Dish extends BaseEntity
     /** 删除标志（0代表存在 2代表删除） */
     private String delFlag;
 
+    /** 菜品id组 */
+    private Long[] dishIds;
+
     /** 食堂组 */
     private Long[] canteenIds;
+
+    /** 上架日期 */
+    private String shelfDate;
 
     public void setDishId(Long dishId)
     {
@@ -144,6 +150,14 @@ public class Dish extends BaseEntity
     {
         return delFlag;
     }
+    public Long[] getDishIds() {
+        return dishIds;
+    }
+
+    public void setDishIds(Long[] dishIds) {
+        this.dishIds = dishIds;
+    }
+
     public void setCanteenIds(Long[] canteenIds)
     {
         this.canteenIds=canteenIds;
@@ -153,6 +167,15 @@ public class Dish extends BaseEntity
     {
         return canteenIds;
     }
+    public void setShelfDate(String shelfDate) {
+        this.shelfDate = shelfDate;
+    }
+
+    public String getShelfDate() {
+        return shelfDate;
+    }
+
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -169,7 +192,9 @@ public class Dish extends BaseEntity
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
+            .append("dishIds",getDishIds())
             .append("canteenIds",getCanteenIds())
+            .append("shelf_date",getShelfDate())
             .toString();
     }
 }

@@ -108,6 +108,31 @@ public class DishController extends BaseController
         return toAjax(dishService.updateDish(dish));
     }
 
+
+    /**
+     * 上架菜品
+     */
+    @PreAuthorize("@ss.hasPermi('dish:dish:upload')")
+    @Log(title = "菜品信息", businessType = BusinessType.UPDATE)
+    @PutMapping("/upload")
+    @ApiOperation("上架菜品")
+    public AjaxResult uploadDish(@RequestBody Dish dish)
+    {
+        return toAjax(dishService.uploadDish(dish));
+    }
+
+    /**
+     * 批量上架菜品
+     */
+    @PreAuthorize("@ss.hasPermi('dish:dish:upload')")
+    @Log(title = "菜品信息", businessType = BusinessType.UPDATE)
+    @PutMapping("/uploads")
+    @ApiOperation("批量上架菜品")
+    public AjaxResult uploadDishes(@RequestBody Dish dish)
+    {
+        return toAjax(dishService.uploadDishes(dish));
+    }
+
     /**
      * 删除菜品
      */

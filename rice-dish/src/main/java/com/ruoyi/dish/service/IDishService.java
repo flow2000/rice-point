@@ -74,4 +74,20 @@ public interface IDishService
      * @return 结果
      */
     public int changeDishStatus(Dish dish);
+
+    /**
+     * 上架菜品
+     *
+     * @param dish 菜品
+     * @return 结果
+     */
+    public int uploadDish(Dish dish);
+
+    /**
+     * 批量上架菜品
+     *
+     * @param dish 菜品
+     * @return 结果
+     */
+    public int uploadDishes(Dish dish);
 }
