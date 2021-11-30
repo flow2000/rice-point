@@ -60,6 +60,9 @@ public class Dish extends BaseEntity
     /** 上架日期 */
     private String shelfDate;
 
+    /** 特定上架日期 */
+    private int oneShelfDate;
+
     public void setDishId(Long dishId)
     {
         this.dishId = dishId;
@@ -174,6 +177,13 @@ public class Dish extends BaseEntity
     public String getShelfDate() {
         return shelfDate;
     }
+    public void setOneShelfDate(int oneShelfDate) {
+        this.oneShelfDate = oneShelfDate;
+    }
+
+    public int getOneShelfDate() {
+        return oneShelfDate;
+    }
 
 
     @Override
@@ -194,7 +204,8 @@ public class Dish extends BaseEntity
             .append("updateTime", getUpdateTime())
             .append("dishIds",getDishIds())
             .append("canteenIds",getCanteenIds())
-            .append("shelf_date",getShelfDate())
+            .append("shelfDate",getShelfDate())
+            .append("oneShelfDate",getOneShelfDate())
             .toString();
     }
 }

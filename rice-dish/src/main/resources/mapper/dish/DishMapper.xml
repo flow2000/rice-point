@@ -43,6 +43,7 @@
             <if test="canteenId != null">and rcd.canteen_id = #{canteenId}</if>
             <if test="typeId != null and typeId != ''">and rt.type_id = #{typeId}</if>
             <if test="price != null ">and price = #{price}</if>
+            <if test="oneShelfDate != 0 ">and shelf_date like concat('%', #{oneShelfDate}, '%')</if>
             and rd.del_flag=0
         </where>
     </select>
