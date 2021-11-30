@@ -55,17 +55,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertTickets">
         insert into rice_ticket
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="dishId != null">dish_id,</if>
-            <if test="ticketNumber != null">ticket_number,</if>
-            <if test="time != null">`time`,</if>
-            <if test="createTime != null">create_time,</if>
+           dish_id,ticket_number,`time`,create_time
         </trim>
         values
-        <foreach item="item" collection="list" open="(" separator="," close=")">
-            #{item.dishId},
-            #{item.ticketNumber},
-            #{item.time},
-            #{item.createTime},
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.dishId},#{item.ticketNumber},#{item.time},#{item.createTime})
         </foreach>
     </insert>
 
