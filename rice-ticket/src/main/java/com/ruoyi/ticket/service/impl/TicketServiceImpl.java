@@ -220,20 +220,29 @@ public class TicketServiceImpl implements ITicketService
         if (ticket.getTime() == null){
             ticket.setTime(time);
         }
+        // 获取投票信息
         List<Ticket> ticketList = ticketMapper.selectTicketsList(ticket);
+        // 获取菜品类型信息
         List<DishType> dishTypeList = dishTypeMapper.selectDishTypeList(new DishType());
+        // 定义结果数组
         List<Object> list = new ArrayList<>();
+        // 遍历重新构造投票数据
         for (DishType dishType : dishTypeList) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("typeName", dishType.getTypeName());
             List<Ticket> l = new ArrayList<>();
-            for (Ticket t : ticketList) {
-                if (t.getTypeId().equals(dishType.getTypeId())) {
+            Iterator<Ticket> iterator = ticketList.iterator();
+            while (iterator.hasNext()) {
+                Ticket t = iterator.next();
+                if (t.getTypeId().equals(dishType.getTypeId())) { //类型相同
                     l.add(t);
+                    iterator.remove(); // 移除该元素
                 }
             }
-            map.put("dishList", l);
-            list.add(map);
+            if (l.size()!=0){
+                Map<String, Object> map = new HashMap<>();
+                map.put("typeName", dishType.getTypeName());
+                map.put("dishList", l);
+                list.add(map);
+            }
         }
         return list;
     }
