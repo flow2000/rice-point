@@ -137,7 +137,7 @@
         update rice_dish
         set del_flag=2
         where dish_id in
-        <foreach item="dishId" collection="dishIds" open="(" separator="," close=")">
+        <foreach item="dishId" collection="array" open="(" separator="," close=")">
             #{dishId}
         </foreach>
     </update>
