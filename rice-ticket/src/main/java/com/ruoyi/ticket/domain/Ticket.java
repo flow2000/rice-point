@@ -24,9 +24,18 @@ public class Ticket extends BaseEntity
     /** 菜品id */
     private Long dishId;
 
+    /** 菜品类型id */
+    private Long typeId;
+
+    /** 菜品类型名 */
+    private String typeName;
+
     /** 菜品名称 */
     @Excel(name = "菜品名称")
     private String dishesName;
+
+    /** 菜品图片 */
+    private String url;
 
     /** 票数 */
     @Excel(name = "票数")
@@ -61,12 +70,33 @@ public class Ticket extends BaseEntity
     {
         return dishId;
     }
+    public void setTypeId(Long typeId) {
+        this.typeId = typeId;
+    }
+
+    public Long getTypeId() {
+        return typeId;
+    }
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
     public void setDishesName(String dishesName) {
         this.dishesName = dishesName;
     }
 
     public String getDishesName() {
         return dishesName;
+    }
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getUrl() {
+        return url;
     }
     public void setTicketNumber(Integer ticketNumber)
     {
@@ -93,7 +123,10 @@ public class Ticket extends BaseEntity
             .append("ticketId", getTicketId())
             .append("userName", getUserName())
             .append("dishId", getDishId())
+            .append("typeId", getTypeId())
+            .append("typeName", getTypeName())
             .append("dishesName", getDishesName())
+            .append("url", getUrl())
             .append("ticketNumber", getTicketNumber())
             .append("time", getTime())
             .append("createTime", getCreateTime())

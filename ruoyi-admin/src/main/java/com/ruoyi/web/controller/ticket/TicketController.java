@@ -35,7 +35,7 @@ public class TicketController extends BaseController
     private static final int votes = 5;
 
     /**
-     * 查询投票信息列表
+     * 查询票数在前十名的最新一期投票信息列表
      */
     @PreAuthorize("@ss.hasPermi('ticket:info:list')")
     @GetMapping("/list")

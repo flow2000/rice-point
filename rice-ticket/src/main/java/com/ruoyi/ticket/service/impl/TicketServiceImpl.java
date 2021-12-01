@@ -6,7 +6,9 @@ import java.util.stream.Collectors;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.dish.domain.Dish;
+import com.ruoyi.dish.domain.DishType;
 import com.ruoyi.dish.mapper.DishMapper;
+import com.ruoyi.dish.mapper.DishTypeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.ticket.mapper.TicketMapper;
@@ -28,6 +30,9 @@ public class TicketServiceImpl implements ITicketService
     @Autowired
     private DishMapper dishMapper;
 
+    @Autowired
+    private DishTypeMapper dishTypeMapper;
+
     /**
      * 查询投票信息
      *
@@ -41,7 +46,7 @@ public class TicketServiceImpl implements ITicketService
     }
 
     /**
-     * 查询投票信息列表
+     * 查询票数在前十名的最新一期投票信息列表
      *
      * @param ticket 投票信息
      * @return 投票信息
@@ -200,5 +205,36 @@ public class TicketServiceImpl implements ITicketService
         res.put("xdata", t);
         res.put("ydata", a);
         return res;
+    }
+
+    /**
+     * 查询最新一期的投票信息列表
+     * @return 结果
+     */
+    @Override
+    public List<Object> selectTicketsList(Ticket ticket) {
+        int time = ticketMapper.getTotalTime();
+        if (time == 0){
+            time++;
+        }
+        if (ticket.getTime() == null){
+            ticket.setTime(time);
+        }
+        List<Ticket> ticketList = ticketMapper.selectTicketsList(ticket);
+        List<DishType> dishTypeList = dishTypeMapper.selectDishTypeList(new DishType());
+        List<Object> list = new ArrayList<>();
+        for (DishType dishType : dishTypeList) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("typeName", dishType.getTypeName());
+            List<Ticket> l = new ArrayList<>();
+            for (Ticket t : ticketList) {
+                if (t.getTypeId().equals(dishType.getTypeId())) {
+                    l.add(t);
+                }
+            }
+            map.put("dishList", l);
+            list.add(map);
+        }
+        return list;
     }
 }

@@ -22,7 +22,7 @@ public interface TicketMapper
     public Ticket selectTicketByTicketId(Long ticketId);
 
     /**
-     * 查询投票信息列表
+     * 查询票数在前十名的最新一期投票信息列表
      *
      * @param ticket 投票信息
      * @return 投票信息集合
@@ -100,4 +100,10 @@ public interface TicketMapper
      * @return 结果
      */
     public int selectTicketAmount();
+
+    /**
+     * 查询最新一期的投票信息列表
+     * @return 结果
+     */
+    public List<Ticket> selectTicketsList(Ticket ticket);
 }
