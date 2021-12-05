@@ -2,8 +2,6 @@ package com.ruoyi.web.controller.ticket;
 
 import java.util.List;
 
-import com.ruoyi.common.core.domain.entity.SysUser;
-import com.ruoyi.system.service.ISysUserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -27,12 +25,6 @@ public class TicketController extends BaseController
 {
     @Autowired
     private ITicketService ticketService;
-
-    @Autowired
-    private ISysUserService userService;
-
-    /** 每日投票限制 */
-    private static final int votes = 5;
 
     /**
      * 查询票数在前十名的最新一期投票信息列表
@@ -79,38 +71,6 @@ public class TicketController extends BaseController
             return AjaxResult.error("期数不合法");
         }
         return toAjax(ticketService.insertTicket(ticket));
-    }
-
-    /**
-     * 修改投票信息
-     */
-    @PreAuthorize("@ss.hasPermi('ticket:info:edit')")
-    @Log(title = "投票信息", businessType = BusinessType.UPDATE)
-    @PutMapping
-    public AjaxResult edit(@RequestBody Ticket ticket)
-    {
-        String userName = ticket.getUserName();
-        if (userName == null || "".equals(userName)){
-            return AjaxResult.error("用户名为空");
-        }
-        if (ticket.getTicketId() == null || ticket.getTicketId() == 0L ){
-            return AjaxResult.error("投票菜品不明确");
-        }
-        int time = ticketService.getTotalTime();
-        Ticket t = ticketService.selectTicketByTicketId(ticket.getTicketId());
-        if (t.getTime() != time){
-            return AjaxResult.error("请进行最新一期的投票");
-        }
-        SysUser user = userService.selectUserByUserName(userName);
-        if (user == null){
-            return AjaxResult.error("请重新登录");
-        }
-        if (user.getVotes() >= votes){
-            return AjaxResult.error("超过每日投票限制");
-        }
-        user.setVotes(user.getVotes() + 1);
-        ticketService.updateUserVotes(user);
-        return toAjax(ticketService.updateTicket(ticket));
     }
 
     /**
