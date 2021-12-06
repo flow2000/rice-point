@@ -1,0 +1,57 @@
+version: '1.0'
+name: pipeline-20211206
+displayName: pipeline-20211206
+triggers:
+  push:
+    branches:
+      prefix:
+        - ''
+stages:
+  - name: stage-dd8bdd6f
+    displayName: 未命名
+    strategy: naturally
+    trigger: auto
+    steps:
+      - step: build@maven
+        name: build_maven
+        displayName: Maven 构建
+        jdkVersion: '8'
+        mavenVersion: 3.3.9
+        artifacts:
+          - name: BUILD_ARTIFACT
+            path:
+              - ./target
+        commands:
+          - mvn -B clean package -Dmaven.test.skip=true
+  - name: stage-8aa4eaf5
+    displayName: 未命名
+    strategy: naturally
+    trigger: auto
+    steps:
+      - step: publish@general_artifacts
+        name: publish_general_artifacts
+        displayName: 上传制品
+        dependArtifact: BUILD_ARTIFACT
+        artifactRepository: default
+        artifactName: output
+  - name: stage-16e6fc57
+    displayName: 未命名
+    strategy: naturally
+    trigger: auto
+    steps:
+      - step: deploy@agent
+        name: deploy_agent
+        displayName: 主机部署
+        hostGroupID: '1'
+        deployArtifact:
+          - source: artifact
+            name: output
+            target: ~/gitee_go/deploy
+            artifactRepository: release
+            artifactName: output
+            artifactVersion: latest
+        script: |-
+          cd ~/gitee_go/deploy
+          tar -zxvf output.tar.gz
+          ls
+          echo 'Hello Gitee!
