@@ -52,6 +52,7 @@
         <include refid="selectDishVo"/>
         <where>
             shelf_date like concat('%', date_format(curdate(),'%w'), '%')
+            <if test="canteenId != null">and rcd.canteen_id = #{canteenId}</if>
             and rd.del_flag=0
         </where>
     </select>
