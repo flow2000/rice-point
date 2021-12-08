@@ -33,7 +33,7 @@ public interface IDishService
      * @param dish 菜品
      * @return 菜品集合
      */
-    public List<Dish> selectTodayDishList(Dish dish);
+    public List<Object> selectTodayDishList(Dish dish);
 
     /**
      * 新增菜品

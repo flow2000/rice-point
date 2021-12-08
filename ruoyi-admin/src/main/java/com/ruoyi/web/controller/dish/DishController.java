@@ -52,19 +52,6 @@ public class DishController extends BaseController
     }
 
     /**
-     * 查询今日上架菜品列表
-     */
-    @PreAuthorize("@ss.hasPermi('dish:dish:list')")
-    @GetMapping("/listTodayDish")
-    @ApiOperation("查询今日菜品列表")
-    public TableDataInfo listTodayDish(Dish dish)
-    {
-        startPage();
-        List<Dish> list = dishService.selectTodayDishList(dish);
-        return getDataTable(list);
-    }
-
-    /**
      * 导出菜品列表
      */
     @PreAuthorize("@ss.hasPermi('dish:dish:export')")

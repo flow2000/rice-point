@@ -1,13 +1,14 @@
 package com.ruoyi.dish.service.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.dish.constatnt.DishConstants;
 import com.ruoyi.dish.domain.CanteenDish;
+import com.ruoyi.dish.domain.DishType;
 import com.ruoyi.dish.mapper.CanteenDishMapper;
+import com.ruoyi.dish.mapper.DishTypeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.dish.mapper.DishMapper;
@@ -28,6 +29,9 @@ public class DishServiceImpl implements IDishService
 
     @Autowired
     private CanteenDishMapper canteenDishMapper;
+
+    @Autowired
+    private DishTypeMapper dishTypeMapper;
 
     /**
      * 查询菜品
@@ -67,8 +71,30 @@ public class DishServiceImpl implements IDishService
      * @return 菜品集合
      */
     @Override
-    public List<Dish> selectTodayDishList(Dish dish) {
-        return dishMapper.selectTodayDishList(dish);
+    public List<Object> selectTodayDishList(Dish dish) {
+        // 定义结果数组
+        List<Object> list = new ArrayList<>();
+        List<Dish> dishList = dishMapper.selectTodayDishList(dish);
+        // 获取菜品类型信息
+        List<DishType> dishTypeList = dishTypeMapper.selectDishTypeList(new DishType());
+        for (DishType dishType : dishTypeList){
+            List<Dish> l = new ArrayList<>();
+            Iterator<Dish> iterator = dishList.iterator();
+            while (iterator.hasNext()){
+                Dish d = iterator.next();
+                if (dishType.getTypeId().equals(d.getTypeId())){ //类型相同
+                    l.add(d);
+                    iterator.remove(); // 移除该元素
+                }
+            }
+            if (l.size()!=0){
+                Map<String, Object> map = new HashMap<>();
+                map.put("typeName", dishType.getTypeName());
+                map.put("dishList", l);
+                list.add(map);
+            }
+        }
+        return list;
     }
 
     /**
