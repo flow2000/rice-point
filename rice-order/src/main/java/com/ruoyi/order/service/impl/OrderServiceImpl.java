@@ -226,4 +226,37 @@ public class OrderServiceImpl implements IOrderService {
         return res;
     }
 
+    /**
+     * 获取订单详细信息
+     *
+     * @return 结果
+     */
+    @Override
+    public List<Order> listUserOrder(Order order) {
+        List<Order> list = orderMapper.listUserOrder(order);
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
+                DishOrder dishOrder = new DishOrder();
+                dishOrder.setOrderId(list.get(i).getOrderId());
+                Order o = list.get(i);
+                String s = o.getStatus();
+                if ("0".equals(s)){
+                    o.setStatus("未处理");
+                }
+                if ("1".equals(s)){
+                    o.setStatus("已完成");
+                }
+                if ("2".equals(s)){
+                    o.setStatus("处理失败");
+                }
+                if ("3".equals(s)){
+                    o.setStatus("已取消");
+                }
+                o.setDishOrders(dishOrderMapper.selectDishOrderList(dishOrder));
+                list.set(i, o);
+            }
+        }
+        return list;
+    }
+
 }

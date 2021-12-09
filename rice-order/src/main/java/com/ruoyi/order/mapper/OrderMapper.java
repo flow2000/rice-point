@@ -103,4 +103,11 @@ public interface OrderMapper
      * @param order 订单
      */
     public void updateDishOnsale(Order order);
+
+    /**
+     * 获取订单详细信息
+     *
+     * @return 结果
+     */
+    public List<Order> listUserOrder(Order order);
 }

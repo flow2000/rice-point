@@ -35,6 +35,9 @@ public class Order extends BaseEntity
     /** 就餐食堂id */
     private Long canteenId;
 
+    /** 就餐食堂名称 */
+    private String canteenName;
+
     /** 菜品订单列表 */
     List<DishOrder> dishOrders;
 
@@ -103,6 +106,14 @@ public class Order extends BaseEntity
         this.canteenId = canteenId;
     }
 
+    public String getCanteenName() {
+        return canteenName;
+    }
+
+    public void setCanteenName(String canteenName) {
+        this.canteenName = canteenName;
+    }
+
     public List<DishOrder> getDishOrders() {
         return dishOrders;
     }
@@ -169,6 +180,7 @@ public class Order extends BaseEntity
                 ", orderCode='" + orderCode + '\'' +
                 ", mealNumber=" + mealNumber +
                 ", canteenId=" + canteenId +
+                ", canteenName=" + canteenName +
                 ", dishOrders=" + dishOrders +
                 ", orderPrice=" + orderPrice +
                 ", orderPaid=" + orderPaid +

@@ -89,4 +89,11 @@ public interface IOrderService
      * @return 结果
      */
     public Map<String, Object> selectWeekOrderMoneyMap();
+
+    /**
+     * 获取订单详细信息
+     *
+     * @return 结果
+     */
+    public List<Order> listUserOrder(Order order);
 }
