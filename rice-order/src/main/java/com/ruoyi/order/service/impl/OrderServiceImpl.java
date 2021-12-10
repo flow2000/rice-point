@@ -80,7 +80,7 @@ public class OrderServiceImpl implements IOrderService {
         }
         // 计算总价
         for (DishOrder d : dishOrders) {
-            sum += d.getNumber() * d.getPrice();
+            sum += d.getPrice();
         }
         // 设置订单初始值
         order.setOrderPrice(new BigDecimal(String.valueOf(sum)));

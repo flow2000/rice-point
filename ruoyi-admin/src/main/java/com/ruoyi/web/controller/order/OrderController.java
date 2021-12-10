@@ -2,11 +2,11 @@ package com.ruoyi.web.controller.order;
 
 import java.util.List;
 
-import com.ruoyi.order.domain.DishOrder;
+import com.ruoyi.framework.web.service.TokenService;
+import com.ruoyi.system.service.ISysUserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -68,27 +68,6 @@ public class OrderController extends BaseController
     public AjaxResult getInfo(@PathVariable("orderId") Long orderId)
     {
         return AjaxResult.success(orderService.selectOrderByOrderId(orderId));
-    }
-
-    /**
-     * 新增订单
-     */
-    @PreAuthorize("@ss.hasPermi('order:order:add')")
-    @Log(title = "订单", businessType = BusinessType.INSERT)
-    @PostMapping
-    public AjaxResult add(@RequestBody Order order)
-    {
-        if (order.getUserId() == null){
-            return AjaxResult.error("系统错误，用户不能为空");
-        }
-        if (order.getCanteenId() == null){
-            return AjaxResult.error("系统错误，食堂不能为空");
-        }
-        List<DishOrder> dishOrders = order.getDishOrders();
-        if (dishOrders == null || dishOrders.size() == 0){
-            return AjaxResult.error("请先选择菜品");
-        }
-        return toAjax(orderService.insertOrder(order));
     }
 
     /**
