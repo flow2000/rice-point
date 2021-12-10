@@ -39,6 +39,11 @@
             <artifactId>rice-ticket</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>rice-order</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
