@@ -110,4 +110,11 @@ public interface OrderMapper
      * @return 结果
      */
     public List<Order> listUserOrder(Order order);
+
+    /**
+     * 查询食堂交易额
+     *
+     * @return 结果
+     */
+    public List<Map<String, Object>> selectCanteenTurnoverMap();
 }

@@ -63,4 +63,15 @@ public class BoardController extends BaseController {
         ajax.put("orderMoneyAmountInWeek", orderService.selectWeekOrderMoneyMap());
         return ajax;
     }
+
+    /**
+     * 查询饼状图信息
+     *
+     * @return 饼状图信息
+     */
+    @GetMapping("/initBar")
+    @PreAuthorize("@ss.hasPermi('board:info:initBar')")
+    public AjaxResult initBar() {
+        return AjaxResult.success(orderService.selectCanteenTurnoverMap());
+    }
 }

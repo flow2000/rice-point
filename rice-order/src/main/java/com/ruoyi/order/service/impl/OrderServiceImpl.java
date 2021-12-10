@@ -3,6 +3,8 @@ package com.ruoyi.order.service.impl;
 import java.math.BigDecimal;
 import java.util.*;
 
+import com.ruoyi.canteen.domain.Canteen;
+import com.ruoyi.canteen.mapper.CanteenMapper;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.uuid.IdUtils;
 import com.ruoyi.order.domain.DishOrder;
@@ -26,6 +28,9 @@ public class OrderServiceImpl implements IOrderService {
 
     @Autowired
     private DishOrderMapper dishOrderMapper;
+
+    @Autowired
+    private CanteenMapper canteenMapper;
 
     /**
      * 查询订单
@@ -257,6 +262,41 @@ public class OrderServiceImpl implements IOrderService {
             }
         }
         return list;
+    }
+
+    /**
+     * 查询食堂交易额
+     *
+     * @return 结果
+     */
+    @Override
+    public Map<String, Object> selectCanteenTurnoverMap() {
+        List<Map<String, Object>> canteenTurnoverList = orderMapper.selectCanteenTurnoverMap();
+        List<Canteen> canteenList = canteenMapper.selectCanteenList(new Canteen());
+        Map<String, Object> res = new HashMap<>();
+        // 构造食堂名称数组
+        List<String> canteenNameList = new ArrayList<>();
+        for (Canteen canteen : canteenList) {
+            canteenNameList.add(canteen.getCanteenName());
+            boolean found_flag = false;
+            for (Map<String, Object> m : canteenTurnoverList){
+                if (m.get("id").equals(canteen.getCanteenId())){
+                    found_flag = true;
+                    break;
+                }
+            }
+            // 找不到
+            if (!found_flag){
+                Map<String, Object> map = new HashMap<>();
+                map.put("value", 0);
+                map.put("name", canteen.getCanteenName());
+                map.put("id", canteen.getCanteenId());
+                canteenTurnoverList.add(map);
+            }
+        }
+        res.put("canteenName", canteenNameList);
+        res.put("canteenTurnover",canteenTurnoverList);
+        return res;
     }
 
 }

@@ -24,6 +24,11 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>rice-dish</artifactId>
         </dependency>
+        <!--   食堂管理     -->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>rice-canteen</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

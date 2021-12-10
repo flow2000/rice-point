@@ -32,6 +32,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime" column="create_time"	/>
     </resultMap>
 
+    <resultMap id="selectCanteenTurnoverMap" type="Map">
+        <result property="value" column="order_paid"	/>
+        <result property="name" column="canteen_name"	/>
+        <result property="id" column="canteen_id"	/>
+    </resultMap>
+
     <sql id="selectOrderVo">
         select ro.order_id, ro.user_id, ro.order_code, ro.meal_number, ro.canteen_id, ro.order_price,
         ro.status, ro.error_reason, ro.create_time
@@ -188,6 +194,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null  and status != ''"> and status = #{status}</if>
         </where>
         order by ro.status asc
+    </select>
+
+    <select id="selectCanteenTurnoverMap" resultMap="selectCanteenTurnoverMap">
+        select IFNULL(SUM(order_paid),0) as order_paid, rc.canteen_name, rc.canteen_id from rice_order ro
+        left join rice_canteen rc on rc.canteen_id=ro.canteen_id
+        group by rc.canteen_id
     </select>
 
 </mapper>
