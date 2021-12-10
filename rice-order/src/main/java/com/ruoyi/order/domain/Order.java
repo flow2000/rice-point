@@ -38,6 +38,9 @@ public class Order extends BaseEntity
     /** 就餐食堂名称 */
     private String canteenName;
 
+    /** 就餐食堂图片 */
+    private String canteenUrl;
+
     /** 菜品订单列表 */
     List<DishOrder> dishOrders;
 
@@ -112,6 +115,14 @@ public class Order extends BaseEntity
 
     public void setCanteenName(String canteenName) {
         this.canteenName = canteenName;
+    }
+
+    public String getCanteenUrl() {
+        return canteenUrl;
+    }
+
+    public void setCanteenUrl(String canteenUrl) {
+        this.canteenUrl = canteenUrl;
     }
 
     public List<DishOrder> getDishOrders() {

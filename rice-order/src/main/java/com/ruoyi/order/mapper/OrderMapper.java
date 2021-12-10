@@ -105,7 +105,7 @@ public interface OrderMapper
     public void updateDishOnsale(Order order);
 
     /**
-     * 获取订单详细信息
+     * 获取用户订单
      *
      * @return 结果
      */

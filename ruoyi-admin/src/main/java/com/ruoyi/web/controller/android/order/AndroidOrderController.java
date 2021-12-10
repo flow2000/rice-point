@@ -35,7 +35,7 @@ public class AndroidOrderController extends BaseController {
     private TokenService tokenService;
 
     /**
-     * 获取订单详细信息
+     * 获取用户订单
      */
     @PreAuthorize("@ss.hasPermi('order:order:query')")
     @GetMapping("/listUserOrder")

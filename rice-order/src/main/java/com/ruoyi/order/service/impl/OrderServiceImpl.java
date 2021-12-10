@@ -227,7 +227,7 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     /**
-     * 获取订单详细信息
+     * 获取用户订单
      *
      * @return 结果
      */
