@@ -48,6 +48,15 @@ public class AndroidTicketController extends BaseController {
     }
 
     /**
+     * 查询票数在前十名的最新一期投票信息列表
+     */
+    @GetMapping("/listTicketTop")
+    public AjaxResult list(Ticket ticket)
+    {
+        return AjaxResult.success(ticketService.selectTicketList(ticket));
+    }
+
+    /**
      * 菜品投票
      */
     @PreAuthorize("@ss.hasPermi('ticket:info:edit')")
