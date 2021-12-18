@@ -53,7 +53,10 @@ public class AndroidTicketController extends BaseController {
     @GetMapping("/listTicketTop")
     public AjaxResult list(Ticket ticket)
     {
-        return AjaxResult.success(ticketService.selectTicketList(ticket));
+        AjaxResult ajax = AjaxResult.success();
+        ajax.put("ticketList",ticketService.selectTicketList(ticket));
+        ajax.put("shelfPeriods",ticketService.getTotalTime());
+        return ajax;
     }
 
     /**
