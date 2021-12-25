@@ -22,8 +22,8 @@ import java.io.IOException;
 public class ConnectTencentCloud {
 
     protected static COSClient cosClient;
-    protected String secretId = "AKIDwiFXaMs87qJWS7VdU4NQChvtZy6wVoqb";
-    protected String secretKey = "VjhOoy71e04rOedLnxrToshFXYIlxrUq";
+    protected String secretId = "AKIDrXy81cx1oKaZHirjzyg8JEsGNDm34oHT";
+    protected String secretKey = "xe4C4g14qLZWBaiZ8SVHm0xd290atvgA";
     protected String bucketName = "ricepoint-1305004688";
     protected String apCity = "ap-nanjing";
     protected String host = "https://" + bucketName + "." + apCity + ".myqcloud.com";
