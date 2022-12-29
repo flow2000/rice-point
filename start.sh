@@ -2,7 +2,7 @@
 # 使用方法：修改jar包名称，完整的jar路径，运行日志名称即可
 
 #jar包名称
-APP_NAME=ruoyi-admin.jar
+APP_NAME=ruoyi-admin/target/ruoyi-admin.jar
 #完整的jar路径
 APP_PATH=$APP_NAME
 #运行日志

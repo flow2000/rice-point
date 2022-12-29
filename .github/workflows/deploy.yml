@@ -34,5 +34,4 @@ jobs:
           remote-path: ${{ secrets.SERVER_TARGET }} #远程路径
           clean: true #是否清理远程路径
           after-upload: |
-              mv ruoyi-admin/target/*.jar ./
               sh start.sh restart
