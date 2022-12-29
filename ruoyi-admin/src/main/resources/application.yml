@@ -18,7 +18,7 @@ ruoyi:
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为8080
-  port: 8080
+  port: 8088
   servlet:
     # 应用的访问路径
     context-path: /
@@ -63,7 +63,7 @@ token:
   # 令牌自定义标识
   header: Authorization
   # 令牌密钥
-  secret: abcdefghijklmnopqrstuvwxyz
+  secret: abcdefghijcasm436opqrstuvwxyz
   # 令牌有效期（默认30分钟）
   expireTime: 30
 
@@ -98,7 +98,3 @@ xss:
   # 匹配链接
   urlPatterns: /system/*,/monitor/*,/tool/*
 
-author: panghai # 开发者姓名，生成到类注释上
-packageName: com.rice.dish # 默认生成包路径
-autoRemovePre: true # 是否自动去除表前缀
-tablePrefix: rice # 表前缀（与数据库建立的表对应比如shop_order）
