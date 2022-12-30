@@ -2,6 +2,8 @@ package com.ruoyi.common.utils.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Paths;
+
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.web.multipart.MultipartFile;
 import com.ruoyi.common.config.RuoYiConfig;
@@ -110,13 +112,15 @@ public class FileUploadUtils
 
         String fileName = extractFilename(file);
 
-        File desc = getAbsoluteFile(baseDir, fileName);
-        file.transferTo(desc);
-        String pathFileName = getPathFileName(baseDir, fileName);
+//        File desc = getAbsoluteFile(baseDir, fileName);
+//        file.transferTo(desc);
+//        ConnectTencentCloud connectTencentCloud = new ConnectTencentCloud();
+//        String pathFileName = getPathFileName(baseDir, fileName);
+//        connectTencentCloud.uploadObject(desc, pathFileName);
 
-        ConnectTencentCloud connectTencentCloud = new ConnectTencentCloud();
-        connectTencentCloud.uploadObject(desc, pathFileName);
-        return pathFileName;
+        String absPath = getAbsoluteFile(baseDir, fileName).getAbsolutePath();
+        file.transferTo(Paths.get(absPath));
+        return getPathFileName(baseDir, fileName);
     }
 
     /**
