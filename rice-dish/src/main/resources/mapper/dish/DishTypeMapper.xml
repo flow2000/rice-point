@@ -16,25 +16,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectDishTypeVo">
-        select type_id, type_name, status, del_flag, create_by, create_time, update_by, update_time from rice_dish_type
+        select rdt.type_id, rdt.type_name, rdt.status, rdt.del_flag,
+        rdt.create_by, rdt.create_time, rdt.update_by, rdt.update_time
+        from rice_dish_type rdt
+        left join sys_dept d on rdt.dept_id = d.dept_id
     </sql>
 
     <select id="selectDishTypeList" parameterType="DishType" resultMap="DishTypeResult">
         <include refid="selectDishTypeVo"/>
         <where>
-            del_flag = 0
-            <if test="typeName != null  and typeName != ''"> and type_name like concat('%', #{typeName}, '%')</if>
+            rdt.del_flag = 0
+            <if test="typeName != null  and typeName != ''"> and rdt.type_name like concat('%', #{typeName}, '%')</if>
         </where>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
     </select>
 
     <select id="selectDishTypeByTypeId" parameterType="Long" resultMap="DishTypeResult">
         <include refid="selectDishTypeVo"/>
-        where del_flag = 0 and type_id = #{typeId}
+        where rdt.del_flag = 0 and rdt.type_id = #{typeId}
     </select>
 
     <insert id="insertDishType" parameterType="DishType" useGeneratedKeys="true" keyProperty="typeId">
         insert into rice_dish_type
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            dept_id,
             <if test="typeName != null">type_name,</if>
             <if test="status != null">status,</if>
             <if test="delFlag != null">del_flag,</if>
@@ -44,6 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{deptId},
             <if test="typeName != null">#{typeName},</if>
             <if test="status != null">#{status},</if>
             <if test="delFlag != null">#{delFlag},</if>

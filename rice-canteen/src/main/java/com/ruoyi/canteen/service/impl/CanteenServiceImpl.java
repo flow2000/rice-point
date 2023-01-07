@@ -9,7 +9,9 @@ import java.util.stream.Collectors;
 
 import com.ruoyi.canteen.constant.CanteenConstants;
 import com.ruoyi.canteen.domain.CanteenTreeSelect;
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,7 @@ public class CanteenServiceImpl implements ICanteenService {
      * @return 食堂信息
      */
     @Override
+    @DataScope(deptAlias = "d")
     public Canteen selectCanteenByCanteenId(Long canteenId) {
         return canteenMapper.selectCanteenByCanteenId(canteenId);
     }
@@ -46,6 +49,7 @@ public class CanteenServiceImpl implements ICanteenService {
      * @return 食堂信息
      */
     @Override
+    @DataScope(deptAlias = "d")
     public List<Canteen> selectCanteenList(Canteen canteen) {
         return canteenMapper.selectCanteenList(canteen);
     }
@@ -59,6 +63,8 @@ public class CanteenServiceImpl implements ICanteenService {
     @Override
     public int insertCanteen(Canteen canteen) {
         canteen.setCreateTime(DateUtils.getNowDate());
+        Long deptId = SecurityUtils.getLoginUser().getDeptId();
+        canteen.setDeptId(deptId);
         return canteenMapper.insertCanteen(canteen);
     }
 

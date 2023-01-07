@@ -19,6 +19,9 @@ public class Dish extends BaseEntity
     /** 菜品id */
     private Long dishId;
 
+    /** 部门id */
+    private Long deptId;
+
     /** 菜品类型id */
     private Long typeId;
 
@@ -71,6 +74,13 @@ public class Dish extends BaseEntity
     public Long getDishId()
     {
         return dishId;
+    }
+    public void setDeptId(Long deptId) {
+        this.deptId = deptId;
+    }
+
+    public Long getDeptId() {
+        return deptId;
     }
     public void setTypeId(Long typeId)
     {
@@ -190,6 +200,7 @@ public class Dish extends BaseEntity
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("dishId", getDishId())
+            .append("deptId", getDeptId())
             .append("typeId", getTypeId())
             .append("dishesName", getDishesName())
             .append("dishesType", getDishesType())

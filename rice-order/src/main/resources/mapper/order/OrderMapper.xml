@@ -42,17 +42,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select ro.order_id, ro.user_id, ro.order_code, ro.meal_number, ro.canteen_id, ro.order_price,
         ro.status, ro.error_reason, ro.create_time
         from rice_order ro
+        left join sys_dept d on ro.dept_id = d.dept_id
     </sql>
 
     <select id="selectOrderList" parameterType="Order" resultMap="OrderResult">
         <include refid="selectOrderVo"/>
         <where>
-            <if test="orderCode != null  and orderCode != ''"> and order_code like concat('%', #{orderCode}, '%')</if>
-            <if test="mealNumber != null  and mealNumber != ''"> and meal_number = #{mealNumber}</if>
-            <if test="canteenId != null  and canteenId != ''"> and canteen_id = #{canteenId}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
-            <if test="timeList != null "> and create_time between #{timeList[0]} and #{timeList[1]}</if>
+            <if test="orderCode != null  and orderCode != ''"> and ro.order_code like concat('%', #{orderCode}, '%')</if>
+            <if test="mealNumber != 0.0 "> and ro.meal_number = #{mealNumber}</if>
+            <if test="canteenId != 0 "> and ro.canteen_id = #{canteenId}</if>
+            <if test="status != null  and status != ''"> and ro.status = #{status}</if>
+            <if test="timeList != null "> and ro.create_time between #{timeList[0]} and #{timeList[1]}</if>
         </where>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
         order by ro.status asc, ro.meal_number asc
     </select>
 
@@ -65,6 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into rice_order
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="userId != null">user_id,</if>
+            dept_id,
             <if test="orderCode != null">order_code,</if>
             <if test="mealNumber != null">meal_number,</if>
             <if test="canteenId != null">canteen_id,</if>
@@ -76,6 +80,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="userId != null">#{userId},</if>
+            #{deptId},
             <if test="orderCode != null">#{orderCode},</if>
             <if test="mealNumber != null">#{mealNumber},</if>
             <if test="canteenId != null">#{canteenId},</if>

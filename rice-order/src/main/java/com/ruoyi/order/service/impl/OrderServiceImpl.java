@@ -5,7 +5,9 @@ import java.util.*;
 
 import com.ruoyi.canteen.domain.Canteen;
 import com.ruoyi.canteen.mapper.CanteenMapper;
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.uuid.IdUtils;
 import com.ruoyi.order.domain.DishOrder;
 import com.ruoyi.order.mapper.DishOrderMapper;
@@ -39,6 +41,7 @@ public class OrderServiceImpl implements IOrderService {
      * @return 订单
      */
     @Override
+    @DataScope(deptAlias = "d")
     public Order selectOrderByOrderId(Long orderId) {
         Order order = orderMapper.selectOrderByOrderId(orderId);
         if (order != null) {
@@ -56,7 +59,10 @@ public class OrderServiceImpl implements IOrderService {
      * @return 订单
      */
     @Override
+    @DataScope(deptAlias = "d")
     public List<Order> selectOrderList(Order order) {
+        Long deptId = SecurityUtils.getLoginUser().getDeptId();
+        order.setDeptId(deptId);
         List<Order> list = orderMapper.selectOrderList(order);
         if (list != null) {
             for (int i = 0; i < list.size(); i++) {
@@ -92,6 +98,8 @@ public class OrderServiceImpl implements IOrderService {
         order.setCreateTime(DateUtils.getNowDate());
         order.setOrderCode(IdUtils.generateOrderID(order.getUserId()));
         order.setMealNumber(selectLastMealNumberInToday() + 1);
+        Long deptId = SecurityUtils.getLoginUser().getDeptId();
+        order.setDeptId(deptId);
         // 插入订单数据
         int row = orderMapper.insertOrder(order);
         for (int i = 0; i < dishOrders.size(); i++) {

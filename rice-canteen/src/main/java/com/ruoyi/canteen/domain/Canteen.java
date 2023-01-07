@@ -22,6 +22,9 @@ public class Canteen extends BaseEntity
     /** 食堂id */
     private Long canteenId;
 
+    /** 部门id */
+    private Long deptId;
+
     /** 食堂名称 */
     @Excel(name = "食堂名称")
     private String canteenName;
@@ -74,6 +77,15 @@ public class Canteen extends BaseEntity
     {
         return canteenId;
     }
+
+    public Long getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(Long deptId) {
+        this.deptId = deptId;
+    }
+
     public void setLocation(String location)
     {
         this.location = location;
@@ -187,6 +199,7 @@ public class Canteen extends BaseEntity
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
                 .append("canteenId", getCanteenId())
+                .append("deptId", getDeptId())
                 .append("location", getLocation())
                 .append("tude", getTude())
                 .append("canteenName", getCanteenName())

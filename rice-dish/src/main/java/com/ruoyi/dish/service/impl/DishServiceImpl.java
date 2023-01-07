@@ -2,7 +2,9 @@ package com.ruoyi.dish.service.impl;
 
 import java.util.*;
 
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.dish.constatnt.DishConstants;
 import com.ruoyi.dish.domain.CanteenDish;
@@ -40,6 +42,7 @@ public class DishServiceImpl implements IDishService
      * @return 菜品
      */
     @Override
+    @DataScope(deptAlias = "d")
     public Dish selectDishByDishId(Long dishId)
     {
         Dish dish = dishMapper.selectDishByDishId(dishId);
@@ -59,6 +62,7 @@ public class DishServiceImpl implements IDishService
      * @return 菜品
      */
     @Override
+    @DataScope(deptAlias = "d")
     public List<Dish> selectDishList(Dish dish)
     {
         return dishMapper.selectDishList(dish);
@@ -71,6 +75,7 @@ public class DishServiceImpl implements IDishService
      * @return 菜品集合
      */
     @Override
+    @DataScope(deptAlias = "d")
     public List<Object> selectTodayDishList(Dish dish) {
         // 定义结果数组
         List<Object> list = new ArrayList<>();
@@ -103,6 +108,7 @@ public class DishServiceImpl implements IDishService
      * @param canteenDish 菜品类型
      * @return 菜品类型
      */
+    @DataScope(deptAlias = "d")
     private Long[] selectCanteenDishList(CanteenDish canteenDish){
         List<CanteenDish> list = canteenDishMapper.selectCanteenDish(canteenDish);
         if (list!=null) {
@@ -125,6 +131,8 @@ public class DishServiceImpl implements IDishService
     public int insertDish(Dish dish)
     {
         dish.setCreateTime(DateUtils.getNowDate());
+        Long deptId = SecurityUtils.getLoginUser().getDeptId();
+        dish.setDeptId(deptId);
         int rows = dishMapper.insertDish(dish);
         // 新增食堂菜品关联
         insertCanteenDish(dish);

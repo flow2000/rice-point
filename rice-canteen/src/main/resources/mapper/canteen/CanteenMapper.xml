@@ -23,30 +23,37 @@
     </resultMap>
 
     <sql id="selectCanteenVo">
-        select canteen_id, location, tude, canteen_name, canteen_url, average, leader, phone, email, status, create_by, create_time, update_by, update_time, del_flag from rice_canteen
+        select rc.canteen_id, rc.location, rc.tude, rc.canteen_name,
+        rc.canteen_url, rc.average, rc.leader, rc.phone, rc.email, rc.status,
+        rc.create_by, rc.create_time, rc.update_by, rc.update_time, rc.del_flag
+        from rice_canteen rc
+        left join sys_dept d on rc.dept_id = d.dept_id
     </sql>
 
 
     <select id="selectCanteenList" parameterType="Canteen" resultMap="CanteenResult">
         <include refid="selectCanteenVo"/>
         <where>
-            <if test="location != null  and location != ''">and location like concat('%', #{canteenName}, '%')</if>
-            <if test="canteenName != null  and canteenName != ''">and canteen_name like concat('%', #{canteenName},
+            <if test="location != null  and location != ''">and rc.location like concat('%', #{canteenName}, '%')</if>
+            <if test="canteenName != null  and canteenName != ''">and rc.canteen_name like concat('%', #{canteenName},
                 '%')
             </if>
-            <if test="leader != null  and leader != ''">and leader = #{leader}</if>
-            and del_flag=0
+            <if test="leader != null  and leader != ''">and rc.leader = #{leader}</if>
+            and rc.del_flag=0
         </where>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
     </select>
 
     <select id="selectCanteenByCanteenId" parameterType="Long" resultMap="CanteenResult">
         <include refid="selectCanteenVo"/>
-        where canteen_id = #{canteenId} and del_flag=0
+        where rc.canteen_id = #{canteenId} and rc.del_flag=0
     </select>
 
     <insert id="insertCanteen" parameterType="Canteen" useGeneratedKeys="true" keyProperty="canteenId">
         insert into rice_canteen
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            dept_id,
             <if test="location != null">location,</if>
             <if test="tude != null">tude,</if>
             <if test="canteenName != null">canteen_name,</if>
@@ -63,6 +70,7 @@
             <if test="delFlag != null">del_flag,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{deptId},
             <if test="location != null">#{location},</if>
             <if test="tude != null">#{tude},</if>
             <if test="canteenName != null">#{canteenName},</if>

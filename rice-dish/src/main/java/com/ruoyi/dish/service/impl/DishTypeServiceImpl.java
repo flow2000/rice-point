@@ -2,7 +2,10 @@ package com.ruoyi.dish.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.dish.constatnt.DishTypeConstants;
 import com.ruoyi.dish.domain.CanteenDishType;
@@ -35,6 +38,7 @@ public class DishTypeServiceImpl implements IDishTypeService
      * @return 菜品类型
      */
     @Override
+    @DataScope(deptAlias = "d")
     public DishType selectDishTypeByTypeId(Long typeId)
     {
         DishType dishType = dishTypeMapper.selectDishTypeByTypeId(typeId);
@@ -55,6 +59,7 @@ public class DishTypeServiceImpl implements IDishTypeService
      * @return 菜品类型
      */
     @Override
+    @DataScope(deptAlias = "d")
     public List<DishType> selectDishTypeList(DishType dishType)
     {
         List<DishType> list = dishTypeMapper.selectDishTypeList(dishType);
@@ -100,6 +105,8 @@ public class DishTypeServiceImpl implements IDishTypeService
     public int insertDishType(DishType dishType)
     {
         dishType.setCreateTime(DateUtils.getNowDate());
+        Long deptId = SecurityUtils.getLoginUser().getDeptId();
+        dishType.setDeptId(deptId);
         int rows = dishTypeMapper.insertDishType(dishType);
         // 新增食堂菜品类型关联
         insertCanteenDishType(dishType);

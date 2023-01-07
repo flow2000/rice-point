@@ -24,6 +24,9 @@ public class Order extends BaseEntity
     /** 用户id */
     private Long userId;
 
+    /** 部门id */
+    private Long deptId;
+
     /** 订单编号 */
     @Excel(name = "订单编号")
     private String orderCode;
@@ -83,6 +86,14 @@ public class Order extends BaseEntity
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    public Long getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(Long deptId) {
+        this.deptId = deptId;
     }
 
     public String getOrderCode() {
@@ -188,6 +199,7 @@ public class Order extends BaseEntity
         return "Order{" +
                 "orderId=" + orderId +
                 "userId=" + userId +
+                "deptId=" + deptId +
                 ", orderCode='" + orderCode + '\'' +
                 ", mealNumber=" + mealNumber +
                 ", canteenId=" + canteenId +

@@ -18,6 +18,9 @@ public class DishType extends BaseEntity
     /** 菜品类型id */
     private Long typeId;
 
+    /** 部门id */
+    private Long deptId;
+
     /** 菜品类型 */
     @Excel(name = "菜品类型")
     private String typeName;
@@ -41,6 +44,15 @@ public class DishType extends BaseEntity
     {
         return typeId;
     }
+
+    public Long getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(Long deptId) {
+        this.deptId = deptId;
+    }
+
     public void setTypeName(String typeName)
     {
         this.typeName = typeName;
@@ -79,6 +91,7 @@ public class DishType extends BaseEntity
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("typeId", getTypeId())
+            .append("deptId", getDeptId())
             .append("typeName", getTypeName())
             .append("status", getStatus())
             .append("delFlag", getDelFlag())

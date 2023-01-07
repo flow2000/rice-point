@@ -28,10 +28,11 @@
     <sql id="selectDishVo">
         select rd.dish_id, rd.type_id, rd.dishes_name, rt.type_name as dishes_type, rd.url, rd.price, rd.shelf_date, rd.onsale, rd.status, rd.del_flag, rd.create_by, rd.create_time, rd.update_by, rd.update_time
         from rice_dish rd
-            left join rice_dish_type rt on rd.type_id = rt.type_id
-            <if test="canteenId != null">
-                left join rice_canteen_dish rcd on rd.dish_id = rcd.dish_id
-            </if>
+        left join rice_dish_type rt on rd.type_id = rt.type_id
+        left join sys_dept d on rd.dept_id = d.dept_id
+        <if test="canteenId != null">
+            left join rice_canteen_dish rcd on rd.dish_id = rcd.dish_id
+        </if>
     </sql>
 
     <select id="selectDishList" parameterType="Dish" resultMap="DishResult">
@@ -40,22 +41,26 @@
             <if test="dishesName != null and dishesName != ''">
                 and dishes_name like concat('%', #{dishesName}, '%')
             </if>
-            <if test="canteenId != null">and rcd.canteen_id = #{canteenId}</if>
+            <if test="canteenId != 0">and rcd.canteen_id = #{canteenId}</if>
             <if test="typeId != null and typeId != ''">and rt.type_id = #{typeId}</if>
             <if test="price != null ">and price = #{price}</if>
             <if test="oneShelfDate != 0 and oneShelfDate != 7">and shelf_date like concat('%', #{oneShelfDate}, '%')</if>
             <if test="oneShelfDate == 7 ">and shelf_date like concat('%', 0, '%')</if>
             and rd.del_flag=0
         </where>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
     </select>
 
     <select id="selectTodayDishList" parameterType="Dish" resultMap="DishResult">
         <include refid="selectDishVo"/>
         <where>
             shelf_date like concat('%', date_format(curdate(),'%w'), '%')
-            <if test="canteenId != null">and rcd.canteen_id = #{canteenId}</if>
+            <if test="canteenId != 0">and rcd.canteen_id = #{canteenId}</if>
             and rd.del_flag=0
         </where>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
     </select>
 
     <select id="selectDishByDishId" parameterType="Long" resultMap="DishResult">
@@ -68,6 +73,7 @@
     <insert id="insertDish" parameterType="Dish" useGeneratedKeys="true" keyProperty="dishId">
         insert into rice_dish
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            dept_id,
             <if test="dishesName != null and dishesName != ''">dishes_name,</if>
             <if test="typeId != null ">type_id,</if>
             <if test="url != null">url,</if>
@@ -80,6 +86,7 @@
             <if test="updateTime != null">update_time,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{deptId},
             <if test="dishesName != null and dishesName != '' ">#{dishesName},</if>
             <if test="typeId != null ">#{typeId},</if>
             <if test="url != null">#{url},</if>
@@ -96,6 +103,7 @@
     <update id="updateDish" parameterType="Dish">
         update rice_dish
         <trim prefix="SET" suffixOverrides=",">
+
             <if test="dishesName != null and dishesName != ''">dishes_name = #{dishesName},</if>
             <if test="typeId != null ">type_id = #{typeId},</if>
             <if test="url != null">url = #{url},</if>
