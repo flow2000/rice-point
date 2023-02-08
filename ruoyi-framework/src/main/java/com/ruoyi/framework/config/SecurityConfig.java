@@ -96,8 +96,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 // 过滤请求
                 .authorizeRequests()
-                // 对于登录login 安卓登录login 注册register 验证码captchaImage 允许匿名访问
-                .antMatchers("/login", "/app/user/login", "/register", "/captchaImage").anonymous()
+                // 对于登录login 安卓登录login 微信小程序登录login 注册register 验证码captchaImage 允许匿名访问
+                .antMatchers("/login", "/app/user/login", "/miniprogram/user/login", "/register", "/captchaImage").anonymous()
                 .antMatchers(
                         HttpMethod.GET,
                         "/",

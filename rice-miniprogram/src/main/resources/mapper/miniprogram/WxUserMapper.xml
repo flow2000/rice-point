@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.miniprogram.mapper.WxUserMapper">
+
+    <resultMap type="com.ruoyi.miniprogram.domain.WxUser" id="WxUserResult">
+        <result property="id"    column="id"    />
+        <result property="wxappId"    column="wxapp_id"    />
+        <result property="unionid"    column="unionid"    />
+        <result property="openId"    column="open_id"    />
+        <result property="nickName"    column="nick_name"    />
+        <result property="userType"    column="user_type"    />
+        <result property="avatar"    column="avatar"    />
+        <result property="sex"    column="sex"    />
+        <result property="country"    column="country"    />
+        <result property="province"    column="province"    />
+        <result property="city"    column="city"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="loginDate"    column="login_date"    />
+    </resultMap>
+
+    <sql id="selectWxUserVo">
+        select id, wxapp_id, unionid, open_id, nick_name, user_type, avatar, sex, country, province, city, create_time, update_time, remark, login_date from rice_wx_user
+    </sql>
+
+    <select id="selectWxUserList" parameterType="com.ruoyi.miniprogram.domain.WxUser" resultMap="WxUserResult">
+        <include refid="selectWxUserVo"/>
+        <where>
+            <if test="wxappId != null  and wxappId != ''"> and wxapp_id like concat('%', #{wxappId}, '%')</if>
+            <if test="openId != null  and openId != ''"> and open_id like concat('%', #{openId}, '%')</if>
+            <if test="nickName != null  and nickName != ''"> and nick_name like concat('%', #{nickName}, '%')</if>
+            <if test="userType != null  and userType != ''"> and user_type = #{userType}</if>
+        </where>
+    </select>
+
+    <select id="selectWxUserById" parameterType="Long" resultMap="WxUserResult">
+        <include refid="selectWxUserVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectWxUserByOpenId" resultMap="WxUserResult">
+        <include refid="selectWxUserVo"/>
+        where open_id = #{openId}
+    </select>
+
+    <insert id="insertWxUser" parameterType="WxUser">
+        insert into rice_wx_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="wxappId != null and wxappId != ''">wxapp_id,</if>
+            <if test="unionid != null">unionid,</if>
+            <if test="openId != null and openId != ''">open_id,</if>
+            <if test="nickName != null">nick_name,</if>
+            <if test="userType != null">user_type,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="sex != null">sex,</if>
+            <if test="country != null">country,</if>
+            <if test="province != null">province,</if>
+            <if test="city != null">city,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+            <if test="loginDate != null">login_date,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="wxappId != null and wxappId != ''">#{wxappId},</if>
+            <if test="unionid != null">#{unionid},</if>
+            <if test="openId != null and openId != ''">#{openId},</if>
+            <if test="nickName != null">#{nickName},</if>
+            <if test="userType != null">#{userType},</if>
+            <if test="avatar != null">#{avatar},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="country != null">#{country},</if>
+            <if test="province != null">#{province},</if>
+            <if test="city != null">#{city},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="loginDate != null">#{loginDate},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWxUser" parameterType="WxUser">
+        update rice_wx_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="wxappId != null and wxappId != ''">wxapp_id = #{wxappId},</if>
+            <if test="unionid != null">unionid = #{unionid},</if>
+            <if test="openId != null and openId != ''">open_id = #{openId},</if>
+            <if test="nickName != null">nick_name = #{nickName},</if>
+            <if test="userType != null">user_type = #{userType},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="country != null">country = #{country},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="loginDate != null">login_date = #{loginDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteWxUserById" parameterType="Long">
+        delete from rice_wx_user where id = #{id}
+    </delete>
+
+    <delete id="deleteWxUserByIds" parameterType="String">
+        delete from rice_wx_user where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

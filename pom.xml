@@ -233,6 +233,13 @@
                 <version>${ruoyi.version}</version>
             </dependency>
 
+            <!-- 小程序接口 -->
+            <dependency>
+                <groupId>com.ruoyi</groupId>
+                <artifactId>rice-miniprogram</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+
             <!-- 通用工具-->
             <dependency>
                 <groupId>com.ruoyi</groupId>
@@ -255,6 +262,7 @@
         <module>rice-ticket</module>
         <module>rice-android</module>
         <module>rice-order</module>
+        <module>rice-miniprogram</module>
     </modules>
     <packaging>pom</packaging>
 

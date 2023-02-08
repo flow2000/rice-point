@@ -85,11 +85,18 @@
             <artifactId>rice-order</artifactId>
         </dependency>
 
-        <!-- 安卓-->
+        <!-- 安卓接口-->
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>rice-android</artifactId>
         </dependency>
+
+        <!-- 小程序接口-->
+        <dependency>
+            <groupId>com.ruoyi</groupId>
+            <artifactId>rice-miniprogram</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
