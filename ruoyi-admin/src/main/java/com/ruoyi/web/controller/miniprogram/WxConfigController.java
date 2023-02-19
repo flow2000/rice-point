@@ -29,7 +29,6 @@ public class WxConfigController extends BaseController {
     /**
      * 查询微信小程序配置列表
      */
-    @PreAuthorize("@ss.hasPermi('miniprogram:config:list')")
     @GetMapping("/list")
     public TableDataInfo list(WxConfig wxConfig) {
         startPage();
@@ -52,7 +51,6 @@ public class WxConfigController extends BaseController {
     /**
      * 获取微信小程序配置详细信息
      */
-    @PreAuthorize("@ss.hasPermi('miniprogram:config:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id) {
         return AjaxResult.success(WxConfigService.selectWxConfigById(id));

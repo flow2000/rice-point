@@ -42,7 +42,6 @@ public class WxUserController extends BaseController {
     /**
      * 查询微信用户列表
      */
-    @PreAuthorize("@ss.hasPermi('miniprogram:user:list')")
     @GetMapping("/list")
     public TableDataInfo list(WxUser wxUser) {
         startPage();
@@ -65,7 +64,6 @@ public class WxUserController extends BaseController {
     /**
      * 获取微信用户详细信息
      */
-    @PreAuthorize("@ss.hasPermi('miniprogram:user:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id) {
         return AjaxResult.success(wxUserService.selectWxUserById(id));

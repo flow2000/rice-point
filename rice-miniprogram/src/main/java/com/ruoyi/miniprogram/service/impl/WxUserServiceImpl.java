@@ -13,6 +13,8 @@ import com.ruoyi.miniprogram.constant.WxAPI;
 import com.ruoyi.miniprogram.constant.WxUserType;
 import com.ruoyi.miniprogram.domain.model.WxLoginResult;
 import com.ruoyi.miniprogram.service.WxTokenService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import com.ruoyi.miniprogram.mapper.WxUserMapper;
 import com.ruoyi.miniprogram.domain.WxUser;
@@ -36,6 +38,8 @@ public class WxUserServiceImpl implements IWxUserService {
 
     @Resource
     private WxTokenService wxTokenService;
+
+    Logger log = LoggerFactory.getLogger(WxUserServiceImpl.class);
 
     /**
      * 微信小程序登录
@@ -84,6 +88,8 @@ public class WxUserServiceImpl implements IWxUserService {
             if (row == 0) {
                 throw new ServiceException("微信用户:" + openId + "注册失败，请稍后重试");
             }
+        } else {
+            wxUser = wu;
         }
 
         // 构造token

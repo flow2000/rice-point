@@ -22,7 +22,7 @@ public class Order extends BaseEntity
     private Long orderId;
 
     /** 用户id */
-    private Long userId;
+    private String userId;
 
     /** 部门id */
     private Long deptId;
@@ -80,11 +80,11 @@ public class Order extends BaseEntity
         this.orderId = orderId;
     }
 
-    public Long getUserId() {
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 

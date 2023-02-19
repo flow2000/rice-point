@@ -59,7 +59,7 @@ public class IdUtils
      * @param userId 用户id
      * @return 16位订单号
      */
-    public static String generateOrderID(Long userId){
+    public static String generateOrderID(String userId){
         return getTime().replaceAll("[[\\s-:punct:]]", "") + frontCompWithZore(userId);
     }
 
@@ -76,9 +76,12 @@ public class IdUtils
      * 截取用户id后两位，不足两位的前面补0
      * @return 生成六位数验证码
      */
-    public static String frontCompWithZore(Long userId){
-        String s = String.format("%02d", userId);
-        return s.substring(s.length() -2);
+    public static String frontCompWithZore(String userId){
+        String tail = userId.substring(userId.length() - 2);
+        if (tail.length() < 2) {
+            tail = "0" + tail;
+        }
+        return tail;
     }
 
 }

@@ -54,6 +54,8 @@ public class WxTokenService {
 
     protected static final long MILLIS_DAY = 24 * MILLIS_MINUTE;
 
+    private static final Long DIFF_TIME = MILLIS_DAY;
+
     @Autowired
     private RedisCache redisCache;
 
@@ -130,19 +132,39 @@ public class WxTokenService {
     }
 
     /**
-     * 从令牌中获取用户身份信息
+     * 从请求中获取用户身份信息
      *
-     * @param token 令牌
+     * @param request 请求
      * @return 用户信息
      */
-    public WxUser getUser(String token) {
+    public WxUser getUser(HttpServletRequest request) {
+        // 获取请求携带的令牌
+        String token = getToken(request);
         if (StringUtils.isNotEmpty(token)) {
-            Claims claims = parseToken(token);
-            String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);
-            String userKey = Constants.LOGIN_TOKEN_KEY + uuid;
-            return redisCache.getCacheObject(userKey);
+            try {
+                Claims claims = parseToken(token);
+                // 解析对应的权限以及用户信息
+                String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);
+                String userKey = getTokenKey(uuid);
+                return redisCache.getCacheObject(userKey);
+            } catch (Exception e) {
+            }
         }
         return null;
+    }
+
+    /**
+     * 验证令牌有效期，相差不足1天，自动刷新缓存
+     *
+     * @param wxUser
+     * @return 令牌
+     */
+    public void verifyToken(WxUser wxUser) {
+        long expireTime = wxUser.getExpireTime();
+        long currentTime = System.currentTimeMillis();
+        if (expireTime - currentTime <= DIFF_TIME) {
+            refreshToken(wxUser);
+        }
     }
 
     /**

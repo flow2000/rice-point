@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.miniprogram.mapper.WxDishTypeMapper">
+
+    <resultMap type="DishType" id="DishTypeResult">
+        <result property="typeId"    column="type_id"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="typeName"    column="type_name"    />
+        <result property="status"    column="status"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectDishTypeVo">
+        select rdt.type_id, rdt.dept_id, rdt.type_name, rdt.status, rdt.del_flag,
+        rdt.create_by, rdt.create_time, rdt.update_by, rdt.update_time
+        from rice_dish_type rdt
+    </sql>
+
+    <select id="selectDishTypeList" parameterType="DishType" resultMap="DishTypeResult">
+        <include refid="selectDishTypeVo"/>
+        <where>
+            rdt.del_flag = 0
+            <if test="typeName != null  and typeName != ''"> and rdt.type_name like concat('%', #{typeName}, '%')</if>
+            <if test="deptId != null and deptId != ''">and rdt.dept_id = #{deptId}</if>
+        </where>
+    </select>
+
+    <select id="selectDishTypeByTypeId" parameterType="Long" resultMap="DishTypeResult">
+        <include refid="selectDishTypeVo"/>
+        where rdt.del_flag = 0 and rdt.type_id = #{typeId}
+    </select>
+
+</mapper>

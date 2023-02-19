@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.miniprogram.mapper.WxDishOrderMapper">
+
+    <resultMap type="DishOrder" id="DishOrderResult">
+        <result property="orderId"    column="order_id"    />
+        <result property="dishId"    column="dish_id"    />
+        <result property="number"    column="number"    />
+        <result property="dishesName"    column="dishes_name"    />
+        <result property="url"    column="url"    />
+        <result property="price"    column="price"    />
+    </resultMap>
+
+    <sql id="selectDishOrderVo">
+        select rdo.order_id, rdo.dish_id, rdo.`number`, rd.dishes_name, rd.url, rd.price
+        from rice_dish_order rdo
+            left join rice_dish rd on rd.dish_id = rdo.dish_id
+    </sql>
+
+    <select id="selectDishOrderList" parameterType="DishOrder" resultMap="DishOrderResult">
+        <include refid="selectDishOrderVo"/>
+        <where>
+            <if test="orderId != null">order_id=#{orderId}</if>
+            <if test="dishId != null">rdo.dish_id=#{dishId}</if>
+            <if test="number != null and number != 0">number=#{number}</if>
+        </where>
+    </select>
+
+    <select id="selectDishOrderByOrderId" parameterType="Long" resultMap="DishOrderResult">
+        <include refid="selectDishOrderVo"/>
+        where order_id = #{orderId}
+    </select>
+
+    <insert id="insertDishOrder" parameterType="DishOrder" useGeneratedKeys="true" keyProperty="orderId">
+        insert into rice_dish_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">order_id,</if>
+            <if test="dishId != null">dish_id,</if>
+            <if test="number != null and number != 0">`number`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">#{orderId},</if>
+            <if test="dishId != null">#{dishId},</if>
+            <if test="number != null and number != 0">#{number},</if>
+        </trim>
+    </insert>
+
+    <insert id="insertDishOrders">
+        insert into rice_dish_order(order_id, dish_id, `number`) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            (#{item.orderId},#{item.dishId},#{item.number})
+        </foreach>
+    </insert>
+
+    <delete id="deleteDishOrderByOrderId" parameterType="Long">
+        delete from rice_dish_order where order_id = #{orderId}
+    </delete>
+
+    <delete id="deleteDishOrderByOrderIds" parameterType="String">
+        delete from rice_dish_order where order_id in
+        <foreach item="orderId" collection="array" open="(" separator="," close=")">
+            #{orderId}
+        </foreach>
+    </delete>
+</mapper>

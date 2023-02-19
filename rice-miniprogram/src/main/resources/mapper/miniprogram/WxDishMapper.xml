@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.miniprogram.mapper.WxDishMapper">
+
+    <resultMap id="canteenIdsResult" type="Dish" >
+        <result property="canteenId" column="canteen_id"/>
+    </resultMap>
+
+    <resultMap type="Dish" id="DishResult">
+        <result property="dishId" column="dish_id"/>
+        <result property="typeId" column="type_id"/>
+        <result property="dishesName" column="dishes_name"/>
+        <result property="dishesType" column="dishes_type"/>
+        <result property="url" column="url"/>
+        <result property="price" column="price"/>
+        <result property="shelfDate" column="shelf_date"/>
+        <result property="onsale" column="onsale"/>
+        <result property="status" column="status"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectDishVo">
+        select rd.dish_id, rd.type_id, rd.dishes_name, rt.type_name as dishes_type, rd.url, rd.price, rd.shelf_date, rd.onsale, rd.status, rd.del_flag, rd.create_by, rd.create_time, rd.update_by, rd.update_time
+        from rice_dish rd
+        left join rice_dish_type rt on rd.type_id = rt.type_id
+    </sql>
+    <select id="selectWxDishList" parameterType="Dish" resultMap="DishResult">
+        <include refid="selectDishVo"/>
+        <where>
+            <if test="dishesName != null and dishesName != ''">
+                and dishes_name like concat('%', #{dishesName}, '%')
+            </if>
+            <if test="deptId != null and deptId != ''">and rd.dept_id = #{deptId}</if>
+            <if test="typeId != null and typeId != ''">and rt.type_id = #{typeId}</if>
+            <if test="price != null ">and price = #{price}</if>
+            <if test="oneShelfDate != 0 and oneShelfDate != 7">and shelf_date like concat('%', #{oneShelfDate}, '%')</if>
+            <if test="oneShelfDate == 7 ">and shelf_date like concat('%', 0, '%')</if>
+            and rd.del_flag=0
+        </where>
+    </select>
+
+    <select id="selectWxDishByDishId" parameterType="Long" resultMap="DishResult">
+        <include refid="selectDishVo"/>
+        where rd.dish_id = #{dishId}
+        and rd.del_flag=0
+        limit 1
+    </select>
+
+</mapper>

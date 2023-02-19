@@ -55,7 +55,7 @@ public class AndroidOrderController extends BaseController {
         if (user == null) {
             return AjaxResult.error("请重新登录");
         }
-        order.setUserId(user.getUserId());
+        order.setUserId(String.valueOf(user.getUserId()));
         return AjaxResult.success(orderService.listUserOrder(order));
     }
 
@@ -80,7 +80,7 @@ public class AndroidOrderController extends BaseController {
             return AjaxResult.error("系统错误，就餐食堂不能为空");
         }
         // 设置用户id
-        order.setUserId(user.getUserId());
+        order.setUserId(String.valueOf(user.getUserId()));
         List<DishOrder> dishOrders = order.getDishOrders();
         if (dishOrders == null || dishOrders.size() == 0){
             return AjaxResult.error("请先选择菜品");
