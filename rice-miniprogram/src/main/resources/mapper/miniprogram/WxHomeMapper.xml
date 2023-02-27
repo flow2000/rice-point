@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.miniprogram.mapper.WxHomeMapper">
+
+    <resultMap type="WxHome" id="WxHomeResult">
+        <result property="id"    column="id"    />
+        <result property="appid"    column="appid"    />
+        <result property="img"    column="img"    />
+    </resultMap>
+
+    <sql id="selectWxHomeVo">
+        select id, appid, img from rice_wx_home
+    </sql>
+
+    <select id="selectWxHomeList" parameterType="WxHome" resultMap="WxHomeResult">
+        <include refid="selectWxHomeVo"/>
+        <where>
+            <if test="appid != null and appid != ''"> and appid = #{appid}</if>
+            <if test="img != null  and img != ''"> and img = #{img}</if>
+        </where>
+    </select>
+
+    <select id="selectWxHomeByAppid" parameterType="Long" resultMap="WxHomeResult">
+        <include refid="selectWxHomeVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertWxHome" parameterType="WxHome">
+        insert into rice_wx_home
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id,
+            <if test="appid != null">appid,</if>
+            <if test="img != null">img,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            0,
+            <if test="appid != null">#{appid},</if>
+            <if test="img != null">#{img},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWxHome" parameterType="WxHome">
+        update rice_wx_home
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="img != null">img = #{img},</if>
+        </trim>
+        where appid = #{appid}
+    </update>
+
+    <delete id="deleteWxHomeById" parameterType="String">
+        delete from rice_wx_home where id = #{id}
+    </delete>
+
+    <delete id="deleteWxHomeByIds" parameterType="String">
+        delete from rice_wx_home where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

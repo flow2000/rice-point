@@ -33,7 +33,6 @@
     <select id="selectWxCanteenList" parameterType="Canteen" resultMap="CanteenResult">
         <include refid="selectCanteenVo"/>
         <where>
-            <if test="location != null  and location != ''">and rc.location like concat('%', #{canteenName}, '%')</if>
             <if test="canteenName != null  and canteenName != ''">and rc.canteen_name like concat('%', #{canteenName},
                 '%')
             </if>
