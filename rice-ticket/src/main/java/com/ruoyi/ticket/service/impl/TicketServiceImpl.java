@@ -22,8 +22,7 @@ import com.ruoyi.ticket.service.ITicketService;
  * @date 2021-10-23
  */
 @Service
-public class TicketServiceImpl implements ITicketService
-{
+public class TicketServiceImpl implements ITicketService {
     @Autowired
     private TicketMapper ticketMapper;
 
@@ -40,8 +39,7 @@ public class TicketServiceImpl implements ITicketService
      * @return 投票信息
      */
     @Override
-    public Ticket selectTicketByTicketId(Long ticketId)
-    {
+    public Ticket selectTicketByTicketId(Long ticketId) {
         return ticketMapper.selectTicketByTicketId(ticketId);
     }
 
@@ -52,13 +50,12 @@ public class TicketServiceImpl implements ITicketService
      * @return 投票信息
      */
     @Override
-    public List<Ticket> selectTicketList(Ticket ticket)
-    {
+    public List<Ticket> selectTicketList(Ticket ticket) {
         int time = ticketMapper.getTotalTime();
-        if (time == 0){
+        if (time == 0) {
             time++;
         }
-        if (ticket.getTime() == null){
+        if (ticket.getTime() == null) {
             ticket.setTime(time);
         }
         return ticketMapper.selectTicketList(ticket);
@@ -71,8 +68,7 @@ public class TicketServiceImpl implements ITicketService
      * @return 结果
      */
     @Override
-    public int insertTicket(Ticket ticket)
-    {
+    public int insertTicket(Ticket ticket) {
         ticket.setCreateTime(DateUtils.getNowDate());
         return ticketMapper.insertTicket(ticket);
     }
@@ -84,8 +80,7 @@ public class TicketServiceImpl implements ITicketService
      * @return 结果
      */
     @Override
-    public int updateTicket(Ticket ticket)
-    {
+    public int updateTicket(Ticket ticket) {
         return ticketMapper.updateTicket(ticket);
     }
 
@@ -96,8 +91,7 @@ public class TicketServiceImpl implements ITicketService
      * @return 结果
      */
     @Override
-    public int deleteTicketByTicketIds(Long[] ticketIds)
-    {
+    public int deleteTicketByTicketIds(Long[] ticketIds) {
         return ticketMapper.deleteTicketByTicketIds(ticketIds);
     }
 
@@ -108,8 +102,7 @@ public class TicketServiceImpl implements ITicketService
      * @return 结果
      */
     @Override
-    public int deleteTicketByTicketId(Long ticketId)
-    {
+    public int deleteTicketByTicketId(Long ticketId) {
         return ticketMapper.deleteTicketByTicketId(ticketId);
     }
 
@@ -141,7 +134,8 @@ public class TicketServiceImpl implements ITicketService
      */
     @Override
     public void resetUserVotes() {
-       ticketMapper.resetUserVotes();
+        ticketMapper.resetUserVotes();
+        ticketMapper.resetWxUserVotes();
     }
 
     /**
@@ -152,7 +146,7 @@ public class TicketServiceImpl implements ITicketService
     public void resetDishVotes() {
         int time = ticketMapper.getTotalTime();
         time++;
-        List<Dish> list = dishMapper.selectDishList(new Dish());
+        List<Dish> list = selectUniqueDishList();
         List<Long> ids = list.stream().map(Dish::getDishId).collect(Collectors.toList());
         List<Ticket> ticketList = new ArrayList<>();
         for (Long id : ids) {
@@ -166,9 +160,22 @@ public class TicketServiceImpl implements ITicketService
         ticketMapper.insertTickets(ticketList);
     }
 
+    // 列表去重
+    private List<Dish> selectUniqueDishList() {
+        List<Dish> list = dishMapper.selectDishList(new Dish());
+        List<Dish> resultList = new ArrayList<>();
+        Map<String, String> tmpMap = new HashMap<>();
+        for (int i = 0; i < list.size(); i++) {
+            if (tmpMap.get(list.get(i).getDishesName()) == null) {
+                resultList.add(list.get(i));
+                tmpMap.put(list.get(i).getDishesName(), "1");
+            }
+        }
+        return resultList;
+    }
+
     /**
      * 更新用户投票数
-     *
      */
     @Override
     public int updateUserVotes(SysUser user) {
@@ -177,6 +184,7 @@ public class TicketServiceImpl implements ITicketService
 
     /**
      * 查询用户投票数
+     *
      * @return 结果
      */
     @Override
@@ -186,6 +194,7 @@ public class TicketServiceImpl implements ITicketService
 
     /**
      * 查询每周投票数
+     *
      * @return 结果
      */
     @Override
@@ -209,15 +218,16 @@ public class TicketServiceImpl implements ITicketService
 
     /**
      * 查询最新一期的投票信息列表
+     *
      * @return 结果
      */
     @Override
     public List<Object> selectTicketsList(Ticket ticket) {
         int time = ticketMapper.getTotalTime();
-        if (time == 0){
+        if (time == 0) {
             time++;
         }
-        if (ticket.getTime() == null){
+        if (ticket.getTime() == null) {
             ticket.setTime(time);
         }
         // 获取投票信息
@@ -237,7 +247,7 @@ public class TicketServiceImpl implements ITicketService
                     iterator.remove(); // 移除该元素
                 }
             }
-            if (l.size()!=0){
+            if (l.size() != 0) {
                 Map<String, Object> map = new HashMap<>();
                 map.put("typeName", dishType.getTypeName());
                 map.put("dishList", l);

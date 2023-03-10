@@ -90,6 +90,12 @@ public interface TicketMapper
     public void resetUserVotes();
 
     /**
+     * 重置用户投票数
+     * 每日重置一次
+     */
+    public void resetWxUserVotes();
+
+    /**
      * 更新用户投票数
      *
      */
@@ -106,4 +112,5 @@ public interface TicketMapper
      * @return 结果
      */
     public List<Ticket> selectTicketsList(Ticket ticket);
+
 }
