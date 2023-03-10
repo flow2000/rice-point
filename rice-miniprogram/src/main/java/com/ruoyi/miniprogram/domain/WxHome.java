@@ -5,13 +5,15 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
+import java.io.Serializable;
+
 /**
  * 轮播图对象 rice_wx_home
  *
  * @author panghai
  * @date 2023-02-26
  */
-public class WxHome extends BaseEntity {
+public class WxHome extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Long id;

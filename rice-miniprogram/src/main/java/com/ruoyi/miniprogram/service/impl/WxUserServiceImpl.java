@@ -131,6 +131,17 @@ public class WxUserServiceImpl implements IWxUserService {
     }
 
     /**
+     * 通过openId查询微信用户
+     *
+     * @param openId 微信用户主键
+     * @return 微信用户
+     */
+    @Override
+    public WxUser selectWxUserByOpenId(String openId) {
+        return wxUserMapper.selectWxUserByOpenId(openId);
+    }
+
+    /**
      * 查询微信用户列表
      *
      * @param wxUser 微信用户

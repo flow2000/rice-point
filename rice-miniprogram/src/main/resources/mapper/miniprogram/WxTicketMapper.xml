@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.miniprogram.mapper.WxTicketMapper">
+
+    <resultMap type="WxTicket" id="WxTicketResult">
+        <result property="ticketId" column="ticket_id"/>
+        <result property="dishId" column="dish_id"/>
+        <result property="ticketNumber" column="ticket_number"/>
+        <result property="time" column="time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="dishName" column="dishes_name"/>
+        <result property="url" column="url"/>
+        <result property="typeId" column="type_id"/>
+        <result property="typeName" column="type_name"/>
+    </resultMap>
+
+    <sql id="selectWxTicketVo">
+        select rt.ticket_id, rt.dish_id, rt.ticket_number,rt.`time`,rt.create_time,
+        rd.dish_id, rd.dishes_name, rd.url,
+        rdt.type_id, rdt.type_name
+        from rice_ticket rt
+        left join rice_dish rd on rd.dish_id = rt.dish_id
+        left join rice_dish_type rdt on rdt.type_id = rd.type_id
+    </sql>
+
+    <select id="selectDishTicketList" parameterType="WxTicket" resultMap="WxTicketResult">
+        <include refid="selectWxTicketVo"/>
+        <where>
+            <if test="time != 0">and `time` = #{time}</if>
+        </where>
+    </select>
+
+    <select id="selectWxDishTicketByTicketId" parameterType="Long" resultMap="WxTicketResult">
+        <include refid="selectWxTicketVo"/>
+        where ticket_id = #{ticketId}
+    </select>
+
+    <update id="updateWxTicket" parameterType="WxTicket">
+        update rice_ticket
+        <set>
+            <if test="dishId!=null">dish_id=#{dishId},</if>
+            <if test="ticketNumber!=null">ticket_number=#{ticketNumber},</if>
+            <if test="time!=0">`time`=#{time},</if>
+        </set>
+        <where>
+            ticket_id = #{ticketId}
+        </where>
+    </update>
+
+    <select id="getTotalTime" resultType="int">
+        select time from `rice_ticket` order by time desc limit 1
+    </select>
+
+</mapper>

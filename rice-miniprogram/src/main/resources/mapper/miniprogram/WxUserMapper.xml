@@ -10,6 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="unionid"    column="unionid"    />
         <result property="openId"    column="open_id"    />
         <result property="nickName"    column="nick_name"    />
+        <result property="votes"    column="votes"    />
         <result property="userType"    column="user_type"    />
         <result property="avatar"    column="avatar"    />
         <result property="sex"    column="sex"    />
@@ -23,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectWxUserVo">
-        select id, wxapp_id, unionid, open_id, nick_name, user_type, avatar, sex, country, province, city, create_time, update_time, remark, login_date from rice_wx_user
+        select id, wxapp_id, unionid, open_id, nick_name, votes, user_type, avatar, sex, country, province, city, create_time, update_time, remark, login_date from rice_wx_user
     </sql>
 
     <select id="selectWxUserList" parameterType="com.ruoyi.miniprogram.domain.WxUser" resultMap="WxUserResult">
@@ -91,6 +92,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="unionid != null">unionid = #{unionid},</if>
             <if test="openId != null and openId != ''">open_id = #{openId},</if>
             <if test="nickName != null">nick_name = #{nickName},</if>
+            <if test="votes != null">votes = #{votes},</if>
             <if test="userType != null">user_type = #{userType},</if>
             <if test="avatar != null">avatar = #{avatar},</if>
             <if test="sex != null">sex = #{sex},</if>

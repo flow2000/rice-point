@@ -31,6 +31,14 @@ public interface IWxUserService {
     public WxUser selectWxUserById(Long id);
 
     /**
+     * 通过openId查询微信用户
+     *
+     * @param openId 微信用户主键
+     * @return 微信用户
+     */
+    public WxUser selectWxUserByOpenId(String openId);
+
+    /**
      * 查询微信用户列表
      *
      * @param wxUser 微信用户

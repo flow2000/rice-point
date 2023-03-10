@@ -57,7 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null  and status != ''"> and ro.status = #{status}</if>
             <if test="timeList != null "> and ro.create_time between #{timeList[0]} and #{timeList[1]}</if>
         </where>
-        order by ro.status asc, ro.meal_number asc
+        order by ro.status asc, ro.meal_number asc, ro.create_time desc
     </select>
 
     <select id="selectOrderByOrderId" parameterType="Long" resultMap="OrderResult">

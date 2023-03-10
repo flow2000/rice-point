@@ -58,6 +58,11 @@ public class WxUser extends BaseEntity implements Serializable {
     private String nickName;
 
     /**
+     * 今日投票数
+     */
+    private int votes = 0;
+
+    /**
      * 用户类型（'01'表示小程序用户，'02'表示公众号用户）
      */
     @Excel(name = "用户类型", readConverterExp = "'=01'表示小程序用户，'02'表示公众号用户")
@@ -189,6 +194,14 @@ public class WxUser extends BaseEntity implements Serializable {
 
     public String getNickName() {
         return nickName;
+    }
+
+    public int getVotes() {
+        return votes;
+    }
+
+    public void setVotes(int votes) {
+        this.votes = votes;
     }
 
     public void setUserType(String userType) {

@@ -66,6 +66,10 @@ public class Dish extends BaseEntity
     /** 特定上架日期 */
     private int oneShelfDate;
 
+    private int time;
+
+    private String typeName;
+
     public void setDishId(Long dishId)
     {
         this.dishId = dishId;
@@ -195,6 +199,21 @@ public class Dish extends BaseEntity
         return oneShelfDate;
     }
 
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
 
     @Override
     public String toString() {
