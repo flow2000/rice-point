@@ -63,6 +63,14 @@ public interface WxOrderMapper
     public int deleteOrderByOrderIds(Long[] orderIds);
 
     /**
+     * 修改订单状态
+     *
+     * @param order 订单信息
+     * @return 结果
+     */
+    public int updateOrderStatus(Order order);
+
+    /**
      * 查询订单中今天最后一个取餐号
      *
      * @return 结果

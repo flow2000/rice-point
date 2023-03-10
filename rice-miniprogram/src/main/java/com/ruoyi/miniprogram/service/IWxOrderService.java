@@ -34,7 +34,7 @@ public interface IWxOrderService
      * @param order 订单
      * @return 结果
      */
-    public int insertWxOrder(Order order);
+    public Order insertWxOrder(Order order);
 
     /**
      * 批量删除订单
@@ -52,5 +52,11 @@ public interface IWxOrderService
      */
     public int deleteWxOrderByOrderId(Long orderId);
 
-
+    /**
+     * 修改订单状态
+     *
+     * @param order 订单信息
+     * @return 结果
+     */
+    public int updateOrderStatus(Order order);
 }

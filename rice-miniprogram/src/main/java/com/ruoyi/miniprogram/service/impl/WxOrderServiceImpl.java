@@ -72,7 +72,7 @@ public class WxOrderServiceImpl implements IWxOrderService {
      * @return 结果
      */
     @Override
-    public int insertWxOrder(Order order) {
+    public Order insertWxOrder(Order order) {
         List<DishOrder> dishOrders = order.getDishOrders();
         double sum = 0;
         if (order.getErrorReason() == null) {
@@ -80,7 +80,7 @@ public class WxOrderServiceImpl implements IWxOrderService {
         }
         // 计算总价
         for (DishOrder d : dishOrders) {
-            sum += d.getPrice();
+            sum += d.getPrice() * d.getNumber();
         }
         // 设置订单初始值
         order.setOrderPrice(new BigDecimal(String.valueOf(sum)));
@@ -102,7 +102,7 @@ public class WxOrderServiceImpl implements IWxOrderService {
         }catch(Exception e){
             wxOrderMapper.deleteOrderByOrderId(order.getOrderId());
         }
-        return row;
+        return order;
     }
 
     /**
@@ -129,6 +129,17 @@ public class WxOrderServiceImpl implements IWxOrderService {
         // 删除菜品订单
         wxDishOrderMapper.deleteDishOrderByOrderId(orderId);
         return wxOrderMapper.deleteOrderByOrderId(orderId);
+    }
+
+    /**
+     * 修改订单状态
+     *
+     * @param order 订单信息
+     * @return 结果
+     */
+    @Override
+    public int updateOrderStatus(Order order) {
+        return wxOrderMapper.updateOrderStatus(order);
     }
 
     /**

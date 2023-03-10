@@ -52,14 +52,14 @@ public class WxOrderController extends BaseController {
         if (order.getCanteenId() == null) {
             return AjaxResult.error("系统错误，就餐食堂不能为空");
         }
-        if (order.getUserId() == null){
+        if (order.getUserId() == null) {
             return AjaxResult.error("系统错误，就餐人id不能为空");
         }
         List<DishOrder> dishOrders = order.getDishOrders();
         if (dishOrders == null || dishOrders.size() == 0) {
             return AjaxResult.error("请先选择菜品");
         }
-        return toAjax(wxOrderService.insertWxOrder(order));
+        return AjaxResult.success(wxOrderService.insertWxOrder(order));
     }
 
     /**
@@ -69,5 +69,23 @@ public class WxOrderController extends BaseController {
     @DeleteMapping("/{orderIds}")
     public AjaxResult remove(@PathVariable Long[] orderIds) {
         return toAjax(wxOrderService.deleteWxOrderByOrderIds(orderIds));
+    }
+
+    /**
+     * 更新订单状态
+     */
+    @Log(title = "订单", businessType = BusinessType.UPDATE)
+    @PutMapping("/update")
+    public AjaxResult edit(@RequestBody Order order) {
+        if (order.getOrderId() == null) {
+            return AjaxResult.error("系统错误，订单id不能为空");
+        }
+        if (order.getStatus() == null) {
+            return AjaxResult.error("处理选项不能为空");
+        }
+        if (!"3".equals(order.getStatus()) && !"1".equals(order.getStatus())) {
+            return AjaxResult.error("处理选项非法");
+        }
+        return toAjax(wxOrderService.updateOrderStatus(order));
     }
 }
