@@ -99,6 +99,16 @@ public class WxUser extends BaseEntity implements Serializable {
     private String city;
 
     /**
+     * 会话密钥
+     */
+    private String sessionKey;
+
+    /**
+     * 用户敏感数据
+     */
+    private String encryptedData;
+
+    /**
      * 最后登录时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -250,6 +260,22 @@ public class WxUser extends BaseEntity implements Serializable {
 
     public String getCity() {
         return city;
+    }
+
+    public String getSessionKey() {
+        return sessionKey;
+    }
+
+    public void setSessionKey(String sessionKey) {
+        this.sessionKey = sessionKey;
+    }
+
+    public String getEncryptedData() {
+        return encryptedData;
+    }
+
+    public void setEncryptedData(String encryptedData) {
+        this.encryptedData = encryptedData;
     }
 
     public void setLoginDate(Date loginDate) {

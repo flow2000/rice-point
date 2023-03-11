@@ -61,6 +61,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="country != null">country,</if>
             <if test="province != null">province,</if>
             <if test="city != null">city,</if>
+            <if test="sessionKey != null">session_key,</if>
+            <if test="encryptedData != null">encrypted_data,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="remark != null">remark,</if>
@@ -78,6 +80,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="country != null">#{country},</if>
             <if test="province != null">#{province},</if>
             <if test="city != null">#{city},</if>
+            <if test="sessionKey != null">#{sessionKey},</if>
+            <if test="encryptedData != null">#{encryptedData},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="remark != null">#{remark},</if>
@@ -99,6 +103,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="country != null">country = #{country},</if>
             <if test="province != null">province = #{province},</if>
             <if test="city != null">city = #{city},</if>
+            <if test="sessionKey != null">session_key = #{sessionKey},</if>
+            <if test="encryptedData != null">encrypted_data = #{encryptedData},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="remark != null">remark = #{remark},</if>

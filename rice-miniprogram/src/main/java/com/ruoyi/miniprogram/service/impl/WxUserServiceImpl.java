@@ -75,6 +75,7 @@ public class WxUserServiceImpl implements IWxUserService {
         wxUser.setUserType(WxUserType.MINIPROGRAM);
         wxUser.setLoginDate(new Date());
         wxUser.setPassword(miniprogramConfig.getAppId());
+        wxUser.setSessionKey(wxLoginResult.getSessionKey());
 
 
         String openId = wxUser.getOpenId();
